@@ -49,4 +49,16 @@ C:\Users\Administrator\AppData\Local\Temp\VMBuilds\Universal_controllerV2.0\Ardu
  C:\Program\ Files\ (x86)\Arduino\hardware\Arduino_STM32-master\STM32F1\cores\maple/WCharacter.h \
  C:\Program\ Files\ (x86)\Arduino\hardware\Arduino_STM32-master\STM32F1\cores\maple/tone.h \
  C:\Program\ Files\ (x86)\Arduino\hardware\Arduino_STM32-master\STM32F1\cores\maple/Arduino.h \
- C:\Program\ Files\ (x86)\Arduino\hardware\Arduino_STM32-master\STM32F1\variants\generic_stm32f103r/variant.h
+ C:\Program\ Files\ (x86)\Arduino\hardware\Arduino_STM32-master\STM32F1\variants\generic_stm32f103r/variant.h \
+ C:\Users\Administrator\AppData\Local\Temp\VMBuilds\Universal_controllerV2.0\Arduino_STM32-master_genericSTM32F103R\Release\user_Set_Correlation.h \
+ C:\Users\Administrator\AppData\Local\Temp\VMBuilds\Universal_controllerV2.0\Arduino_STM32-master_genericSTM32F103R\Release\user_initialization.h \
+ C:\Program\ Files\ (x86)\Arduino\hardware\Arduino_STM32-master\STM32F1\cores\maple/Arduino.h \
+ C:\Users\Administrator\AppData\Local\Temp\VMBuilds\Universal_controllerV2.0\Arduino_STM32-master_genericSTM32F103R\Release\user_lorainit.h \
+ C:\Users\Administrator\AppData\Local\Temp\VMBuilds\Universal_controllerV2.0\Arduino_STM32-master_genericSTM32F103R\Release\AT24CXX.h \
+ C:\Users\Administrator\AppData\Local\Temp\VMBuilds\Universal_controllerV2.0\Arduino_STM32-master_genericSTM32F103R\Release\i2c.h \
+ C:\Users\Administrator\AppData\Local\Temp\VMBuilds\Universal_controllerV2.0\Arduino_STM32-master_genericSTM32F103R\Release\user_crc8.h \
+ C:\Users\Administrator\AppData\Local\Temp\VMBuilds\Universal_controllerV2.0\Arduino_STM32-master_genericSTM32F103R\Release\user_judgement.h \
+ C:\Users\Administrator\AppData\Local\Temp\VMBuilds\Universal_controllerV2.0\Arduino_STM32-master_genericSTM32F103R\Release\user_A021_E021.h \
+ C:\Users\Administrator\AppData\Local\Temp\VMBuilds\Universal_controllerV2.0\Arduino_STM32-master_genericSTM32F103R\Release\user_A025_E025.h \
+ C:\Users\Administrator\AppData\Local\Temp\VMBuilds\Universal_controllerV2.0\Arduino_STM32-master_genericSTM32F103R\Release\user_A011_E011.h \
+ C:\Users\Administrator\AppData\Local\Temp\VMBuilds\Universal_controllerV2.0\Arduino_STM32-master_genericSTM32F103R\Release\user_HEXtoDEC.h

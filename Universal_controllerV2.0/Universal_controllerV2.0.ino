@@ -43,40 +43,28 @@ void setup()
 
 	Serial.println("初始化执行结束");
 
-	for (size_t i = 0; i < 255; i++)
+	if (AT24CXX_ReadOneByte(0) == 0x01 && AT24CXX_ReadOneByte(1) == 0x01)
 	{
-		//Serial.println(String("AT24CXX_ReadOneByte[") + i + "] = " + AT24CXX_ReadOneByte(i));
-		AT24CXX_WriteOneByte(i, 0x55);
+		Serial.println("初始化程序执行成功！");
+		//初始化完成状态灯1红绿交替闪烁5次
+		for (size_t i = 0; i < 5; i++)
+		{
+			digitalWrite(LED1, HIGH);
+			digitalWrite(LED2, LOW);
+			delay(200);
+			digitalWrite(LED1, LOW);
+			digitalWrite(LED2, HIGH);
+			delay(200);
+			digitalWrite(LED1, LOW);
+			digitalWrite(LED2, LOW);
+		}
+
+		Button_Waiting_report();//按键等待上报函数
 	}
-	for (size_t i = 0; i < 255; i++)
+	else
 	{
-		Serial.println(String("AT24CXX_ReadOneByte[") + i + "] = " + AT24CXX_ReadOneByte(i));
-		//AT24CXX_WriteOneByte(i, 0x55);
+		Initialization_exception();//初始化异常函数
 	}
-
-
-	//if (AT24CXX_ReadOneByte(0) == 0x01 && AT24CXX_ReadOneByte(1) == 0x01)
-	//{
-	//	Serial.println("初始化程序执行成功！");
-	//	//初始化完成状态灯1红绿交替闪烁5次
-	//	for (size_t i = 0; i < 5; i++)
-	//	{
-	//		digitalWrite(LED1, HIGH);
-	//		digitalWrite(LED2, LOW);
-	//		delay(200);
-	//		digitalWrite(LED1, LOW);
-	//		digitalWrite(LED2, HIGH);
-	//		delay(200);
-	//		digitalWrite(LED1, LOW);
-	//		digitalWrite(LED2, LOW);
-	//	}
-
-	//	Button_Waiting_report();//按键等待上报函数
-	//}
-	//else
-	//{
-	//	Initialization_exception();//初始化异常函数
-	//}
 }
 
 //函 数 名：loop() 
@@ -90,25 +78,46 @@ void setup()
 // Add the main program code into the continuous loop() function
 void loop()
 {
-	for (size_t i = 0; i < 255; i+=45)
-	{
-		analogWrite(AO1, i);
-		analogWrite(AO2, i);
-		delay(1000);
-	}
+	//Send_E011(Receive_IsBroadcast);//这里的Receive_IsBroadcast是否有值？
+	/*tone(AO1, 1, 2000);
+	delay(2000);
+	noTone(AO1);
+
+	tone(AO1, 1000, 2000);
+	delay(2000);
+	noTone(AO1);*/
+
+	/*digitalWrite(AO1, HIGH);
+	digitalWrite(AO2, HIGH);*/
 
 
-	//LORA_Receive_information();	//LORA的接收函数
+	/*noTone(AO1);
+	delay(5000);
+	Serial.println("1");
+	tone(AO1, 1500, 5000);
+	noTone(AO1);
+	delay(5000);
+	Serial.println("2");
+	tone(AO1, 2000, 5000);
+	noTone(AO1);
+	delay(5000);
+	Serial.println("3");
+	tone(AO1, 3000, 5000);
+	noTone(AO1);
+	delay(5000);
+	Serial.println("4");*/
 
-	//Automated_strategy();//自动策略函数
+	LORA_Receive_information();	//LORA的接收函数
 
-	//forswitch();//执行函数
+	Automated_strategy();//自动策略函数
 
-	//Timely_reporting();//定时上报函数
+	forswitch();//执行函数
 
-	//Forced_Start_Relay();//强制启动继电器
+	Timely_reporting();//定时上报函数
 
-	//Restore_factory_settings();//恢复出厂设置函数
+	Forced_Start_Relay();//强制启动继电器
+
+	Restore_factory_settings();//恢复出厂设置函数
 }
 
 

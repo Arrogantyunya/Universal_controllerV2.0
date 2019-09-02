@@ -1079,7 +1079,7 @@ void LORA_Receive_information(void)
 	if (Receive_Length > 0)
 	{
 		//Serial.write(Receive_Data,Receive_Length);//发16进制，自动转成ASCII码
-		Judgement_Length = 0;//收到新消息清空判断数组的长度值
+		//Judgement_Length = 0;//收到新消息清空判断数组的长度值
 		Check_Length = 0;//收到新消息清空校验数组的长度值
 		Receive_data_lamp();
 		if (debug == 1)
@@ -1122,8 +1122,6 @@ void LORA_Receive_information(void)
 				Serial.println(CRC_Check_num, HEX);
 			}
 		}
-		Receive_Length = 0;	//将Receive_Length清零
-		Check_Length = 0;	//将Check_Length清零
 
 		//--------------------------------------------------------
 		if (debug == 1)
@@ -1132,7 +1130,10 @@ void LORA_Receive_information(void)
 		}
 		//--------------------------------------------------------
 
-		Judgement_function(Judgement_Data, Judgement_Length, CRC_Check_num);//判断函数
+		Judgement_function(Receive_Data, Receive_Length - 1, CRC_Check_num);//判断函数
+
+		Receive_Length = 0;	//将Receive_Length清零
+		Check_Length = 0;	//将Check_Length清零
 	}
 
 

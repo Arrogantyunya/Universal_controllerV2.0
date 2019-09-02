@@ -51,21 +51,21 @@ void Receive_A011(unsigned char * Judgement_Data, int Judgement_Length)//A011函
 		Serial.println(Judgement_Length);
 	}
 	//--------------------------------------------------------
-	//int ZoneID = Judgement_Data[7];
-	//if (debug == 1)
-	//{
-	//	Serial.println(ZoneID, HEX);
-	//}
-	//AT24CXX_WriteOneByte(12, ZoneID);//将区域ID写入数组
-	//for (size_t i = 8; i <= 16; i++)
-	//{
-	//	AT24CXX_WriteOneByte(i - 5, Judgement_Data[i]);
-	//	if (debug == 1)
-	//	{
-	//		Serial.print(String("AT24CXX_ReadOneByte[ ") + String(i-5) + String(" ]="));
-	//		Serial.println(AT24CXX_ReadOneByte(i - 5), HEX);
-	//	}
-	//}
+	int ZoneID = Judgement_Data[7];
+	if (debug == 1)
+	{
+		Serial.println(ZoneID, HEX);
+	}
+	AT24CXX_WriteOneByte(12, ZoneID);//将区域ID写入数组
+	for (size_t i = 8; i <= 16; i++)
+	{
+		AT24CXX_WriteOneByte(i - 5, Judgement_Data[i]);
+		if (debug == 1)
+		{
+			Serial.print(String("AT24CXX_ReadOneByte[ ") + String(i-5) + String(" ]="));
+			Serial.println(AT24CXX_ReadOneByte(i - 5), HEX);
+		}
+	}
 
 	//是否广播指令
 	Receive_IsBroadcast = Judgement_Data[6];

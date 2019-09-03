@@ -51,7 +51,7 @@ int LORA_Initialization()//LORA初始化函数
 	// digitalWrite(RESETN,HIGH);			//防止LORA进行复位
 	// digitalWrite(AT_CMD,LOW);			//将LORA设置为透传
 
-	if (debug == 1)
+	if (debug_print == 1)
 	{
 		Serial.println("进入LORA_Initialization函数");
 	}
@@ -876,7 +876,7 @@ int LORA_Initialization()//LORA初始化函数
 		Serial.println("LORA Initialization Setup completed");
 		AT24CXX_WriteOneByte(0, 0x01);
 
-		if (debug == 1)
+		if (debug_print == 1)
 		{
 			Serial.println("结束LORA_Initialization函数");
 		}
@@ -889,7 +889,7 @@ int LORA_Initialization()//LORA初始化函数
 		Serial.println("LORA Initialization Setup failed");
 		AT24CXX_WriteOneByte(0, 0x00);
 
-		if (debug == 1)
+		if (debug_print == 1)
 		{
 			Serial.println("结束LORA_Initialization函数");
 		}
@@ -908,7 +908,7 @@ String addr_write()
 
 	for (size_t i = 8; i < lora_len - 2; i++)
 	{
-		if (debug == 1)
+		if (debug_print == 1)
 		{
 			//Serial.println(lora_data[i]);//输出值
 		}
@@ -989,7 +989,7 @@ String addr_write()
 		}
 	}
 
-	if (debug == 1)
+	if (debug_print == 1)
 	{
 		/*for (size_t i = 0; i < 8; i++)
 		{
@@ -1000,18 +1000,18 @@ String addr_write()
 	for (size_t i = 0; i < 8; i++)
 	{
 		addr_data.concat(String(y[i]));//连接字符串
-		if (debug == 1)
+		if (debug_print == 1)
 		{
 			Serial.println(String(y[i]));
 			Serial.println(addr_data);
 		}
 	}
-	if (debug == 1)
+	if (debug_print == 1)
 	{
 		Serial.println("-------");
 	}
 	addr_data.toUpperCase();//大写转换
-	if (debug == 1)
+	if (debug_print == 1)
 	{
 		Serial.println(addr_data);
 	}
@@ -1022,12 +1022,12 @@ String addr_write()
 	//{
 	//	_addr_data = _addr_data + (x[i] * (pow(16, (7 - i))));
 	//	delay(5);
-	//	if (debug == 1)
+	//	if (debug_print == 1)
 	//	{
 	//		//Serial.println(x[i] * (pow(16, (7 - i))));
 	//	}
 	//}
-	//if (debug == 1)
+	//if (debug_print == 1)
 	//{
 	//	Serial.println(_addr_data);
 	//	Serial.println(_addr_data,HEX);
@@ -1082,7 +1082,7 @@ void LORA_Receive_information(void)
 		//Judgement_Length = 0;//收到新消息清空判断数组的长度值
 		Check_Length = 0;//收到新消息清空校验数组的长度值
 		Receive_data_lamp();
-		if (debug == 1)
+		if (debug_print == 1)
 		{
 			Serial.print("Receive_Length = ");//输出接收到的数据长度
 			Serial.println(Receive_Length);
@@ -1099,7 +1099,7 @@ void LORA_Receive_information(void)
 				break;
 			}
 			Check_Data[Check_Length] = Receive_Data[i];
-			if (debug == 1)
+			if (debug_print == 1)
 			{
 				Serial.print("Check_Data ");
 				Serial.print(Check_Length);
@@ -1116,7 +1116,7 @@ void LORA_Receive_information(void)
 		if (Check_Length > 0)
 		{
 			CRC_Check_num = GetCrc8(Check_Data, Check_Length);
-			if (debug == 1)
+			if (debug_print == 1)
 			{
 				Serial.print("CRC8计算的值CRC_Check_num为：0x");
 				Serial.println(CRC_Check_num, HEX);
@@ -1124,7 +1124,7 @@ void LORA_Receive_information(void)
 		}
 
 		//--------------------------------------------------------
-		if (debug == 1)
+		if (debug_crc == 1)
 		{
 			CRC_Check_num = 0xD6;//这行代码是为了不让我每次都计算CRC，实际使用请注释
 		}
@@ -1156,7 +1156,7 @@ void LORA_Receive_information(void)
 
 	//	char const *c = LORA_RecData2.c_str();
 
-	//	if (debug == 1)
+	//	if (debug_print == 1)
 	//	{
 	//		Serial.println(String("LORA_RecData2.length()= ") + String(LORA_RecData2.length()));
 	//		Serial.println("接收到的数据为：");

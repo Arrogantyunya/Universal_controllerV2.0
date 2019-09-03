@@ -60,7 +60,7 @@ unsigned char Judgement_function(unsigned char * Judgement_Data, int Judgement_L
 						{
 							//帧ID为A011
 							//进入A011的判断函数
-							if (debug == 1)
+							if (debug_print == 1)
 							{
 								Serial.println("帧ID为A011");
 							}
@@ -70,7 +70,7 @@ unsigned char Judgement_function(unsigned char * Judgement_Data, int Judgement_L
 						{
 							//帧ID为A013
 							//进入A013的判断函数
-							if (debug == 1)
+							if (debug_print == 1)
 							{
 								Serial.println("帧ID为A013");
 							}
@@ -80,7 +80,7 @@ unsigned char Judgement_function(unsigned char * Judgement_Data, int Judgement_L
 						{
 							//帧ID为A020
 							//进入A020的判断函数
-							if (debug == 1)
+							if (debug_print == 1)
 							{
 								Serial.println("帧ID为A020");
 							}
@@ -90,7 +90,7 @@ unsigned char Judgement_function(unsigned char * Judgement_Data, int Judgement_L
 						{
 							//帧ID为A021
 							//进入A021的判断函数
-							if (debug == 1)
+							if (debug_print == 1)
 							{
 								Serial.println("帧ID为A021");
 							}
@@ -100,7 +100,7 @@ unsigned char Judgement_function(unsigned char * Judgement_Data, int Judgement_L
 						{
 							//帧ID为A022
 							//进入A022的判断函数
-							if (debug == 1)
+							if (debug_print == 1)
 							{
 								Serial.println("帧ID为A022");
 							}
@@ -110,7 +110,7 @@ unsigned char Judgement_function(unsigned char * Judgement_Data, int Judgement_L
 						{
 							//帧ID为A023
 							//进入A023的判断函数
-							if (debug == 1)
+							if (debug_print == 1)
 							{
 								Serial.println("帧ID为A023");
 							}
@@ -120,7 +120,7 @@ unsigned char Judgement_function(unsigned char * Judgement_Data, int Judgement_L
 						{
 							//帧ID为A024
 							//进入A024的判断函数
-							if (debug == 1)
+							if (debug_print == 1)
 							{
 								Serial.println("帧ID为A024");
 							}
@@ -130,7 +130,7 @@ unsigned char Judgement_function(unsigned char * Judgement_Data, int Judgement_L
 						{
 							//帧ID为A025
 							//进入A025的判断函数
-							if (debug == 1)
+							if (debug_print == 1)
 							{
 								Serial.println("帧ID为A025");
 							}

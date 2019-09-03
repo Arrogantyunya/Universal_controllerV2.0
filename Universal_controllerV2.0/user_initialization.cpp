@@ -48,8 +48,8 @@ void Initialization()//初始化函数
 	pinMode(WAKE_UP, OUTPUT);//LORA唤醒
 	pinMode(VIN1, INPUT_ANALOG);//模拟输入电压1
 	pinMode(VIN2, INPUT_ANALOG);//模拟输入电压2
-	pinMode(AO1, OUTPUT);//模拟输出1
-	pinMode(AO2, OUTPUT);//模拟输出2
+	pinMode(AO1, PWM);//模拟输出1
+	pinMode(AO2, PWM);//模拟输出2
 	pinMode(DI1, INPUT_PULLDOWN);//数字输入1
 	pinMode(DI2, INPUT_PULLDOWN);//数字输入2
 	pinMode(DO1, OUTPUT);//数字输出1
@@ -96,10 +96,13 @@ void Initialization()//初始化函数
 	}
 
 
-	Serial.println("===========");
+	Serial.println("===============");
 	Serial.println(String("debug = ") + String(debug));
+	Serial.println(String("debug_crc = ") + String(debug_crc));
+	Serial.println(String("debug_print = ") + String(debug_print));
 	Serial.println(String("LORA_reset = ") + String(LORA_reset));
 	Serial.println(String("LORA_NET = ") + String(LORA_NET));
+	Serial.println("===============");
 
 
 	//-------------------------------------------

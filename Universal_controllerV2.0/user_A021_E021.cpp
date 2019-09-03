@@ -18,7 +18,7 @@ void Receive_A021(unsigned char * Judgement_Data, int Judgement_Length)
 	//--------------------------------------------------------
 	//该区域为测试传输进Receive_A021函数的数据是否正确的测试代码块
 	//需要测试时请取消注释
-	if (debug == 1)
+	if (debug_print == 1)
 	{
 		Serial.println("进入Receive_A021函数");
 		for (int i = 0; i < Judgement_Length + 1; i++)
@@ -43,7 +43,7 @@ void Receive_A021(unsigned char * Judgement_Data, int Judgement_Length)
 
 	//进行状态的回执
 	Send_E021(Receive_IsBroadcast);
-	if (debug == 1)
+	if (debug_print == 1)
 	{
 		Serial.println("完成A021状态回执");
 		Serial.println("结束Receive_A021函数");
@@ -92,7 +92,7 @@ unsigned char Send_E021(int Receive_IsBroadcast)
 	{
 		Check_Data[Check_Length] = E021[i];
 		// Check_Data[Check_Length] = 0x55;
-		if (debug == 1)
+		if (debug_print == 1)
 		{
 			Serial.print("Check_Data ");
 			Serial.print(Check_Length);
@@ -108,7 +108,7 @@ unsigned char Send_E021(int Receive_IsBroadcast)
 	if (Check_Length > 0)
 	{
 		E021_CRC8 = GetCrc8(Check_Data, Check_Length);//得到CRC数据
-		if (debug == 1)
+		if (debug_print == 1)
 		{
 			Serial.print("CRC8计算的值E021_CRC8 = 0x");
 			Serial.println(E021_CRC8, HEX);
@@ -184,7 +184,7 @@ int E021_GetDigitalStatus()
 	{
 		DIBin_1 = DIBin_1 | (DI_1[7 - i] << i);
 		DIBin_2 = DIBin_2 | (DI_2[7 - i] << i);
-		if (debug == 1)
+		if (debug_print == 1)
 		{
 			Serial.print(String("DIBin_1 = "));
 			Serial.println(DIBin_1, BIN);
@@ -195,7 +195,7 @@ int E021_GetDigitalStatus()
 
 	//Str_DI1 = String(DIBin_1,HEX); Str_DI2 = String(DIBin_2, HEX);
 
-	/*if (debug == 1)
+	/*if (debug_print == 1)
 	{
 		Serial.print("Str_DI1 = 0x");
 		Serial.println(Str_DI1);
@@ -205,7 +205,7 @@ int E021_GetDigitalStatus()
 
 	long DI1_long = Str_DI1.toInt();
 	long DI2_long = Str_DI2.toInt();
-	if (debug == 1)
+	if (debug_print == 1)
 	{
 		Serial.print("DI1_long = ");
 		Serial.println(DI1_long,HEX);
@@ -216,7 +216,7 @@ int E021_GetDigitalStatus()
 	E021_digIn1 = DIBin_1;
 	E021_digIn2 = DIBin_2;
 
-	if (debug == 1)
+	if (debug_print == 1)
 	{
 		Serial.print("E021_digIn1,E021_digIn2 = ");
 		Serial.println(E021_digIn1, HEX);
@@ -239,7 +239,7 @@ int E021_GetDigitalStatus()
 	{
 		DOBin_1 = DOBin_1 | (DO_1[7 - i] << i);
 		DOBin_2 = DOBin_2 | (DO_2[7 - i] << i);
-		if (debug == 1)
+		if (debug_print == 1)
 		{
 			Serial.print(String("DOBin_1 = "));
 			Serial.println(DOBin_1, BIN);
@@ -250,7 +250,7 @@ int E021_GetDigitalStatus()
 
 	//Str_DO1 = String(DOBin_1, HEX); Str_DO2 = String(DOBin_2, HEX);
 
-	/*if (debug == 1)
+	/*if (debug_print == 1)
 	{
 		Serial.print("Str_DO1 = 0x");
 		Serial.println(Str_DO1);
@@ -259,7 +259,7 @@ int E021_GetDigitalStatus()
 	}
 	long DO1_long = Str_DO1.toInt();
 	long DO2_long = Str_DO2.toInt();
-	if (debug == 1)
+	if (debug_print == 1)
 	{
 		Serial.print("DI1_long = ");
 		Serial.println(DI1_long, HEX);
@@ -269,7 +269,7 @@ int E021_GetDigitalStatus()
 	E021_digOut1 = DOBin_1;
 	E021_digOut2 = DOBin_2;
 
-	if (debug == 1)
+	if (debug_print == 1)
 	{
 		Serial.print("E021_digOut1,E021_digOut2 = ");
 		Serial.println(E021_digOut1, HEX);
@@ -296,10 +296,13 @@ int E021_GetAnalogStatus()
 	{
 		ar1 = 5.69; ar2 = 17.36;
 		ar3 = 0.79; ar4 = 99.36;
-		Serial.println(String("ar1 = ") + ar1 + String("mV"));
-		Serial.println(String("ar2 = ") + ar2 + String("mV"));
-		Serial.println(String("ar3 = ") + ar3 + String("mV"));
-		Serial.println(String("ar4 = ") + ar4 + String("mV"));
+		if (debug_print == 1)
+		{
+			Serial.println(String("ar1 = ") + ar1 + String("mV"));
+			Serial.println(String("ar2 = ") + ar2 + String("mV"));
+			Serial.println(String("ar3 = ") + ar3 + String("mV"));
+			Serial.println(String("ar4 = ") + ar4 + String("mV"));
+		}
 	}
 
 	//模拟输入1
@@ -308,7 +311,7 @@ int E021_GetAnalogStatus()
 		E021_anaIn1_1 = floor(ar1);
 		E021_anaIn1_2 = (ar1 - E021_anaIn1_1) * 100;
 		E021_anaIn1_3 = 0xE2;
-		if (debug == 1)
+		if (debug_print == 1)
 		{
 			Serial.println(String("E021_anaIn1_1 = ") + E021_anaIn1_1);
 			Serial.println(String("E021_anaIn1_2 = ") + E021_anaIn1_2);
@@ -321,7 +324,7 @@ int E021_GetAnalogStatus()
 		/*E021_anaIn1_1 = floor(ar1);
 		E021_anaIn1_2 = (ar1 - E021_anaIn1_1) * 100;
 		E021_anaIn1_3 = 0xE2;*/
-		if (debug == 1)
+		if (debug_print == 1)
 		{
 			Serial.println(String("E021_anaIn1_1 = ") + E021_anaIn1_1);
 			Serial.println(String("E021_anaIn1_2 = ") + E021_anaIn1_2);
@@ -335,7 +338,7 @@ int E021_GetAnalogStatus()
 		E021_anaIn2_1 = floor(ar2);
 		E021_anaIn2_2 = (ar2 - E021_anaIn2_1) * 100;
 		E021_anaIn2_3 = 0xE2;
-		if (debug == 1)
+		if (debug_print == 1)
 		{
 			Serial.println(String("E021_anaIn2_1 = ") + E021_anaIn2_1);
 			Serial.println(String("E021_anaIn2_2 = ") + E021_anaIn2_2);
@@ -348,7 +351,7 @@ int E021_GetAnalogStatus()
 		/*E021_anaIn2_1 = floor(ar2);
 		E021_anaIn2_2 = (ar2 - E021_anaIn2_1) * 100;
 		E021_anaIn2_3 = 0xE2;*/
-		if (debug == 1)
+		if (debug_print == 1)
 		{
 			Serial.println(String("E021_anaIn2_1 = ") + E021_anaIn2_1);
 			Serial.println(String("E021_anaIn2_2 = ") + E021_anaIn2_2);
@@ -362,7 +365,7 @@ int E021_GetAnalogStatus()
 		E021_anaOut1_1 = floor(ar3);
 		E021_anaOut1_2 = (ar3 - E021_anaOut1_1) * 100;
 		E021_anaOut1_3 = 0xE2;
-		if (debug == 1)
+		if (debug_print == 1)
 		{
 			Serial.println(String("E021_anaOut1_1 = ") + E021_anaOut1_1);
 			Serial.println(String("E021_anaOut1_2 = ") + E021_anaOut1_2);
@@ -375,7 +378,7 @@ int E021_GetAnalogStatus()
 		/*E021_anaOut1_1 = floor(ar3);
 		E021_anaOut1_2 = (ar3 - E021_anaOut1_1) * 100;
 		E021_anaOut1_3 = 0xE2;*/
-		if (debug == 1)
+		if (debug_print == 1)
 		{
 			Serial.println(String("E021_anaOut1_1 = ") + E021_anaOut1_1);
 			Serial.println(String("E021_anaOut1_2 = ") + E021_anaOut1_2);
@@ -389,7 +392,7 @@ int E021_GetAnalogStatus()
 		E021_anaOut2_1 = floor(ar4);
 		E021_anaOut2_2 = (ar4 - E021_anaOut2_1) * 100;
 		E021_anaOut2_3 = 0xE2;
-		if (debug == 1)
+		if (debug_print == 1)
 		{
 			Serial.println(String("E021_anaOut2_1 = ") + E021_anaOut2_1);
 			Serial.println(String("E021_anaOut2_2 = ") + E021_anaOut2_2);
@@ -402,7 +405,7 @@ int E021_GetAnalogStatus()
 		/*E021_anaOut2_1 = floor(ar4);
 		E021_anaOut2_2 = (ar4 - E021_anaOut2_1) * 100;
 		E021_anaOut2_3 = 0xE2;*/
-		if (debug == 1)
+		if (debug_print == 1)
 		{
 			Serial.println(String("E021_anaOut2_1 = ") + E021_anaOut2_1);
 			Serial.println(String("E021_anaOut2_2 = ") + E021_anaOut2_2);
@@ -414,7 +417,7 @@ int E021_GetAnalogStatus()
 
 unsigned long Get_Delivery_oldtime()
 {
-	if (debug == 1)
+	if (debug_print == 1)
 	{
 		//Serial.println(String("Delivery_oldtime = ") + Delivery_oldtime);
 	}

@@ -35,7 +35,7 @@ void Receive_A011(unsigned char * Judgement_Data, int Judgement_Length)//A011函
 	//--------------------------------------------------------
 	//该区域为测试传输进Receive_A011函数的数据是否正确的测试代码块
 	//需要测试时请取消注释
-	if (debug ==1)
+	if (debug_print ==1)
 	{
 		Serial.println("进入Receive_A011函数");
 		for (int i = 0; i < Judgement_Length + 1; i++)
@@ -52,7 +52,7 @@ void Receive_A011(unsigned char * Judgement_Data, int Judgement_Length)//A011函
 	}
 	//--------------------------------------------------------
 	int ZoneID = Judgement_Data[7];
-	if (debug == 1)
+	if (debug_print == 1)
 	{
 		Serial.println(ZoneID, HEX);
 	}
@@ -60,7 +60,7 @@ void Receive_A011(unsigned char * Judgement_Data, int Judgement_Length)//A011函
 	for (size_t i = 8; i <= 16; i++)
 	{
 		AT24CXX_WriteOneByte(i - 5, Judgement_Data[i]);
-		if (debug == 1)
+		if (debug_print == 1)
 		{
 			Serial.print(String("AT24CXX_ReadOneByte[ ") + String(i-5) + String(" ]="));
 			Serial.println(AT24CXX_ReadOneByte(i - 5), HEX);
@@ -72,7 +72,7 @@ void Receive_A011(unsigned char * Judgement_Data, int Judgement_Length)//A011函
 
 	//进行状态的回执
 	Send_E011(Receive_IsBroadcast);
-	if (debug == 1)
+	if (debug_print == 1)
 	{
 		Serial.println("完成A011状态回执");
 		Serial.println("结束Receive_A011函数");
@@ -116,7 +116,7 @@ unsigned char Send_E011(int Receive_IsBroadcast)//E011函数
 	{
 		Check_Data[Check_Length] = E011[i];
 		// Check_Data[Check_Length] = 0x55;
-		if (debug == 1)
+		if (debug_print == 1)
 		{
 			Serial.print("Check_Data ");
 			Serial.print(Check_Length);
@@ -132,7 +132,7 @@ unsigned char Send_E011(int Receive_IsBroadcast)//E011函数
 	if (Check_Length > 0)
 	{
 		E011_CRC8 = GetCrc8(Check_Data, Check_Length);//得到CRC数据
-		if (debug == 1)
+		if (debug_print == 1)
 		{
 			Serial.print("CRC8计算的值E011_CRC8 = 0x");
 			Serial.println(E011_CRC8, HEX);
@@ -148,7 +148,7 @@ unsigned char Send_E011(int Receive_IsBroadcast)//E011函数
 	E011[23] = E011_FrameEnd6;
 
 	//该区域为串口查看E011回执的信息
-	if (debug == 1)
+	if (debug_print == 1)
 	{
 		for (int i = 0; i < 24; i++)
 		{

@@ -17,7 +17,7 @@ void Receive_A025(unsigned char * Judgement_Data, int Judgement_Length)
 	//--------------------------------------------------------
 	//该区域为测试传输进Receive_A025函数的数据是否正确的测试代码块
 	//需要测试时请取消注释
-	if (debug == 1)
+	if (debug_print == 1)
 	{
 		Serial.println("进入Receive_A025函数");
 		for (int i = 0; i < Judgement_Length + 1; i++)
@@ -44,7 +44,7 @@ void Receive_A025(unsigned char * Judgement_Data, int Judgement_Length)
 	{
 		for (int v = 0; v < a; v++)
 		{
-			if (debug == 1)
+			if (debug_print == 1)
 			{
 				Serial.print(String("RS485[ ") + String(v) + String(" ]= "));
 				Serial.println(RS485[v], HEX);
@@ -60,7 +60,7 @@ void Receive_A025(unsigned char * Judgement_Data, int Judgement_Length)
 
 	//进行状态的回执
 	Send_E025(Receive_IsBroadcast);
-	if (debug == 1)
+	if (debug_print == 1)
 	{
 		Serial.println("完成A025状态回执");
 		Serial.println("结束Receive_A025函数");
@@ -87,14 +87,14 @@ unsigned char Send_E025(int Receive_IsBroadcast)
 	if (RS485_length > 0)
 	{
 		Receive_data_lamp();
-		if (debug == 1)
+		if (debug_print == 1)
 		{
 			Serial.print("RS485_length = ");
 			Serial.println(RS485_length);
 		}
 		for (int i = 0; i < RS485_length; i++)
 		{
-			if (debug == 1)
+			if (debug_print == 1)
 			{
 				Serial.print(String("RS485") + "[" + i + "]");
 				Serial.println(RS485[i], HEX);
@@ -119,7 +119,7 @@ unsigned char Send_E025(int Receive_IsBroadcast)
 	for (size_t i = 0; i < E025_need_485length; i++)//E025[15]
 	{
 		E025[8 + i] = RS485[i];
-		if (debug == 1)
+		if (debug_print == 1)
 		{
 			Serial.print(String("RS485") + "[" + i + "] = ");
 			Serial.println(RS485[i], HEX);
@@ -129,7 +129,7 @@ unsigned char Send_E025(int Receive_IsBroadcast)
 	}
 	for (size_t i = 0; i < 16; i++)
 	{
-		if (debug == 1)
+		if (debug_print == 1)
 		{
 			Serial.print(String("E025") + "[" + i + "] = ");
 			Serial.println(E025[i], HEX);
@@ -140,21 +140,24 @@ unsigned char Send_E025(int Receive_IsBroadcast)
 	for (size_t i = 0; i < 4 + E025_need_485length; i++)
 	{
 		E025CRC[i] = E025[i + 4];
-		if (debug == 1)
+		if (debug_print == 1)
 		{
 			Serial.print(String("E025CRC") + "[" + i + "]");
 			Serial.println(E025CRC[i], HEX);
 		}
 		Check_Length++;
 	}
-	if (debug == 1)
+	if (debug_print == 1)
 	{
 		Serial.println("Check_Length" + String(Check_Length));
 	}
 	if (Check_Length > 0)
 	{
-		Serial.print("CRC8计算的值为：0x");
-		Serial.println(GetCrc8(E025CRC, Check_Length), HEX);
+		if (debug_print == 1)
+		{
+			Serial.print("CRC8计算的值为：0x");
+			Serial.println(GetCrc8(E025CRC, Check_Length), HEX);
+		}
 		E025_CRC8 = GetCrc8(E025CRC, Check_Length);
 		Check_Length = 0;
 	}
@@ -168,7 +171,7 @@ unsigned char Send_E025(int Receive_IsBroadcast)
 	E025[E025_length - 1] = 0x0A;//E025[22]
 	for (size_t i = 0; i < E025_length; i++)
 	{
-		if (debug == 1)
+		if (debug_print == 1)
 		{
 			Serial.print(String("E025[") + String(i) + String("]="));
 			Serial.println(E025[i], HEX);

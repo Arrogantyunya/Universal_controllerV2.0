@@ -32,9 +32,9 @@
 #include "i2c.h"
 
 
-#define debug			1		//debug为1进入测试模式，每次重启所有标志位都清零;为0进入正常使用模式，不会清空标志位
+#define debug			0		//debug为1进入测试模式，每次重启所有标志位都清零;为0进入正常使用模式，不会清空标志位
 #define debug_crc		1		//debug_crc为1进入CRC不需要校验的模式，将CRC位发送D6将校验通过；为0时为正常校验CRC
-#define debug_print		1		//debug_print为1进入测试输出模式，将会打印信息；为0时将不打印输出
+#define debug_print		0		//debug_print为1进入测试输出模式，将会打印信息；为0时将不打印输出
 
 #define LORA_reset		0		//LORA_reset为1进入LORA测试，每次重启LORA的标志位都清零
 #define LORA_NET		0		//LORA_NET为0代表lora的NET为节点，为1代表为网关,为0代表节点

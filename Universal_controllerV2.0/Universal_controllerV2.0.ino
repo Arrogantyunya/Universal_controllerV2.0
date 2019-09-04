@@ -116,6 +116,11 @@ void Timely_reporting(void)//定时上报函数
 {
 	if (millis() - Get_Delivery_oldtime() >= Delivery_time * 1000 && Get_Delivery_oldtime() > 0)
 	{
+		if (debug_print == 1)
+		{
+			Serial.println("定时自动上报");
+			//delay(1000);
+		}
 		//进行状态的回执
 		Send_E021(Receive_IsBroadcast);
 	}

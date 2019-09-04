@@ -2562,11 +2562,14 @@ void forswitch()
 				//无状态
 				//无状态指令
 				//--------------------------------------
-				if (debug_print == 1)
+				if (debug == 1)
 				{
 					delay(500);
-					Serial.print(i);
-					Serial.println("进入case：Stateless");
+					if (debug_print == 1)
+					{
+						Serial.print(i);
+						Serial.println("进入case：Stateless");
+					}
 				}
 				//--------------------------------------
 				break;
@@ -2576,11 +2579,14 @@ void forswitch()
 				*接收到值后进行判断进入下一个状态。*/
 			case DO1_ON:
 				//--------------------------------------
-				if (debug_print == 1)
+				if (debug == 1)
 				{
 					delay(500);
-					Serial.print(i);
-					Serial.println("进入case：DO1_ON");
+					if (debug_print == 1)
+					{
+						Serial.print(i);
+						Serial.println("进入case：DO1_ON");
+					}
 				}
 				//--------------------------------------
 				digitalWrite(DO1, HIGH);
@@ -2608,11 +2614,14 @@ void forswitch()
 				*接收到值后进行判断进入下一个状态。*/
 			case DO2_ON:
 				//--------------------------------------
-				if (debug_print == 1)
+				if (debug == 1)
 				{
 					delay(500);
-					Serial.print(i);
-					Serial.println("进入case：DO2_ON");
+					if (debug_print == 1)
+					{
+						Serial.print(i);
+						Serial.println("进入case：DO2_ON");
+					}
 				}
 				//--------------------------------------
 				digitalWrite(DO2, HIGH);
@@ -2638,11 +2647,14 @@ void forswitch()
 				*接收到值后进行判断进入下一个状态。*/
 			case DO3_ON:
 				//--------------------------------------
-				if (debug_print == 1)
+				if (debug == 1)
 				{
 					delay(500);
-					Serial.print(i);
-					Serial.println("进入case：DO3_ON");
+					if (debug_print == 1)
+					{
+						Serial.print(i);
+						Serial.println("进入case：DO3_ON");
+					}
 				}
 				//--------------------------------------
 				digitalWrite(KCZJ1, LOW);
@@ -2668,11 +2680,14 @@ void forswitch()
 				*接收到值后进行判断进入下一个状态。*/
 			case DO4_ON:
 				//--------------------------------------
-				if (debug_print == 1)
+				if (debug == 1)
 				{
 					delay(500);
-					Serial.print(i);
-					Serial.println("进入case：DO4_ON");
+					if (debug_print == 1)
+					{
+						Serial.print(i);
+						Serial.println("进入case：DO4_ON");
+					}
 				}
 				//--------------------------------------
 				digitalWrite(KCZJ2, LOW);
@@ -2698,11 +2713,14 @@ void forswitch()
 				*接收到值后进行判断进入下一个状态。*/
 			case AO1_ON:
 				//--------------------------------------
-				if (debug_print == 1)
+				if (debug == 1)
 				{
 					delay(500);
-					Serial.print(i);
-					Serial.println("进入case：AO1_ON");
+					if (debug_print == 1)
+					{
+						Serial.print(i);
+						Serial.println("进入case：AO1_ON");
+					}
 				}
 				//--------------------------------------
 				analogWrite(AO1, Analog_Value1);
@@ -2728,11 +2746,14 @@ void forswitch()
 				*接收到值后进行判断进入下一个状态。*/
 			case AO2_ON:
 				//--------------------------------------
-				if (debug_print == 1)
+				if (debug == 1)
 				{
 					delay(500);
-					Serial.print(i);
-					Serial.println("进入case：AO2_ON");
+					if (debug_print == 1)
+					{
+						Serial.print(i);
+						Serial.println("进入case：AO2_ON");
+					}
 				}
 				//--------------------------------------
 				analogWrite(AO2, Analog_Value2);

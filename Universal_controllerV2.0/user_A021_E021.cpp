@@ -147,7 +147,7 @@ unsigned char E021_init()
 	E021_FrameId1 = 0xE0;		//E021的帧ID1
 	E021_FrameId2 = 0x21;		//E021的帧ID2
 
-	E021_DataLen = 0x14;			//E021的数据长度
+	E021_DataLen = 0x14;		//E021的数据长度
 
 	E021_DeviceTypeID1 = 0xC0;	//E021的设备类型1
 	E021_DeviceTypeID2 = 0x02;	//E021的设备类型2
@@ -171,10 +171,10 @@ int E021_GetDigitalStatus()
 	byte DO_1[8] = { 0,0,0,0,0,0,0,0 }; String Str_DO1; int DOBin_1 = 0;
 	byte DO_2[8] = { 0,0,0,0,0,0,0,0 }; String Str_DO2; int DOBin_2 = 0;
 
-	DI_2[0] = 1;
+	DI_2[0] = 0;
 	DI_2[1] = 0;
-	DI_2[2] = 1;
-	DI_2[3] = 1;
+	DI_2[2] = 0;
+	DI_2[3] = 0;
 	DI_2[4] = 0;
 	DI_2[5] = 0;
 	DI_2[6] = digitalRead(DI2);	//digitalRead(DI2)
@@ -224,14 +224,16 @@ int E021_GetDigitalStatus()
 		Serial.println(E021_digIn2, HEX);
 	}
 //--------------------------------------------------
-	DO_2[0] = 1;
+	DO_2[0] = 0;
 	DO_2[1] = 0;
-	DO_2[2] = 1;
+	DO_2[2] = 0;
 	DO_2[3] = 0;
 	DO_2[4] = 0;
 	DO_2[5] = 0;
 	DO_2[4] = digitalRead(KCZJ2);	//digitalRead(KCZJ2);
+	DO_2[4] == 0 ? DO_2[4] = 1 : DO_2[4] = 0;//对继电器2取反
 	DO_2[5] = digitalRead(KCZJ1);	//digitalRead(KCZJ1);
+	DO_2[5] == 0 ? DO_2[5] = 1 : DO_2[5] = 0;//对继电器1取反
 	DO_2[6] = digitalRead(DO2);		//digitalRead(D02);
 	DO_2[7] = digitalRead(DO1);		//digitalRead(D01);
 

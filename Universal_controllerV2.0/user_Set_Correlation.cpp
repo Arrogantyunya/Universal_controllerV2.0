@@ -1810,6 +1810,8 @@ void Receive_A022(unsigned char * Judgement_Data, int Judgement_Length)//A022函
 
 	//进行状态的回执
 	Send_E021(Receive_IsBroadcast);
+
+	Send_E022(Receive_IsBroadcast);
 	if (debug_print == 1)
 	{
 		Serial.println("完成A022状态回执");
@@ -2366,6 +2368,50 @@ unsigned char E020_init()
 	E020_FrameEnd6 = 0x0A;
 	return 0;
 }
+
+
+//函 数 名：Send_E022() 
+//功能描述：回执剩余时间E022的函数
+//函数说明：
+//调用函数：
+//全局变量：
+//输 入：
+//返 回：
+/////////////////////////////////////////////////////////////////////
+unsigned char Send_E022(int Receive_IsBroadcast)
+{
+
+	return 0;
+}
+
+
+//函 数 名：E022_init() 
+//功能描述：E022的初始化函数
+//函数说明：
+//调用函数：
+//全局变量：
+//输 入：
+//返 回：
+/////////////////////////////////////////////////////////////////////
+unsigned char E022_init()
+{
+	E022_FrameHead = 0xFE;		//E022的帧头
+
+	E022_FrameId1 = 0xE0;		//E022的帧ID1
+	E022_FrameId2 = 0x22;		//E022的帧ID2
+
+	E022_DataLen = 0x14;		//E022的数据长度
+
+	E022_DeviceTypeID1 = 0xC0;	//E022的设备类型1
+	E022_DeviceTypeID2 = 0x02;	//E022的设备类型2
+
+	E022_IsBroadcast = 0x00;		//E022的是否广播指令
+
+	E022_ZoneId = AT24CXX_ReadOneByte(12);			//E022的区域
+
+	return 0;
+}
+
 
 //函 数 名：SN_ZoneISOK() 
 //功能描述：判断SN以及ZoneID是否写入成功的函数

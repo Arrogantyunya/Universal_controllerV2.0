@@ -28,6 +28,7 @@ static unsigned char Out_State[6];              //用来存放状态值rd1
 static unsigned long duration[6];               //用来存放持续时间值Duration_time
 static unsigned long remaining[6];              //用来存放剩余时间值Remaining
 static unsigned long ot[6];                     //用来存放旧时间值oldtime
+static unsigned long CurrentWorkSec[6];			//用来存放已工作时长
 
 static unsigned long time_huns = 0;             //时间百位
 static unsigned long time_tens = 0;             //时间十位
@@ -36,6 +37,8 @@ static unsigned long time_ones = 0;             //时间个位
 static unsigned long Duration_time = 0;         //持续时间
 static unsigned long Remaining = 0;             //剩余时间
 static unsigned long oldtime = 0;				//旧时间
+
+
 
 static float Set_AOVoltage1 = 0;			//设置模拟输出电压值1
 static float Set_AOVoltage2 = 0;			//设置模拟输出电压值2
@@ -81,6 +84,86 @@ static int E020_FrameEnd6 = 0x0A;		//E020的帧尾6
 
 static unsigned char E020_Check_Data[50];   //用来存放接收到的数据
 static int E020_Check_Length = 0;
+//------------------------------------------------------------------------
+
+
+static unsigned char E022[51];//用来存放E022发送出去的数组
+
+static int E022_FrameHead = 0xFE;		//E022的帧头
+
+static int E022_FrameId1 = 0xE0;		//E022的帧ID1
+static int E022_FrameId2 = 0x22;		//E022的帧ID2
+
+static int E022_DataLen = 0x28;			//E022的数据长度
+
+static int E022_DeviceTypeID1 = 0xC0;	//E022的设备类型1
+static int E022_DeviceTypeID2 = 0x02;	//E022的设备类型2
+
+static int E022_IsBroadcast = 0x00;		//E022的是否广播指令
+
+static int E022_ZoneId = 0x00;			//E022的区域
+
+static int E022_DO1_SetTime1 = 0x00;	//E022数字输出1设定时间1
+static int E022_DO1_SetTime2 = 0x00;	//E022数字输出1设定时间2
+static int E022_DO1_SetTime3 = 0x00;	//E022数字输出1设定时间3
+
+static int E022_DO1_RemainTime1 = 0x00;	//E022数字输出1剩余时间1
+static int E022_DO1_RemainTime2 = 0x00;	//E022数字输出1剩余时间2
+static int E022_DO1_RemainTime3 = 0x00;	//E022数字输出1剩余时间3
+
+
+static int E022_DO2_SetTime1 = 0x00;	//E022数字输出2设定时间1
+static int E022_DO2_SetTime2 = 0x00;	//E022数字输出2设定时间2
+static int E022_DO2_SetTime3 = 0x00;	//E022数字输出2设定时间3
+
+static int E022_DO2_RemainTime1 = 0x00;	//E022数字输出2剩余时间1
+static int E022_DO2_RemainTime2 = 0x00;	//E022数字输出2剩余时间2
+static int E022_DO2_RemainTime3 = 0x00;	//E022数字输出2剩余时间3
+
+static int E022_DO3_SetTime1 = 0x00;	//E022数字输出3设定时间1
+static int E022_DO3_SetTime2 = 0x00;	//E022数字输出3设定时间2
+static int E022_DO3_SetTime3 = 0x00;	//E022数字输出3设定时间3
+
+static int E022_DO3_RemainTime1 = 0x00;	//E022数字输出3剩余时间1
+static int E022_DO3_RemainTime2 = 0x00;	//E022数字输出3剩余时间2
+static int E022_DO3_RemainTime3 = 0x00;	//E022数字输出3剩余时间3
+
+static int E022_DO4_SetTime1 = 0x00;	//E022数字输出4设定时间1
+static int E022_DO4_SetTime2 = 0x00;	//E022数字输出4设定时间2
+static int E022_DO4_SetTime3 = 0x00;	//E022数字输出4设定时间3
+
+static int E022_DO4_RemainTime1 = 0x00;	//E022数字输出4剩余时间1
+static int E022_DO4_RemainTime2 = 0x00;	//E022数字输出4剩余时间2
+static int E022_DO4_RemainTime3 = 0x00;	//E022数字输出4剩余时间3
+
+static int E022_AO1_SetTime1 = 0x00;	//E022模拟输出1设定时间1
+static int E022_AO1_SetTime2 = 0x00;	//E022模拟输出1设定时间2
+static int E022_AO1_SetTime3 = 0x00;	//E022模拟输出1设定时间3
+
+static int E022_AO1_RemainTime1 = 0x00;	//E022模拟输出1剩余时间1
+static int E022_AO1_RemainTime2 = 0x00;	//E022模拟输出1剩余时间2
+static int E022_AO1_RemainTime3 = 0x00;	//E022模拟输出1剩余时间3
+
+static int E022_AO2_SetTime1 = 0x00;	//E022模拟输出2设定时间1
+static int E022_AO2_SetTime2 = 0x00;	//E022模拟输出2设定时间2
+static int E022_AO2_SetTime3 = 0x00;	//E022模拟输出2设定时间3
+
+static int E022_AO2_RemainTime1 = 0x00;	//E022模拟输出2剩余时间1
+static int E022_AO2_RemainTime2 = 0x00;	//E022模拟输出2剩余时间2
+static int E022_AO2_RemainTime3 = 0x00;	//E022模拟输出2剩余时间3	36
+
+static int E022_CRC8 = 0x00;			//E022的CRC8校验码
+
+static int E022_FrameEnd1 = 0x0D;		//E022的帧尾1
+static int E022_FrameEnd2 = 0x0A;		//E022的帧尾2
+static int E022_FrameEnd3 = 0x0D;		//E022的帧尾3
+static int E022_FrameEnd4 = 0x0A;		//E022的帧尾4
+static int E022_FrameEnd5 = 0x0D;		//E022的帧尾5
+static int E022_FrameEnd6 = 0x0A;		//E022的帧尾6
+
+static unsigned char E022_Check_Data[50];   //用来存放接收到的数据
+static int E022_Check_Length = 0;
+//------------------------------------------------------------------------
 
 //static String AssStat, AssStat1, AssStat2;//Association_statement，关联语句1
 static String condition_1, implement_1;//判断语句以及执行语句
@@ -88,10 +171,6 @@ static String con0[5], con1[5], con2[5], con3[5], con4[5];//条件语句块数�
 static String imp0[5], imp1[5], imp2[5], imp3[5], imp4[5];//执行语句块数组
 static String Strcon[5],Strimp[5];//实际使用到的条件语句块以及执行语句块，用来充当变量的数组赋值
 static size_t i_0 = 0, i_1 = 0, i_2 = 0, i_3 = 0;//循环次数函数
-
-//static unsigned char Receive_Data[128];//用来存放接收到的数据
-//static int Receive_Length = 0;//接收数据的长度
-//static int CRC_Check_num = 0x00;//CRC校验的数值
 
 
 //全局函数声明
@@ -103,6 +182,8 @@ void Receive_A023(unsigned char * Judgement_Data, int Judgement_Length);  //A023
 void Receive_A024(unsigned char * Judgement_Data, int Judgement_Length);  //A024函数
 unsigned char Send_E020(int Receive_IsBroadcast,int E020_status );  //E020函数
 unsigned char E020_init();	//E011初始化函数
+unsigned char Send_E022(int Receive_IsBroadcast);  //E021函数
+unsigned char E022_init();	//E021初始化函数
 unsigned char SN_ZoneISOK(unsigned char * Judgement_Data, int Judgement_Length);	//测试SN区域是否写入成功函数
 int Verification_Reserved_field(unsigned char * Judgement_Data, int Initial);
 void forswitch();

@@ -34,15 +34,30 @@ void Receive_A021(unsigned char * Judgement_Data, int Judgement_Length)
 		Serial.println(Judgement_Length);
 	}
 	//--------------------------------------------------------
+	//判断区域
+	if (Judgement_Data[7] == AT24CXX_ReadOneByte(12))
+	{
+		// 防止数据冲突，增加延时随机函数
+		delay(random(0, 5000));
 
-	//防止数据冲突，增加延时随机函数
-	delay(random(0,5000));
+		//是否广播指令
+		Receive_IsBroadcast = Judgement_Data[6];
 
-	//是否广播指令
-	Receive_IsBroadcast = Judgement_Data[6];
+		//进行状态的回执
+		Send_E021(Receive_IsBroadcast);
+	}
+	else
+	{
+		E020_status = Incorrect_information_error;
+		if (debug_print == 1)
+		{
+			Serial.println("区域信息不正确");
+			Serial.println(String("E020_status = Incorrect_information_error") + String(E020_status));
+		}
+		//进行状态的回执
+		Send_E020(Receive_IsBroadcast, E020_status);
+	}
 
-	//进行状态的回执
-	Send_E021(Receive_IsBroadcast);
 	if (debug_print == 1)
 	{
 		Serial.println("完成A021状态回执");
@@ -123,14 +138,26 @@ unsigned char Send_E021(int Receive_IsBroadcast)
 	E021[29] = E021_FrameEnd5;
 	E021[30] = E021_FrameEnd6;
 
+	//该区域为串口查看E011回执的信息
+	if (debug_print == 1)
+	{
+		for (int i = 0; i < 31; i++)
+		{
+			Serial.print(i);
+			Serial.print("/");
+			Serial.println(E021[i], HEX);
+			delay(1);
+		}
+	}
+
 	Serial3.write(E021,31);
 	Serial3.flush();
 	Send_Data_Lamp();//发送数据灯
 	return 0;
 }
 
-//函 数 名：E025_init() 
-//功能描述：E025的的初始化函数
+//函 数 名：E021_init() 
+//功能描述：E021的的初始化函数
 //函数说明：
 //调用函数：
 //全局变量：
@@ -417,6 +444,15 @@ int E021_GetAnalogStatus()
 	return 0;
 }
 
+
+//函 数 名：Get_Delivery_oldtime() 
+//功能描述：得到Delivery_oldtime的时间值
+//函数说明：
+//调用函数：
+//全局变量：
+//输 入：
+//返 回：
+/////////////////////////////////////////////////////////////////////
 unsigned long Get_Delivery_oldtime()
 {
 	if (debug_print == 1)
@@ -425,3 +461,4 @@ unsigned long Get_Delivery_oldtime()
 	}
 	return Delivery_oldtime;
 }
+

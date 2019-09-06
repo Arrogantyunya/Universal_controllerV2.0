@@ -66,6 +66,16 @@ unsigned char Judgement_function(unsigned char * Judgement_Data, int Judgement_L
 							}
 							Receive_A011(Judgement_Data, Judgement_Length);
 						}
+						else if (Judgement_Data[1] == 0xA0 && Judgement_Data[2] == 0x12)//帧ID为A012
+						{
+							//帧ID为A012
+							//进入A012的判断函数
+							if (debug_print == 1)
+							{
+								Serial.println("帧ID为A012");
+							}
+							Receive_A012(Judgement_Data, Judgement_Length);
+						}
 						else if (Judgement_Data[1] == 0xA0 && Judgement_Data[2] == 0x13)//帧ID为A013
 						{
 							//帧ID为A013
@@ -75,6 +85,16 @@ unsigned char Judgement_function(unsigned char * Judgement_Data, int Judgement_L
 								Serial.println("帧ID为A013");
 							}
 							Receive_A013(Judgement_Data, Judgement_Length);
+						}
+						else if (Judgement_Data[1] == 0xA0 && Judgement_Data[2] == 0x14)//帧ID为A014
+						{
+							//帧ID为A014
+							//进入A014的判断函数
+							if (debug_print == 1)
+							{
+								Serial.println("帧ID为A014");
+							}
+							Receive_A014(Judgement_Data, Judgement_Length);
 						}
 						else if (Judgement_Data[1] == 0xA0 && Judgement_Data[2] == 0x20)//帧ID为A020
 						{

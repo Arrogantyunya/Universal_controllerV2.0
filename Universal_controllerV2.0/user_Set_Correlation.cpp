@@ -6,6 +6,100 @@
 #include "user_initialization.h"
 #include "user_HEXtoDEC.h"
 
+//函 数 名：Receive_A012() 
+//功能描述：A012的执行函数
+//函数说明：设置LORA主设备的RTC时间
+//调用函数：
+//全局变量：
+//输 入：
+//返 回：
+/////////////////////////////////////////////////////////////////////
+void Receive_A012(unsigned char* Judgement_Data, int Judgement_Length)
+{
+	//--------------------------------------------------------
+	//该区域为测试传输进Receive_A013函数的数据是否正确的测试代码块
+	//需要测试时请取消注释
+	if (debug_print == 1)
+	{
+		Serial.println("进入Receive_A013函数");
+		for (int i = 0; i < Judgement_Length + 1; i++)
+		{
+			Serial.print("A012Judgement_Data ");
+			Serial.print(i);
+			Serial.print(" :");
+			Serial.println(Judgement_Data[i], HEX);
+			delay(1);
+		}
+		delay(200);
+		Serial.print("Judgement_Length = ");
+		Serial.println(Judgement_Length);
+	}
+	//--------------------------------------------------------
+
+	if (Judgement_Data[7] == AT24CXX_ReadOneByte(12))//判断区域ID是否是12
+	{
+		RTC_Year = Judgement_Data[8];
+		RTC_Month = Judgement_Data[9];
+		RTC_Day = Judgement_Data[10];
+		RTC_Hour = Judgement_Data[11];
+		RTC_Minute = Judgement_Data[12];
+		RTC_Second = Judgement_Data[13];
+
+		if (debug_print == 1)
+		{
+			Serial.println(String("RTC时间为："));
+			Serial.println(String(RTC_Year) + "年" + RTC_Month + "月" + RTC_Day + "日" + RTC_Hour + "时" + RTC_Minute + "分" + RTC_Second + "秒");
+			if (debug == 1)
+			{
+				delay(1500);
+			}
+		}
+
+		if (RTC_Year == Judgement_Data[8] && RTC_Month == Judgement_Data[9] && RTC_Day == Judgement_Data[10] &&
+			RTC_Hour == Judgement_Data[11] && RTC_Minute == Judgement_Data[12] && RTC_Second == Judgement_Data[13])
+		{
+			E020_status = Set_RTC_clock_success;
+			if (debug_print == 1)
+			{
+				Serial.println(String("E020_status = Set_RTC_clock_success") + String(E020_status));
+			}
+
+			RTC_Flag = 0x01;//设置RTC时钟成功后，将RTC的标志位置1
+		}
+		else
+		{
+			E020_status = Set_RTC_clock_failed;
+			if (debug_print == 1)
+			{
+				Serial.println(String("E020_status = Set_RTC_clock_failed") + String(E020_status));
+			}
+
+			RTC_Flag = 0x00;//设置RTC时钟失败后，将RTC的标志位置0
+		}
+
+		//进行状态的回执
+		Send_E020(Receive_IsBroadcast, E020_status);
+
+		Send_E023(Receive_IsBroadcast);//心跳回执
+	}
+	else
+	{
+		E020_status = Incorrect_information_error;
+		if (debug_print == 1)
+		{
+			Serial.println("区域信息不正确");
+			Serial.println(String("E020_status = Incorrect_information_error") + String(E020_status));
+		}
+		//进行状态的回执
+		Send_E020(Receive_IsBroadcast, E020_status);
+	}
+
+	if (debug_print == 1)
+	{
+		Serial.println("完成A012状态回执");
+		Serial.println("结束Receive_A012函数");
+	}
+}
 
 //函 数 名：Receive_A013() 
 //功能描述：A013的执行函数
@@ -83,9 +177,22 @@ void Receive_A013(unsigned char * Judgement_Data, int Judgement_Length)//A013函
 	}
 }
 
+//函 数 名：Receive_A014() 
+//功能描述：A014的执行函数
+//函数说明：设置LORA主设备定时执行的时间段
+//调用函数：
+//全局变量：
+//输 入：
+//返 回：
+/////////////////////////////////////////////////////////////////////
+void Receive_A014(unsigned char* Judgement_Data, int Judgement_Length)
+{
+
+}
+
 //函 数 名：Receive_A020() 
 //功能描述：A020的执行函数
-//函数说明：设置没类型接口挂载的某一路子设备以及工作组数组
+//函数说明：设置某类型接口挂载的某一路子设备以及工作组数组
 //调用函数：
 //全局变量：
 //输 入：
@@ -236,14 +343,24 @@ void Receive_A020(unsigned char * Judgement_Data, int Judgement_Length)//A020函
 			}
 			E020_status = Set_subdevice_type_and_workgroup_failed;
 		}
+		//是否广播指令
+		Receive_IsBroadcast = Judgement_Data[6];
+
+		//进行状态的回执
+		Send_E020(Receive_IsBroadcast, E020_status);
+	}
+	else
+	{
+		E020_status = Incorrect_information_error;
+		if (debug_print == 1)
+		{
+			Serial.println("区域信息不正确");
+			Serial.println(String("E020_status = Incorrect_information_error") + String(E020_status));
+		}
+		//进行状态的回执
+		Send_E020(Receive_IsBroadcast, E020_status);
 	}
 
-
-	//是否广播指令
-	Receive_IsBroadcast = Judgement_Data[6];
-
-	//进行状态的回执
-	Send_E020(Receive_IsBroadcast, E020_status);
 	if (debug_print == 1)
 	{
 		Serial.println("完成A020状态回执");
@@ -1795,23 +1912,28 @@ void Receive_A022(unsigned char * Judgement_Data, int Judgement_Length)//A022函
 				Serial.println("不存在的广播功能");
 			}
 		}
+
+		//是否广播指令
+		Receive_IsBroadcast = Judgement_Data[6];
+
+
+		//进行状态的回执
+		Send_E021(Receive_IsBroadcast);
+
+		Send_E022(Receive_IsBroadcast);
 	}
 	else
 	{
+		E020_status = Incorrect_information_error;
 		if (debug_print == 1)
 		{
-			Serial.println("不属于本设备的区域");
+			Serial.println("区域信息不正确");
+			Serial.println(String("E020_status = Incorrect_information_error") + String(E020_status));
 		}
+		//进行状态的回执
+		Send_E020(Receive_IsBroadcast, E020_status);
 	}
 
-	//是否广播指令
-	Receive_IsBroadcast = Judgement_Data[6];
-
-
-	//进行状态的回执
-	Send_E021(Receive_IsBroadcast);
-
-	Send_E022(Receive_IsBroadcast);
 	if (debug_print == 1)
 	{
 		Serial.println("完成A022状态回执");
@@ -1997,6 +2119,29 @@ void Receive_A023(unsigned char * Judgement_Data, int Judgement_Length)//A023函
 				Serial.println(String("E020_status = State_Storage_Exceeding_the_Upper_Limit") + String(E020_status));
 			}
 		}
+
+		//是否广播指令
+		Receive_IsBroadcast = Judgement_Data[6];
+
+		//进行状态的回执
+		Send_E020(Receive_IsBroadcast, E020_status);
+	}
+	else
+	{
+		E020_status = Incorrect_information_error;
+		if (debug_print == 1)
+		{
+			Serial.println("区域信息不正确");
+			Serial.println(String("E020_status = Incorrect_information_error") + String(E020_status));
+		}
+		//进行状态的回执
+		Send_E020(Receive_IsBroadcast, E020_status);
+	}
+
+	if (debug_print == 1)
+	{
+		Serial.println("完成A023状态回执");
+		Serial.println("结束Receive_A023函数");
 	}
 	
 
@@ -2018,17 +2163,6 @@ void Receive_A023(unsigned char * Judgement_Data, int Judgement_Length)//A023函
 	//array_print_test();
 	////先分割#，分割为条件语句以及执行语句
 	//data_processing(AssStat);
-
-	//是否广播指令
-	Receive_IsBroadcast = Judgement_Data[6];
-
-	//进行状态的回执
-	Send_E020(Receive_IsBroadcast, E020_status);
-	if (debug_print == 1)
-	{
-		Serial.println("完成A023状态回执");
-		Serial.println("结束Receive_A023函数");
-	}
 }
 
 //函 数 名：Receive_A024() 
@@ -2219,14 +2353,25 @@ void Receive_A024(unsigned char * Judgement_Data, int Judgement_Length)//A024函
 				Serial.println("不存在的字段");
 			}
 		}
+
+		//是否广播指令
+		Receive_IsBroadcast = Judgement_Data[6];
+
+		//进行状态的回执
+		Send_E020(Receive_IsBroadcast, E020_status);
+	}
+	else
+	{
+		E020_status = Incorrect_information_error;
+		if (debug_print == 1)
+		{
+			Serial.println("区域信息不正确");
+			Serial.println(String("E020_status = Incorrect_information_error") + String(E020_status));
+		}
+		//进行状态的回执
+		Send_E020(Receive_IsBroadcast, E020_status);
 	}
 
-
-	//是否广播指令
-	Receive_IsBroadcast = Judgement_Data[6];
-
-	//进行状态的回执
-	Send_E020(Receive_IsBroadcast, E020_status);
 	if (debug_print == 1)
 	{
 		Serial.println("完成A024状态回执");
@@ -2381,6 +2526,10 @@ unsigned char E020_init()
 unsigned char Send_E022(int Receive_IsBroadcast)
 {
 
+	Serial3.write(E022, 51);
+	Serial3.flush();
+	Send_Data_Lamp();//发送数据灯
+
 	return 0;
 }
 
@@ -2409,6 +2558,272 @@ unsigned char E022_init()
 
 	E022_ZoneId = AT24CXX_ReadOneByte(12);			//E022的区域
 
+	return 0;
+}
+
+
+//函 数 名：Send_E023() 
+//功能描述：心跳帧
+//函数说明：
+//调用函数：
+//全局变量：
+//输 入：
+//返 回：
+/////////////////////////////////////////////////////////////////////
+unsigned char Send_E023(int Receive_IsBroadcast)
+{
+	E023_init();//将E023的值重置为初始值
+
+	E023_IsBroadcast = Receive_IsBroadcast;//E023的是否广播指令
+
+	E023[0] = E023_FrameHead;
+	E023[1] = E023_FrameId1;
+	E023[2] = E023_FrameId2;
+	E023[3] = E023_DataLen;
+	E023[4] = E023_DeviceTypeID1;
+	E023[5] = E023_DeviceTypeID2;
+	E023[6] = E023_IsBroadcast;
+	E023[7] = E023_ZoneId;
+	E023[8] = E023_Year;
+	E023[9] = E023_Month;
+	E023[10] = E023_Day;
+	E023[11] = E023_Hour;
+	E023[12] = E023_Minute;
+	E023[13] = E023_Second;
+
+	for (size_t i = 4; i <= E023_DataLen + 0x03; i++)
+	{
+		Check_Data[Check_Length] = E023[i];
+		// Check_Data[Check_Length] = 0x55;
+		if (debug_print == 1)
+		{
+			Serial.print("Check_Data ");
+			Serial.print(Check_Length);
+			Serial.print(" :");
+			Serial.println(Check_Data[Check_Length], HEX);
+		}
+		Check_Length++;
+		delay(1);
+	}
+	if (debug_print == 1)
+	{
+		Serial.print("Check_Length = ");
+		Serial.println(Check_Length);
+	}
+	
+	if (Check_Length > 0)
+	{
+		E023_CRC8 = GetCrc8(Check_Data, Check_Length);//得到CRC数据
+		if (debug_print == 1)
+		{
+			Serial.print("CRC8计算的值E023_CRC8 = 0x");
+			Serial.println(E023_CRC8, HEX);
+		}
+		Check_Length = 0;
+	}
+
+	E023[14] = E023_CRC8;
+	E023[15] = E023_FrameEnd1;
+	E023[16] = E023_FrameEnd2;
+	E023[17] = E023_FrameEnd3;
+	E023[18] = E023_FrameEnd4;
+	E023[19] = E023_FrameEnd5;
+	E023[20] = E023_FrameEnd6;
+
+	//该区域为串口查看E020回执的信息
+	if (debug_print == 1)
+	{
+		for (int i = 0; i < 21; i++)
+		{
+			Serial.print(i);
+			Serial.print("/");
+			Serial.println(E023[i], HEX);
+			delay(1);
+		}
+	}
+
+	Serial3.write(E023, 21);
+	Serial3.flush();
+	Send_Data_Lamp();//发送数据灯
+
+	return 0;
+}
+
+
+//函 数 名：E023_init() 
+//功能描述：E023的初始化函数
+//函数说明：
+//调用函数：
+//全局变量：
+//输 入：
+//返 回：
+/////////////////////////////////////////////////////////////////////
+unsigned char E023_init()
+{
+	HeartBeat_oldtime = millis();//定时上报状态，在这里进行赋值
+
+	E023_FrameHead = 0xFE;
+
+	E023_FrameId1 = 0xE0;
+	E023_FrameId2 = 0x23;
+
+	E023_DataLen = 0x0D;
+
+	E023_DeviceTypeID1 = 0xC0;
+	E023_DeviceTypeID2 = 0x02;
+
+	E023_IsBroadcast = 0x00;
+
+	E023_ZoneId = AT24CXX_ReadOneByte(12);;
+
+	E023_Year = RTC_Year;
+	E023_Month = RTC_Month;
+	E023_Day = RTC_Day;
+	E023_Hour = RTC_Hour;
+	E023_Minute = RTC_Minute;
+	E023_Second = RTC_Second;
+
+	E023_CRC8 = 0x00;
+
+	E023_FrameEnd1 = 0x0D;
+	E023_FrameEnd2 = 0x0A;
+	E023_FrameEnd3 = 0x0D;
+	E023_FrameEnd4 = 0x0A;
+	E023_FrameEnd5 = 0x0D;
+	E023_FrameEnd6 = 0x0A;
+	return 0;
+}
+
+
+//函 数 名：Send_E024() 
+//功能描述：请求RTC时间
+//函数说明：
+//调用函数：
+//全局变量：
+//输 入：
+//返 回：
+/////////////////////////////////////////////////////////////////////
+unsigned char Send_E024(int Receive_IsBroadcast)
+{
+	E024_init();//将E024的值重置为初始值
+
+	E024[0] = E024_FrameHead;
+	E024[1] = E024_FrameId1;
+	E024[2] = E024_FrameId2;
+	E024[3] = E024_DataLen;
+	E024[4] = E024_DeviceTypeID1;
+	E024[5] = E024_DeviceTypeID2;
+	E024[6] = E024_IsBroadcast;
+	E024[7] = E024_ZoneId;
+	E024[8] = E024_Allocate1;
+	E024[9] = E024_Allocate2;
+	E024[10] = E024_Allocate3;
+	E024[11] = E024_Allocate4;
+	E024[12] = E024_Allocate5;
+	E024[13] = E024_Allocate6;
+	E024[14] = E024_Allocate7;
+	E024[15] = E024_Allocate8;
+
+	for (size_t i = 4; i <= E024_DataLen + 0x03; i++)
+	{
+		Check_Data[Check_Length] = E024[i];
+		// Check_Data[Check_Length] = 0x55;
+		if (debug_print == 1)
+		{
+			Serial.print("Check_Data ");
+			Serial.print(Check_Length);
+			Serial.print(" :");
+			Serial.println(Check_Data[Check_Length], HEX);
+		}
+		Check_Length++;
+		delay(1);
+	}
+	if (debug_print == 1)
+	{
+		Serial.print("Check_Length = ");
+		Serial.println(Check_Length);
+	}
+
+	if (Check_Length > 0)
+	{
+		E024_CRC8 = GetCrc8(Check_Data, Check_Length);//得到CRC数据
+		if (debug_print == 1)
+		{
+			Serial.print("CRC8计算的值E020_CRC8 = 0x");
+			Serial.println(E024_CRC8, HEX);
+		}
+		Check_Length = 0;
+	}
+
+	E024[17] = E024_CRC8;
+	E024[18] = E024_FrameEnd1;
+	E024[19] = E024_FrameEnd2;
+	E024[20] = E024_FrameEnd3;
+	E024[21] = E024_FrameEnd4;
+	E024[22] = E024_FrameEnd5;
+	E024[23] = E024_FrameEnd6;
+
+	//该区域为串口查看E024回执的信息
+	if (debug_print == 1)
+	{
+		for (int i = 0; i < 23; i++)
+		{
+			Serial.print(i);
+			Serial.print("/");
+			Serial.println(E024[i], HEX);
+			delay(1);
+		}
+	}
+
+	Serial3.write(E024, 23);
+	Serial3.flush();
+	Send_Data_Lamp();//发送数据灯
+
+	return 0;
+}
+
+
+//函 数 名：E024_init() 
+//功能描述：E024的初始化函数
+//函数说明：
+//调用函数：
+//全局变量：
+//输 入：
+//返 回：
+/////////////////////////////////////////////////////////////////////
+unsigned char E024_init()
+{
+	E024_FrameHead = 0xFE;
+
+	E024_FrameId1 = 0xE0;
+	E024_FrameId2 = 0x24;
+
+	E024_DataLen = 0x0C;
+
+	E024_DeviceTypeID1 = 0xC0;
+	E024_DeviceTypeID2 = 0x02;
+
+	E024_IsBroadcast = 0x00;
+
+	E024_ZoneId = AT24CXX_ReadOneByte(12);;
+
+	E024_Allocate1 = 0x00;
+	E024_Allocate2 = 0x00;
+	E024_Allocate3 = 0x00;
+	E024_Allocate4 = 0x00;
+	E024_Allocate5 = 0x00;
+	E024_Allocate6 = 0x00;
+	E024_Allocate7 = 0x00;
+	E024_Allocate8 = 0x00;
+
+	E024_CRC8 = 0x00;
+
+	E024_FrameEnd1 = 0x0D;
+	E024_FrameEnd2 = 0x0A;
+	E024_FrameEnd3 = 0x0D;
+	E024_FrameEnd4 = 0x0A;
+	E024_FrameEnd5 = 0x0D;
+	E024_FrameEnd6 = 0x0A;
 	return 0;
 }
 
@@ -2636,6 +3051,14 @@ void forswitch()
 				}
 				//--------------------------------------
 				digitalWrite(DO1, HIGH);
+
+				CurrentWorkSec[i] = (millis() - ot[i]) / 1000;//得到DO1的已工作时长
+				remaining[i] = duration[i] - CurrentWorkSec[i];//得到DO1的剩余工作时长
+				if (debug_print == 1)
+				{
+					Serial.println(String("DO1的已工作时长 = ") + CurrentWorkSec[i]);
+					Serial.println(String("DO1的剩余工作时长 = ") + remaining[i]);
+				}
 				//-----------------------------------这一段代码将已工作的数值拆位-------------------------------------------------------------------------------
 				
 				//-------------------------------------------------------------------------------------------------------------------------------------------
@@ -5174,4 +5597,34 @@ int Voltage_Value_Processing(String str_V)
 }
 
 
+//函 数 名：Get_HeartBeat_oldtime() 
+//功能描述：得到Delivery_oldtime的时间值
+//函数说明：
+//调用函数：
+//全局变量：
+//输 入：
+//返 回：
+/////////////////////////////////////////////////////////////////////
+unsigned long Get_HeartBeat_oldtime()
+{
+	if (debug_print == 1)
+	{
+		//Serial.println(String("Delivery_oldtime = ") + Delivery_oldtime);
+	}
+	return HeartBeat_oldtime;
+}
+
+
+//函 数 名：Get_RTC_Flag() 
+//功能描述：得到RTC_Flag的状态值
+//函数说明：
+//调用函数：
+//全局变量：
+//输 入：
+//返 回：
+/////////////////////////////////////////////////////////////////////
+bool Get_RTC_Flag()
+{
+	return RTC_Flag;
+}
 

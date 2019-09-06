@@ -13,6 +13,7 @@
 #include"user_initialization.h"//初始化
 #include"user_crc8.h"//CRC校验
 #include"user_judgement.h"//判断
+#include "user_Set_Correlation.h"
 
 
 //引脚定义

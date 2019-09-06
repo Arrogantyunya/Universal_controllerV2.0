@@ -57,4 +57,5 @@ C:\Users\Administrator\AppData\Local\Temp\VMBuilds\Universal_controllerV2.0\Ardu
  C:\Users\Administrator\AppData\Local\Temp\VMBuilds\Universal_controllerV2.0\Arduino_STM32-master_genericSTM32F103R\Release\AT24CXX.h \
  C:\Users\Administrator\AppData\Local\Temp\VMBuilds\Universal_controllerV2.0\Arduino_STM32-master_genericSTM32F103R\Release\i2c.h \
  C:\Users\Administrator\AppData\Local\Temp\VMBuilds\Universal_controllerV2.0\Arduino_STM32-master_genericSTM32F103R\Release\user_crc8.h \
- C:\Users\Administrator\AppData\Local\Temp\VMBuilds\Universal_controllerV2.0\Arduino_STM32-master_genericSTM32F103R\Release\user_judgement.h
+ C:\Users\Administrator\AppData\Local\Temp\VMBuilds\Universal_controllerV2.0\Arduino_STM32-master_genericSTM32F103R\Release\user_judgement.h \
+ C:\Users\Administrator\AppData\Local\Temp\VMBuilds\Universal_controllerV2.0\Arduino_STM32-master_genericSTM32F103R\Release\user_Set_Correlation.h

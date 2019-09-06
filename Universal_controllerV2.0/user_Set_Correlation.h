@@ -38,14 +38,28 @@ static unsigned long Duration_time = 0;         //持续时间
 static unsigned long Remaining = 0;             //剩余时间
 static unsigned long oldtime = 0;				//旧时间
 
+static int Heartbeat_time = 5;		//用于处理定时发送的新时间变量
+static unsigned long HeartBeat_oldtime;
+//------------------------------------------------------------------------
+//RTC时钟全局变量
+static bool RTC_Flag = 0;	//RTC时钟的标志位，如果为0则请求RTC时钟，为1不请求
+static int RTC_Year = 0;	//RTC时钟的年份
+static int RTC_Month = 0;	//RTC时钟的月份
+static int RTC_Day = 0;		//RTC时钟的日期
+static int RTC_Hour = 0;	//RTC时钟的小时
+static int RTC_Minute = 0;	//RTC时钟的分钟
+static int RTC_Second = 0;	//RTC时钟的秒钟
+
+//------------------------------------------------------------------------
 
 
 static float Set_AOVoltage1 = 0;			//设置模拟输出电压值1
 static float Set_AOVoltage2 = 0;			//设置模拟输出电压值2
 static int Analog_Value1 = 0;				//analogwrite时输出的值1
 static int Analog_Value2 = 0;				//analogwrite时输出的值2
-//------------------------------------------------------------------------
 
+
+//------------------------------------------------------------------------
 static unsigned char E020[24];//用来存放E020发送出去的数组
 
 static int E020_FrameHead = 0xFE;		//E020的帧头
@@ -82,11 +96,11 @@ static int E020_FrameEnd4 = 0x0A;		//E020的帧尾4
 static int E020_FrameEnd5 = 0x0D;		//E020的帧尾5
 static int E020_FrameEnd6 = 0x0A;		//E020的帧尾6
 
-static unsigned char E020_Check_Data[50];   //用来存放接收到的数据
-static int E020_Check_Length = 0;
+//static unsigned char E020_Check_Data[50];   //用来存放接收到的数据
+//static int E020_Check_Length = 0;
+
+
 //------------------------------------------------------------------------
-
-
 static unsigned char E022[51];//用来存放E022发送出去的数组
 
 static int E022_FrameHead = 0xFE;		//E022的帧头
@@ -161,8 +175,82 @@ static int E022_FrameEnd4 = 0x0A;		//E022的帧尾4
 static int E022_FrameEnd5 = 0x0D;		//E022的帧尾5
 static int E022_FrameEnd6 = 0x0A;		//E022的帧尾6
 
-static unsigned char E022_Check_Data[50];   //用来存放接收到的数据
-static int E022_Check_Length = 0;
+//static unsigned char E022_Check_Data[50];   //用来存放接收到的数据
+//static int E022_Check_Length = 0;
+//------------------------------------------------------------------------
+static unsigned char E023[21];//用来存放E023发送出去的数组
+
+static int E023_FrameHead = 0xFE;		//E023的帧头
+
+static int E023_FrameId1 = 0xE0;		//E023的帧ID1
+static int E023_FrameId2 = 0x23;		//E023的帧ID2
+
+static int E023_DataLen = 0x0A;			//E023的数据长度
+
+static int E023_DeviceTypeID1 = 0xC0;	//E023的设备类型1
+static int E023_DeviceTypeID2 = 0x02;	//E023的设备类型2
+
+static int E023_IsBroadcast = 0x00;		//E023的是否广播指令
+
+static int E023_ZoneId = 0x00;			//E023的区域
+
+static int E023_Year = 0x00;			//E023的年份
+static int E023_Month = 0x00;			//E023月份
+static int E023_Day = 0x00;				//E023日期
+static int E023_Hour = 0x00;			//E023小时
+static int E023_Minute = 0x00;			//E023分钟
+static int E023_Second = 0x00;			//E023秒钟
+
+static int E023_CRC8 = 0x00;			//E023的CRC8校验码
+
+static int E023_FrameEnd1 = 0x0D;		//E023的帧尾1
+static int E023_FrameEnd2 = 0x0A;		//E023的帧尾2
+static int E023_FrameEnd3 = 0x0D;		//E023的帧尾3
+static int E023_FrameEnd4 = 0x0A;		//E023的帧尾4
+static int E023_FrameEnd5 = 0x0D;		//E023的帧尾5
+static int E023_FrameEnd6 = 0x0A;		//E023的帧尾6
+
+//static unsigned char E023_Check_Data[50];   //用来存放接收到的数据
+//static int E023_Check_Length = 0;
+
+
+//------------------------------------------------------------------------
+static unsigned char E024[23];//用来存放E024发送出去的数组
+
+static int E024_FrameHead = 0xFE;		//E024的帧头
+
+static int E024_FrameId1 = 0xE0;		//E024的帧ID1
+static int E024_FrameId2 = 0x24;		//E024的帧ID2
+
+static int E024_DataLen = 0x0C;			//E024的数据长度
+
+static int E024_DeviceTypeID1 = 0xC0;	//E024的设备类型1
+static int E024_DeviceTypeID2 = 0x02;	//E024的设备类型2
+
+static int E024_IsBroadcast = 0x00;		//E024的是否广播指令
+
+static int E024_ZoneId = 0x00;			//E024的区域
+
+static int E024_Allocate1 = 0x00;		//E024的预留字段1
+static int E024_Allocate2 = 0x00;		//E024的预留字段2
+static int E024_Allocate3 = 0x00;		//E024的预留字段3
+static int E024_Allocate4 = 0x00;		//E024的预留字段4
+static int E024_Allocate5 = 0x00;		//E024的预留字段5
+static int E024_Allocate6 = 0x00;		//E024的预留字段6
+static int E024_Allocate7 = 0x00;		//E024的预留字段7
+static int E024_Allocate8 = 0x00;		//E024的预留字段8
+
+static int E024_CRC8 = 0x00;			//E024的CRC8校验码
+
+static int E024_FrameEnd1 = 0x0D;		//E024的帧尾1
+static int E024_FrameEnd2 = 0x0A;		//E024的帧尾2
+static int E024_FrameEnd3 = 0x0D;		//E024的帧尾3
+static int E024_FrameEnd4 = 0x0A;		//E024的帧尾4
+static int E024_FrameEnd5 = 0x0D;		//E024的帧尾5
+static int E024_FrameEnd6 = 0x0A;		//E024的帧尾6
+
+//static unsigned char E024_Check_Data[50];   //用来存放接收到的数据
+//static int E024_Check_Length = 0;
 //------------------------------------------------------------------------
 
 //static String AssStat, AssStat1, AssStat2;//Association_statement，关联语句1
@@ -175,15 +263,21 @@ static size_t i_0 = 0, i_1 = 0, i_2 = 0, i_3 = 0;//循环次数函数
 
 //全局函数声明
 //void LORA_Receive_information(void);//LORA接收函数
-void Receive_A013(unsigned char * Judgement_Data, int Judgement_Length);  //A013函数
-void Receive_A020(unsigned char * Judgement_Data, int Judgement_Length);  //A020函数
-void Receive_A022(unsigned char * Judgement_Data, int Judgement_Length);  //A022函数
-void Receive_A023(unsigned char * Judgement_Data, int Judgement_Length);  //A023函数
-void Receive_A024(unsigned char * Judgement_Data, int Judgement_Length);  //A024函数
-unsigned char Send_E020(int Receive_IsBroadcast,int E020_status );  //E020函数
-unsigned char E020_init();	//E011初始化函数
-unsigned char Send_E022(int Receive_IsBroadcast);  //E021函数
+void Receive_A012(unsigned char* Judgement_Data, int Judgement_Length);		//A012函数
+void Receive_A013(unsigned char * Judgement_Data, int Judgement_Length);	//A013函数
+void Receive_A014(unsigned char* Judgement_Data, int Judgement_Length);		//A014函数
+void Receive_A020(unsigned char * Judgement_Data, int Judgement_Length);	//A020函数
+void Receive_A022(unsigned char * Judgement_Data, int Judgement_Length);	//A022函数
+void Receive_A023(unsigned char * Judgement_Data, int Judgement_Length);	//A023函数
+void Receive_A024(unsigned char * Judgement_Data, int Judgement_Length);	//A024函数
+unsigned char Send_E020(int Receive_IsBroadcast,int E020_status );			//E020函数
+unsigned char E020_init();	//E020初始化函数
+unsigned char Send_E022(int Receive_IsBroadcast);  //E022函数
 unsigned char E022_init();	//E021初始化函数
+unsigned char Send_E023(int Receive_IsBroadcast);  //E023函数
+unsigned char E023_init();	//E023初始化函数
+unsigned char Send_E024(int Receive_IsBroadcast);  //E024函数
+unsigned char E024_init();	//E024初始化函数
 unsigned char SN_ZoneISOK(unsigned char * Judgement_Data, int Judgement_Length);	//测试SN区域是否写入成功函数
 int Verification_Reserved_field(unsigned char * Judgement_Data, int Initial);
 void forswitch();
@@ -198,6 +292,8 @@ void array_empty_test();//数组清空函数
 void array_print_test();//数组打印测试函数
 void Automated_strategy();//策略函数
 int Voltage_Value_Processing(String str_V);//电压值处理函数
+unsigned long Get_HeartBeat_oldtime();//得到eartBeat_oldtime的值
+bool Get_RTC_Flag();//得到RTC_Flag的值
 
 //类结构声明
 //LORA开关型设备的通用回执状态(结构类型，枚举)
@@ -213,11 +309,16 @@ static enum Device_status
 	Set_analog_output_status_success = 0x07,//设置模拟输出成功
 	Set_analog_output_status_failed = 0x08,//设置模拟输出失败
 	Set_association_status_succeed = 0x09,//设置关联状态成功
-	Set_association_status_failed = 0x0A ,//设置关联状态失败
+	Set_association_status_failed = 0x0A,//设置关联状态失败
 	State_Storage_Exceeding_the_Upper_Limit = 0x0B,//关联状态失败，存储超上限
 	Set_reserved_field_success = 0x0C,//设置预留字段成功
 	Set_reserved_field_failed = 0x0D,//设置预留字段失败
-	Data_loss_due_to_abnormal_power_off = 0x0E//异常断电数据丢失
+	Data_loss_due_to_abnormal_power_off = 0x0E,//异常断电数据丢失
+	Set_RTC_clock_success = 0x0F,//设置RTC时间成功
+	Set_RTC_clock_failed = 0x10,//设置RTC时间失败
+	Set_time_interval_success = 0x11,//设置时间段成功
+	Set_time_interval_failed = 0x12,//设置时间段失败
+	Incorrect_information_error = 0x13//区域信息错误
 }E020_status = FactoryMode;
 
 //输出状态(结构类型，枚举)

@@ -51,27 +51,42 @@ void Receive_A011(unsigned char * Judgement_Data, int Judgement_Length)//A011函
 		Serial.println(Judgement_Length);
 	}
 	//--------------------------------------------------------
-	int ZoneID = Judgement_Data[7];
-	if (debug_print == 1)
+	//int ZoneID = Judgement_Data[7];
+	//if (debug_print == 1)
+	//{
+	//	Serial.println(ZoneID, HEX);
+	//}
+	//AT24CXX_WriteOneByte(12, ZoneID);//将区域ID写入数组
+	//for (size_t i = 8; i <= 16; i++)
+	//{
+	//	AT24CXX_WriteOneByte(i - 5, Judgement_Data[i]);
+	//	if (debug_print == 1)
+	//	{
+	//		Serial.print(String("AT24CXX_ReadOneByte[ ") + String(i-5) + String(" ]="));
+	//		Serial.println(AT24CXX_ReadOneByte(i - 5), HEX);
+	//	}
+	//}
+	//判断区域
+	if (Judgement_Data[7] == AT24CXX_ReadOneByte(12))
 	{
-		Serial.println(ZoneID, HEX);
+		//是否广播指令
+		Receive_IsBroadcast = Judgement_Data[6];
+
+		//进行状态的回执
+		Send_E011(Receive_IsBroadcast);
 	}
-	AT24CXX_WriteOneByte(12, ZoneID);//将区域ID写入数组
-	for (size_t i = 8; i <= 16; i++)
+	else
 	{
-		AT24CXX_WriteOneByte(i - 5, Judgement_Data[i]);
+		E020_status = Incorrect_information_error;
 		if (debug_print == 1)
 		{
-			Serial.print(String("AT24CXX_ReadOneByte[ ") + String(i-5) + String(" ]="));
-			Serial.println(AT24CXX_ReadOneByte(i - 5), HEX);
+			Serial.println("区域信息不正确");
+			Serial.println(String("E020_status = Incorrect_information_error") + String(E020_status));
 		}
+		//进行状态的回执
+		Send_E020(Receive_IsBroadcast, E020_status);
 	}
 
-	//是否广播指令
-	Receive_IsBroadcast = Judgement_Data[6];
-
-	//进行状态的回执
-	Send_E011(Receive_IsBroadcast);
 	if (debug_print == 1)
 	{
 		Serial.println("完成A011状态回执");

@@ -33,33 +33,48 @@ void Receive_A025(unsigned char * Judgement_Data, int Judgement_Length)
 		Serial.println(Judgement_Length);
 	}
 	//--------------------------------------------------------
-
-	int a = 0;
-	for (size_t i = 8; i < Judgement_Length + 1 - 7; i++)
+	//判断区域
+	if (Judgement_Data[7] == AT24CXX_ReadOneByte(12))
 	{
-		RS485[a] = Judgement_Data[i];
-		a++;
-	}
-	if (a > 0)
-	{
-		for (int v = 0; v < a; v++)
+		int a = 0;
+		for (size_t i = 8; i < Judgement_Length + 1 - 7; i++)
 		{
-			if (debug_print == 1)
+			RS485[a] = Judgement_Data[i];
+			a++;
+		}
+		if (a > 0)
+		{
+			for (int v = 0; v < a; v++)
 			{
-				Serial.print(String("RS485[ ") + String(v) + String(" ]= "));
-				Serial.println(RS485[v], HEX);
+				if (debug_print == 1)
+				{
+					Serial.print(String("RS485[ ") + String(v) + String(" ]= "));
+					Serial.println(RS485[v], HEX);
+				}
 			}
 		}
+		Serial2.write(RS485, 8);//发送485的指令
+		Serial2.flush();
+		a = 0;//清空
+
+		//是否广播指令
+		Receive_IsBroadcast = Judgement_Data[6];
+
+		//进行状态的回执
+		Send_E025(Receive_IsBroadcast);
 	}
-	Serial2.write(RS485, 8);//发送485的指令
-	Serial2.flush();
-	a = 0;//清空
+	else
+	{
+		E020_status = Incorrect_information_error;
+		if (debug_print == 1)
+		{
+			Serial.println("区域信息不正确");
+			Serial.println(String("E020_status = Incorrect_information_error") + String(E020_status));
+		}
+		//进行状态的回执
+		Send_E020(Receive_IsBroadcast, E020_status);
+	}
 
-	//是否广播指令
-	Receive_IsBroadcast = Judgement_Data[6];
-
-	//进行状态的回执
-	Send_E025(Receive_IsBroadcast);
 	if (debug_print == 1)
 	{
 		Serial.println("完成A025状态回执");

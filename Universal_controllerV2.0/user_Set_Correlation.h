@@ -63,19 +63,21 @@ static int AO1_RemainWorkSec1, AO1_RemainWorkSec2, AO1_RemainWorkSec3;//AO1的�
 static int AO2_RemainWorkSec1, AO2_RemainWorkSec2, AO2_RemainWorkSec3;//AO2的剩余工作时长
 //------------------------------------------------------------------------
 //RTC时钟全局变量
+static unsigned long RTC_oldtime;//RTC时间的旧值
+//static unsigned long RTC_Dvalue;//RTC时间的差值
 static int Mode_implementation = 0x00;//执行方式
 static bool RTC_Flag = 0;	//RTC时钟的标志位，如果为0则请求RTC时钟，为1不请求
-static int RTC_Year = 0;	//RTC时钟的年份
-static int RTC_Month = 0;	//RTC时钟的月份
-static int RTC_Day = 0;		//RTC时钟的日期
-static int RTC_Hour = 0;	//RTC时钟的小时
-static int RTC_Minute = 0;	//RTC时钟的分钟
-static int RTC_Second = 0;	//RTC时钟的秒钟
+static int RTC_Year = 19;	//RTC时钟的年份
+static int RTC_Month = 11;	//RTC时钟的月份
+static int RTC_Day = 29;		//RTC时钟的日期
+static int RTC_Hour = 23;	//RTC时钟的小时
+static int RTC_Minute = 59;	//RTC时钟的分钟
+static int RTC_Second = 40;	//RTC时钟的秒钟
 //------------------------------------------------------------------------
 //各路数的自动执行时间
 static bool DO1_AutoFlag, DO2_AutoFlag, DO3_AutoFlag, DO4_AutoFlag, AO1_AutoFlag, AO2_AutoFlag;
-static int DO1_AutoBegin1[2][6], DO2_AutoBegin1[2][6], DO3_AutoBegin1[2][6], DO4_AutoBegin1[2][6], AO1_AutoBegin1[2][6], AO2_AutoBegin1[2][6];
-static int DO1_AutoEnd2[2][6], DO2_AutoEnd2[2][6], DO3_AutoEnd2[2][6], DO4_AutoEnd2[2][6], AO1_AutoEnd2[2][6], AO2_AutoEnd2[2][6];
+static int DO1_AutoBegin[2][6], DO2_AutoBegin[2][6], DO3_AutoBegin[2][6], DO4_AutoBegin[2][6], AO1_AutoBegin[2][6], AO2_AutoBegin[2][6];
+static int DO1_AutoEnd[2][6], DO2_AutoEnd[2][6], DO3_AutoEnd[2][6], DO4_AutoEnd[2][6], AO1_AutoEnd[2][6], AO2_AutoEnd[2][6];
 //------------------------------------------------------------------------
 
 
@@ -320,6 +322,8 @@ void Automated_strategy();//策略函数
 int Voltage_Value_Processing(String str_V);//电压值处理函数
 unsigned long Get_HeartBeat_oldtime();//得到eartBeat_oldtime的值
 bool Get_RTC_Flag();//得到RTC_Flag的值
+void Automatic_execution_test();//自动执行测试函数
+void RTC_Clock();//RTC时钟
 
 //类结构声明
 //LORA开关型设备的通用回执状态(结构类型，枚举)

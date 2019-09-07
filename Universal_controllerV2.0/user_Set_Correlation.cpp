@@ -38,6 +38,8 @@ void Receive_A012(unsigned char* Judgement_Data, int Judgement_Length)
 
 	if (Judgement_Data[7] == AT24CXX_ReadOneByte(12))//判断区域ID是否是12
 	{
+		RTC_oldtime = millis();//当每次被设置RTC时间时都更新旧时间
+
 		RTC_Year = Judgement_Data[8];
 		RTC_Month = Judgement_Data[9];
 		RTC_Day = Judgement_Data[10];
@@ -242,27 +244,73 @@ void Receive_A014(unsigned char* Judgement_Data, int Judgement_Length)
 					//判断时间段序号
 					if (Judgement_Data[12] == 0x01)
 					{
+						if (debug_print == 0x01)
+						{
+							Serial.println("DO1的时间段1:");
+						}
 						for (size_t i = 0; i < 6; i++)
 						{
-							DO1_AutoBegin1[0][i] = Judgement_Data[i + 14];
-							DO1_AutoEnd2[0][i] = Judgement_Data[i + 20];
+							DO1_AutoBegin[0][i] = Judgement_Data[i + 14];
+							DO1_AutoEnd[0][i] = Judgement_Data[i + 20];
 							if (debug == 1)
 							{
-								Serial.println(String("DO1开始时间：") + i + "/" + DO1_AutoBegin1[0][i]);
-								Serial.println(String("DO1结束时间：") + i + "/" + DO1_AutoBegin1[0][i]);
+								Serial.println(String("DO1开始时间：") + i + "/" + DO1_AutoBegin[0][i]);
+								Serial.println(String("DO1结束时间：") + i + "/" + DO1_AutoEnd[0][i]);
+							}
+						}
+
+						if (DO1_AutoBegin[0][0] == Judgement_Data[14] && DO1_AutoEnd[0][0] == Judgement_Data[20])
+						{
+							E020_status = Set_time_interval_success;
+							if (debug_print == 1)
+							{
+								Serial.println("设置时间段成功");
+								Serial.println(String("E020_status = Set_time_interval_success") + String(E020_status));
+							}
+						}
+						else
+						{
+							E020_status = Set_time_interval_failed;
+							if (debug_print == 1)
+							{
+								Serial.println("设置时间段失败");
+								Serial.println(String("E020_status = Set_time_interval_failed") + String(E020_status));
 							}
 						}
 					}
 					else if (Judgement_Data[12] == 0x02)
 					{
+						if (debug_print == 0x01)
+						{
+							Serial.println("DO1的时间段2:");
+						}
 						for (size_t i = 0; i < 6; i++)
 						{
-							DO1_AutoBegin1[1][i] = Judgement_Data[i + 14];
-							DO1_AutoEnd2[1][i] = Judgement_Data[i + 20];
-							if (debug == 1)
+							DO1_AutoBegin[1][i] = Judgement_Data[i + 14];
+							DO1_AutoEnd[1][i] = Judgement_Data[i + 20];
+							if (debug_print == 1)
 							{
-								Serial.println(String("DO1开始时间：") + i + "/" + DO1_AutoBegin1[1][i]);
-								Serial.println(String("DO1结束时间：") + i + "/" + DO1_AutoBegin1[1][i]);
+								Serial.println(String("DO1开始时间：") + i + "/" + DO1_AutoBegin[1][i]);
+								Serial.println(String("DO1结束时间：") + i + "/" + DO1_AutoEnd[1][i]);
+							}
+						}
+
+						if (DO1_AutoBegin[1][0] == Judgement_Data[14] && DO1_AutoEnd[1][0] == Judgement_Data[20])
+						{
+							E020_status = Set_time_interval_success;
+							if (debug_print == 1)
+							{
+								Serial.println("设置时间段成功");
+								Serial.println(String("E020_status = Set_time_interval_success") + String(E020_status));
+							}
+						}
+						else
+						{
+							E020_status = Set_time_interval_failed;
+							if (debug_print == 1)
+							{
+								Serial.println("设置时间段失败");
+								Serial.println(String("E020_status = Set_time_interval_failed") + String(E020_status));
 							}
 						}
 					}
@@ -294,27 +342,73 @@ void Receive_A014(unsigned char* Judgement_Data, int Judgement_Length)
 					//判断时间段序号
 					if (Judgement_Data[12] == 0x01)
 					{
+						if (debug_print == 0x01)
+						{
+							Serial.println("DO3的时间段1:");
+						}
 						for (size_t i = 0; i < 6; i++)
 						{
-							DO3_AutoBegin1[0][i] = Judgement_Data[i + 14];
-							DO3_AutoEnd2[0][i] = Judgement_Data[i + 20];
+							DO3_AutoBegin[0][i] = Judgement_Data[i + 14];
+							DO3_AutoEnd[0][i] = Judgement_Data[i + 20];
 							if (debug == 1)
 							{
-								Serial.println(String("DO3开始时间：") + i + "/" + DO3_AutoBegin1[0][i]);
-								Serial.println(String("DO3结束时间：") + i + "/" + DO3_AutoBegin1[0][i]);
+								Serial.println(String("DO3开始时间：") + i + "/" + DO3_AutoBegin[0][i]);
+								Serial.println(String("DO3结束时间：") + i + "/" + DO3_AutoEnd[0][i]);
+							}
+						}
+
+						if (DO3_AutoBegin[0][0] == Judgement_Data[14] && DO3_AutoEnd[0][0] == Judgement_Data[20])
+						{
+							E020_status = Set_time_interval_success;
+							if (debug_print == 1)
+							{
+								Serial.println("设置时间段成功");
+								Serial.println(String("E020_status = Set_time_interval_success") + String(E020_status));
+							}
+						}
+						else
+						{
+							E020_status = Set_time_interval_failed;
+							if (debug_print == 1)
+							{
+								Serial.println("设置时间段失败");
+								Serial.println(String("E020_status = Set_time_interval_failed") + String(E020_status));
 							}
 						}
 					}
 					else if (Judgement_Data[12] == 0x02)
 					{
+						if (debug_print == 0x01)
+						{
+							Serial.println("DO3的时间段2:");
+						}
 						for (size_t i = 0; i < 6; i++)
 						{
-							DO3_AutoBegin1[1][i] = Judgement_Data[i + 14];
-							DO3_AutoEnd2[1][i] = Judgement_Data[i + 20];
-							if (debug == 1)
+							DO3_AutoBegin[1][i] = Judgement_Data[i + 14];
+							DO3_AutoEnd[1][i] = Judgement_Data[i + 20];
+							if (debug_print == 1)
 							{
-								Serial.println(String("DO3开始时间：") + i + "/" + DO3_AutoBegin1[1][i]);
-								Serial.println(String("DO3结束时间：") + i + "/" + DO3_AutoBegin1[1][i]);
+								Serial.println(String("DO3开始时间：") + i + "/" + DO3_AutoBegin[1][i]);
+								Serial.println(String("DO3结束时间：") + i + "/" + DO3_AutoEnd[1][i]);
+							}
+						}
+
+						if (DO3_AutoBegin[1][0] == Judgement_Data[14] && DO3_AutoEnd[1][0] == Judgement_Data[20])
+						{
+							E020_status = Set_time_interval_success;
+							if (debug_print == 1)
+							{
+								Serial.println("设置时间段成功");
+								Serial.println(String("E020_status = Set_time_interval_success") + String(E020_status));
+							}
+						}
+						else
+						{
+							E020_status = Set_time_interval_failed;
+							if (debug_print == 1)
+							{
+								Serial.println("设置时间段失败");
+								Serial.println(String("E020_status = Set_time_interval_failed") + String(E020_status));
 							}
 						}
 					}
@@ -352,6 +446,26 @@ void Receive_A014(unsigned char* Judgement_Data, int Judgement_Length)
 
 			}
 		}
+
+		//进行状态的回执
+		Send_E020(Receive_IsBroadcast, E020_status);
+	}
+	else
+	{
+		E020_status = Incorrect_information_error;
+		if (debug_print == 1)
+		{
+			Serial.println("区域信息不正确");
+			Serial.println(String("E020_status = Incorrect_information_error") + String(E020_status));
+		}
+		//进行状态的回执
+		Send_E020(Receive_IsBroadcast, E020_status);
+	}
+
+	if (debug_print == 1)
+	{
+		Serial.println("完成A014状态回执");
+		Serial.println("结束Receive_A014函数");
 	}
 }
 
@@ -6781,5 +6895,167 @@ unsigned long Get_HeartBeat_oldtime()
 bool Get_RTC_Flag()
 {
 	return RTC_Flag;
+}
+
+
+//函 数 名：Automatic_execution_test() 
+//功能描述：根据设定的时间段自动执行
+//函数说明：
+//调用函数：
+//全局变量：
+//输 入：
+//返 回：
+/////////////////////////////////////////////////////////////////////
+void Automatic_execution_test()
+{
+	if (Mode_implementation == 0x01)
+	{
+		if (debug_print == 0x01)
+		{
+			//Serial.println("Mode_implementation == 0x01,进入自动执行函数");
+		}
+
+		if (DO1_AutoFlag == 1)
+		{
+			if (debug_print == 0x01)
+			{
+				//Serial.println("DO1_AutoFlag == 1");
+			}
+
+		}
+		else if (DO2_AutoFlag == 1)
+		{
+
+		}
+		else if (DO3_AutoFlag == 1)
+		{
+			if (debug_print == 0x01)
+			{
+				//Serial.println("DO3_AutoFlag == 1");
+			}
+		}
+		else if (DO4_AutoFlag == 1)
+		{
+
+		}
+		else if (AO1_AutoFlag == 1)
+		{
+
+		}
+		else if (AO2_AutoFlag == 1)
+		{
+
+		}
+		else
+		{
+
+		}
+	}
+}
+
+
+//函 数 名：RTC_Clock() 
+//功能描述：根据设定的时间段自动执行
+//函数说明：
+//调用函数：
+//全局变量：
+//输 入：
+//返 回：
+/////////////////////////////////////////////////////////////////////
+void RTC_Clock()
+{
+	int Senod_count = 0;//得到经过了多少秒
+	float Senod_count_F;
+
+	Senod_count_F = float((millis() - RTC_oldtime)) / 1000;
+	Serial.println(String("Senod_count_F = ") + Senod_count_F);
+	Senod_count = (millis() - RTC_oldtime) / 1000;
+	Senod_count = (Senod_count_F - Senod_count > 0.5) ? Senod_count + 1 : Senod_count;
+
+
+
+	RTC_oldtime = millis();
+	if (debug_print == 0x01)
+	{
+		Serial.println(String("millis = ") + millis());
+		Serial.println(String("RTC_oldtime = ") + RTC_oldtime);
+		Serial.println(String("Senod_count = ") + Senod_count);
+		Serial.println(String("RTC_Second = ") + RTC_Second);
+	}
+
+	RTC_Second = RTC_Second + Senod_count;
+	if (debug_print == 1)
+	{
+		//Serial.println(String("RTC_Second = ") + RTC_Second);
+	}
+	if (RTC_Second == 60)
+	{
+		RTC_Minute = RTC_Minute + 1;
+		RTC_Second = 0;
+	}
+	if (RTC_Second > 60)
+	{
+		RTC_Minute = RTC_Minute + (RTC_Second % 60);
+		RTC_Second = RTC_Second - ((RTC_Second % 60) * 60);
+	}
+
+	if (RTC_Minute == 60)
+	{
+		RTC_Hour = RTC_Hour + 1;
+		RTC_Minute = 0;
+	}
+	if (RTC_Minute > 60)
+	{
+		RTC_Hour = RTC_Hour + (RTC_Minute % 60);
+		RTC_Minute = RTC_Minute - ((RTC_Minute % 60) * 60);
+	}
+
+	if (RTC_Hour == 24)
+	{
+		RTC_Day = RTC_Day + 1;
+		RTC_Hour = 0;
+	}
+	if (RTC_Hour > 24)
+	{
+		RTC_Day = RTC_Day + (RTC_Hour % 24);
+		RTC_Hour = RTC_Hour - ((RTC_Hour % 24) * 24);
+	}
+
+	if (RTC_Day == 30)
+	{
+		RTC_Month = RTC_Month + 1;
+		RTC_Day = 0;
+	}
+	if (RTC_Day >= 30)
+	{
+		RTC_Month = RTC_Month + (RTC_Day % 30);
+		RTC_Day = RTC_Day - ((RTC_Day % 30) * 30);
+	}
+
+	if (RTC_Month == 12)
+	{
+		RTC_Year = RTC_Year + 1;
+		RTC_Month = 0;
+	}
+	if (RTC_Month > 12)
+	{
+		RTC_Year = RTC_Year + (RTC_Month % 12);
+		RTC_Month = RTC_Month - ((RTC_Month % 12) * 12);
+	}
+
+	if (RTC_Year == 99)
+	{
+		RTC_Year = 0;
+	}
+
+	if (debug_print == 0x01)
+	{
+		Serial.println(String("RTC时间为："));
+		Serial.println(String(RTC_Year) + "年" + RTC_Month + "月" + RTC_Day + "日" + RTC_Hour + "时" + RTC_Minute + "分" + RTC_Second + "秒");
+		if (debug == 1)
+		{
+			delay(1500);
+		}
+	}
 }
 

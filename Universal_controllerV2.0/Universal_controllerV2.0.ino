@@ -28,6 +28,12 @@
 #include "i2c.h"
 #include "user_HEXtoDEC.h"
 //#include "RTClock.h"
+//----------------------------------------------------------------------------------------------
+
+//全局变量
+//static unsigned long rtc_oldtime;
+//----------------------------------------------------------------------------------------------
+
 
 
 //函 数 名：setup() 
@@ -81,9 +87,13 @@ void loop()
 {
 	//RTC_request();//RTC请求函数
 
+	RTC_Clock();//RTC时钟函数
+
 	LORA_Receive_information();	//LORA的接收函数
 
 	Automated_strategy();//自动策略函数
+
+	Automatic_execution_test();//自动执行测试函数
 
 	forswitch();//执行函数
 

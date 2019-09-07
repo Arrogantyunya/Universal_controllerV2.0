@@ -44,7 +44,8 @@ void Receive_A021(unsigned char * Judgement_Data, int Judgement_Length)
 		Receive_IsBroadcast = Judgement_Data[6];
 
 		//进行状态的回执
-		Send_E021(Receive_IsBroadcast);
+		Send_E021(Receive_IsBroadcast);//各路数状态的回执
+		Send_E022(Receive_IsBroadcast);//各路数时间的回执
 	}
 	else
 	{

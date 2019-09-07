@@ -60,12 +60,12 @@ void setup()
 			digitalWrite(LED2, LOW);
 		}
 
-		Button_Waiting_report();//按键等待上报函数
+		//Button_Waiting_report();//按键等待上报函数
 	}
-	else
-	{
-		Initialization_exception();//初始化异常函数
-	}
+	//else
+	//{
+	//	Initialization_exception();//初始化异常函数
+	//}
 }
 
 //函 数 名：loop() 
@@ -87,9 +87,9 @@ void loop()
 
 	forswitch();//执行函数
 
-	Timely_reporting();//定时上报状态函数
+	//Timely_reporting();//定时上报状态函数
 
-	Heartbeat();//心跳函数
+	//Heartbeat();//心跳函数
 
 	Forced_Start_Relay();//强制启动继电器
 
@@ -128,6 +128,7 @@ void Timely_reporting(void)//定时上报状态函数
 		}
 		//进行状态的回执
 		Send_E021(Receive_IsBroadcast);
+		Send_E022(Receive_IsBroadcast);
 	}
 }
 

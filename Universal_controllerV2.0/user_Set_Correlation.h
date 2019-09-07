@@ -40,8 +40,30 @@ static unsigned long oldtime = 0;				//旧时间
 
 static int Heartbeat_time = 5;		//用于处理定时发送的新时间变量
 static unsigned long HeartBeat_oldtime;
+
+static int DO1_SetWorkSec1, DO1_SetWorkSec2, DO1_SetWorkSec3;//DO1的设定工作时长
+static int DO2_SetWorkSec1, DO2_SetWorkSec2, DO2_SetWorkSec3;//DO2的设定工作时长
+static int DO3_SetWorkSec1, DO3_SetWorkSec2, DO3_SetWorkSec3;//DO3的设定工作时长
+static int DO4_SetWorkSec1, DO4_SetWorkSec2, DO4_SetWorkSec3;//DO4的设定工作时长
+static int AO1_SetWorkSec1, AO1_SetWorkSec2, AO1_SetWorkSec3;//AO1的设定工作时长
+static int AO2_SetWorkSec1, AO2_SetWorkSec2, AO2_SetWorkSec3;//AO2的设定工作时长
+
+static int DO1_CurrentWorkSec1, DO1_CurrentWorkSec2, DO1_CurrentWorkSec3;//DO1的已工作时长
+static int DO2_CurrentWorkSec1, DO2_CurrentWorkSec2, DO2_CurrentWorkSec3;//DO2的已工作时长
+static int DO3_CurrentWorkSec1, DO3_CurrentWorkSec2, DO3_CurrentWorkSec3;//DO3的已工作时长
+static int DO4_CurrentWorkSec1, DO4_CurrentWorkSec2, DO4_CurrentWorkSec3;//DO4的已工作时长
+static int AO1_CurrentWorkSec1, AO1_CurrentWorkSec2, AO1_CurrentWorkSec3;//AO1的已工作时长
+static int AO2_CurrentWorkSec1, AO2_CurrentWorkSec2, AO2_CurrentWorkSec3;//AO2的已工作时长
+
+static int DO1_RemainWorkSec1, DO1_RemainWorkSec2, DO1_RemainWorkSec3;//DO1的剩余工作时长
+static int DO2_RemainWorkSec1, DO2_RemainWorkSec2, DO2_RemainWorkSec3;//DO2的剩余工作时长
+static int DO3_RemainWorkSec1, DO3_RemainWorkSec2, DO3_RemainWorkSec3;//DO3的剩余工作时长
+static int DO4_RemainWorkSec1, DO4_RemainWorkSec2, DO4_RemainWorkSec3;//DO4的剩余工作时长
+static int AO1_RemainWorkSec1, AO1_RemainWorkSec2, AO1_RemainWorkSec3;//AO1的剩余工作时长
+static int AO2_RemainWorkSec1, AO2_RemainWorkSec2, AO2_RemainWorkSec3;//AO2的剩余工作时长
 //------------------------------------------------------------------------
 //RTC时钟全局变量
+static int Mode_implementation = 0x00;//执行方式
 static bool RTC_Flag = 0;	//RTC时钟的标志位，如果为0则请求RTC时钟，为1不请求
 static int RTC_Year = 0;	//RTC时钟的年份
 static int RTC_Month = 0;	//RTC时钟的月份
@@ -49,7 +71,11 @@ static int RTC_Day = 0;		//RTC时钟的日期
 static int RTC_Hour = 0;	//RTC时钟的小时
 static int RTC_Minute = 0;	//RTC时钟的分钟
 static int RTC_Second = 0;	//RTC时钟的秒钟
-
+//------------------------------------------------------------------------
+//各路数的自动执行时间
+static bool DO1_AutoFlag, DO2_AutoFlag, DO3_AutoFlag, DO4_AutoFlag, AO1_AutoFlag, AO2_AutoFlag;
+static int DO1_AutoBegin1[2][6], DO2_AutoBegin1[2][6], DO3_AutoBegin1[2][6], DO4_AutoBegin1[2][6], AO1_AutoBegin1[2][6], AO2_AutoBegin1[2][6];
+static int DO1_AutoEnd2[2][6], DO2_AutoEnd2[2][6], DO3_AutoEnd2[2][6], DO4_AutoEnd2[2][6], AO1_AutoEnd2[2][6], AO2_AutoEnd2[2][6];
 //------------------------------------------------------------------------
 
 

@@ -17,11 +17,11 @@
 void Receive_A012(unsigned char* Judgement_Data, int Judgement_Length)
 {
 	//--------------------------------------------------------
-	//该区域为测试传输进Receive_A013函数的数据是否正确的测试代码块
+	//该区域为测试传输进Receive_A012函数的数据是否正确的测试代码块
 	//需要测试时请取消注释
 	if (debug_print == 1)
 	{
-		Serial.println("进入Receive_A013函数");
+		Serial.println("进入Receive_A012函数");
 		for (int i = 0; i < Judgement_Length + 1; i++)
 		{
 			Serial.print("A012Judgement_Data ");
@@ -187,7 +187,172 @@ void Receive_A013(unsigned char * Judgement_Data, int Judgement_Length)//A013函
 /////////////////////////////////////////////////////////////////////
 void Receive_A014(unsigned char* Judgement_Data, int Judgement_Length)
 {
+	//--------------------------------------------------------
+	//该区域为测试传输进Receive_A014函数的数据是否正确的测试代码块
+	//需要测试时请取消注释
+	if (debug_print == 1)
+	{
+		Serial.println("进入Receive_A014函数");
+		for (int i = 0; i < Judgement_Length + 1; i++)
+		{
+			Serial.print("A014Judgement_Data ");
+			Serial.print(i);
+			Serial.print(" :");
+			Serial.println(Judgement_Data[i], HEX);
+			delay(1);
+		}
+		delay(200);
+		Serial.print("Judgement_Length = ");
+		Serial.println(Judgement_Length);
+	}
+	//--------------------------------------------------------
 
+	if (Judgement_Data[7] == AT24CXX_ReadOneByte(12))//判断区域ID是否是12
+	{
+		Mode_implementation = Judgement_Data[8];//得到执行方式
+		if (debug_print == 1)
+		{
+			if (Mode_implementation == 0x01)
+			{
+				Serial.println("每天执行");
+			}
+			else if (Mode_implementation == 0x00)
+			{
+				Serial.println("不执行");
+			}
+		}
+
+		//数字输出
+		if (Judgement_Data[9] == 0xC0 && Judgement_Data[10] == 0x03)
+		{
+			//DO1
+			if (Judgement_Data[11] == 0x01)
+			{
+				//判断设定参数
+				if (Judgement_Data[13] == 0x01)
+				{
+					DO1_AutoFlag = 0x01;
+					if (DO1_AutoFlag == 0x01)
+					{
+						if (debug_print == 1)
+						{
+							Serial.println("D01的自动开启");
+						}
+					}
+					//判断时间段序号
+					if (Judgement_Data[12] == 0x01)
+					{
+						for (size_t i = 0; i < 6; i++)
+						{
+							DO1_AutoBegin1[0][i] = Judgement_Data[i + 14];
+							DO1_AutoEnd2[0][i] = Judgement_Data[i + 20];
+							if (debug == 1)
+							{
+								Serial.println(String("DO1开始时间：") + i + "/" + DO1_AutoBegin1[0][i]);
+								Serial.println(String("DO1结束时间：") + i + "/" + DO1_AutoBegin1[0][i]);
+							}
+						}
+					}
+					else if (Judgement_Data[12] == 0x02)
+					{
+						for (size_t i = 0; i < 6; i++)
+						{
+							DO1_AutoBegin1[1][i] = Judgement_Data[i + 14];
+							DO1_AutoEnd2[1][i] = Judgement_Data[i + 20];
+							if (debug == 1)
+							{
+								Serial.println(String("DO1开始时间：") + i + "/" + DO1_AutoBegin1[1][i]);
+								Serial.println(String("DO1结束时间：") + i + "/" + DO1_AutoBegin1[1][i]);
+							}
+						}
+					}
+					else
+					{
+
+					}
+				}
+			}
+			//DO2
+			else if (Judgement_Data[11] == 0x02)
+			{
+
+			}
+			//DO3
+			else if (Judgement_Data[11] == 0x03)
+			{
+				//判断设定参数
+				if (Judgement_Data[13] == 0x01)
+				{
+					DO3_AutoFlag = 0x01;
+					if (DO3_AutoFlag == 0x01)
+					{
+						if (debug_print == 1)
+						{
+							Serial.println("DO3的自动开启");
+						}
+					}
+					//判断时间段序号
+					if (Judgement_Data[12] == 0x01)
+					{
+						for (size_t i = 0; i < 6; i++)
+						{
+							DO3_AutoBegin1[0][i] = Judgement_Data[i + 14];
+							DO3_AutoEnd2[0][i] = Judgement_Data[i + 20];
+							if (debug == 1)
+							{
+								Serial.println(String("DO3开始时间：") + i + "/" + DO3_AutoBegin1[0][i]);
+								Serial.println(String("DO3结束时间：") + i + "/" + DO3_AutoBegin1[0][i]);
+							}
+						}
+					}
+					else if (Judgement_Data[12] == 0x02)
+					{
+						for (size_t i = 0; i < 6; i++)
+						{
+							DO3_AutoBegin1[1][i] = Judgement_Data[i + 14];
+							DO3_AutoEnd2[1][i] = Judgement_Data[i + 20];
+							if (debug == 1)
+							{
+								Serial.println(String("DO3开始时间：") + i + "/" + DO3_AutoBegin1[1][i]);
+								Serial.println(String("DO3结束时间：") + i + "/" + DO3_AutoBegin1[1][i]);
+							}
+						}
+					}
+					else
+					{
+
+					}
+				}
+			}
+			//DO4
+			else if (Judgement_Data[11] == 0x04)
+			{
+
+			}
+			else
+			{
+
+			}
+		}
+		//模拟输出
+		else if (Judgement_Data[9] == 0xC0 && Judgement_Data[10] == 0x04)
+		{
+			//AO1
+			if (Judgement_Data[11] == 0x01)
+			{
+
+			}
+			//AO2
+			else if (Judgement_Data[11] == 0x02)
+			{
+
+			}
+			else
+			{
+
+			}
+		}
+	}
 }
 
 //函 数 名：Receive_A020() 
@@ -470,6 +635,20 @@ void Receive_A022(unsigned char * Judgement_Data, int Judgement_Length)//A022函
 							Out_State[0] = out_state;
 							digitalWrite(DO1, LOW);
 
+							//将所有的设定时间，已工作时间，剩余时间清零
+							duration[0] = 0x00;
+							CurrentWorkSec[0] = 0x00;
+							remaining[0] = 0x00;
+							DO1_SetWorkSec1 = 0x00;
+							DO1_SetWorkSec2 = 0x00;
+							DO1_SetWorkSec3 = 0x00;
+							DO1_CurrentWorkSec1 = 0x00;
+							DO1_CurrentWorkSec2 = 0x00;
+							DO1_CurrentWorkSec3 = 0x00;
+							DO1_RemainWorkSec1 = 0x00;
+							DO1_RemainWorkSec2 = 0x00;
+							DO1_RemainWorkSec3 = 0x00;
+
 							if (debug == 1)
 							{
 								Serial.println("数字输出1关");
@@ -558,6 +737,20 @@ void Receive_A022(unsigned char * Judgement_Data, int Judgement_Length)//A022函
 							out_state = Stateless;
 							Out_State[1] = out_state;
 							digitalWrite(DO2, LOW);
+
+							//将所有的设定时间，已工作时间，剩余时间清零
+							duration[1] = 0x00;
+							CurrentWorkSec[1] = 0x00;
+							remaining[1] = 0x00;
+							DO2_SetWorkSec1 = 0x00;
+							DO2_SetWorkSec2 = 0x00;
+							DO2_SetWorkSec3 = 0x00;
+							DO2_CurrentWorkSec1 = 0x00;
+							DO2_CurrentWorkSec2 = 0x00;
+							DO2_CurrentWorkSec3 = 0x00;
+							DO2_RemainWorkSec1 = 0x00;
+							DO2_RemainWorkSec2 = 0x00;
+							DO2_RemainWorkSec3 = 0x00;
 
 							if (debug == 1)
 							{
@@ -648,6 +841,20 @@ void Receive_A022(unsigned char * Judgement_Data, int Judgement_Length)//A022函
 							Out_State[2] = out_state;
 							digitalWrite(KCZJ1, HIGH);
 
+							//将所有的设定时间，已工作时间，剩余时间清零
+							duration[2] = 0x00;
+							CurrentWorkSec[2] = 0x00;
+							remaining[2] = 0x00;
+							DO3_SetWorkSec1 = 0x00;
+							DO3_SetWorkSec2 = 0x00;
+							DO3_SetWorkSec3 = 0x00;
+							DO3_CurrentWorkSec1 = 0x00;
+							DO3_CurrentWorkSec2 = 0x00;
+							DO3_CurrentWorkSec3 = 0x00;
+							DO3_RemainWorkSec1 = 0x00;
+							DO3_RemainWorkSec2 = 0x00;
+							DO3_RemainWorkSec3 = 0x00;
+
 							if (debug_print == 1)
 							{
 								Serial.println("数字输出3关");
@@ -736,6 +943,20 @@ void Receive_A022(unsigned char * Judgement_Data, int Judgement_Length)//A022函
 							out_state = Stateless;
 							Out_State[3] = out_state;
 							digitalWrite(KCZJ2, HIGH);
+
+							//将所有的设定时间，已工作时间，剩余时间清零
+							duration[3] = 0x00;
+							CurrentWorkSec[3] = 0x00;
+							remaining[3] = 0x00;
+							DO4_SetWorkSec1 = 0x00;
+							DO4_SetWorkSec2 = 0x00;
+							DO4_SetWorkSec3 = 0x00;
+							DO4_CurrentWorkSec1 = 0x00;
+							DO4_CurrentWorkSec2 = 0x00;
+							DO4_CurrentWorkSec3 = 0x00;
+							DO4_RemainWorkSec1 = 0x00;
+							DO4_RemainWorkSec2 = 0x00;
+							DO4_RemainWorkSec3 = 0x00;
 
 							if (debug_print == 1)
 							{
@@ -843,6 +1064,54 @@ void Receive_A022(unsigned char * Judgement_Data, int Judgement_Length)//A022函
 							digitalWrite(DO2, LOW);
 							digitalWrite(KCZJ1, HIGH);
 							digitalWrite(KCZJ2, HIGH);
+
+							//将所有的设定时间，已工作时间，剩余时间清零
+							for (size_t i = 0; i < 6; i++)
+							{
+								duration[i] = 0x00;
+								CurrentWorkSec[i] = 0x00;
+								remaining[i] = 0x00;
+
+							}
+							DO1_SetWorkSec1 = 0x00;
+							DO1_SetWorkSec2 = 0x00;
+							DO1_SetWorkSec3 = 0x00;
+							DO1_CurrentWorkSec1 = 0x00;
+							DO1_CurrentWorkSec2 = 0x00;
+							DO1_CurrentWorkSec3 = 0x00;
+							DO1_RemainWorkSec1 = 0x00;
+							DO1_RemainWorkSec2 = 0x00;
+							DO1_RemainWorkSec3 = 0x00;
+
+							DO2_SetWorkSec1 = 0x00;
+							DO2_SetWorkSec2 = 0x00;
+							DO2_SetWorkSec3 = 0x00;
+							DO2_CurrentWorkSec1 = 0x00;
+							DO2_CurrentWorkSec2 = 0x00;
+							DO2_CurrentWorkSec3 = 0x00;
+							DO2_RemainWorkSec1 = 0x00;
+							DO2_RemainWorkSec2 = 0x00;
+							DO2_RemainWorkSec3 = 0x00;
+
+							DO3_SetWorkSec1 = 0x00;
+							DO3_SetWorkSec2 = 0x00;
+							DO3_SetWorkSec3 = 0x00;
+							DO3_CurrentWorkSec1 = 0x00;
+							DO3_CurrentWorkSec2 = 0x00;
+							DO3_CurrentWorkSec3 = 0x00;
+							DO3_RemainWorkSec1 = 0x00;
+							DO3_RemainWorkSec2 = 0x00;
+							DO3_RemainWorkSec3 = 0x00;
+
+							DO4_SetWorkSec1 = 0x00;
+							DO4_SetWorkSec2 = 0x00;
+							DO4_SetWorkSec3 = 0x00;
+							DO4_CurrentWorkSec1 = 0x00;
+							DO4_CurrentWorkSec2 = 0x00;
+							DO4_CurrentWorkSec3 = 0x00;
+							DO4_RemainWorkSec1 = 0x00;
+							DO4_RemainWorkSec2 = 0x00;
+							DO4_RemainWorkSec3 = 0x00;
 
 							if (debug_print == 1)
 							{
@@ -983,6 +1252,21 @@ void Receive_A022(unsigned char * Judgement_Data, int Judgement_Length)//A022函
 							out_state = Stateless;
 							Out_State[4] = out_state;
 							analogWrite(AO1, 0);
+
+							//将所有的设定时间，已工作时间，剩余时间清零
+							duration[4] = 0x00;
+							CurrentWorkSec[4] = 0x00;
+							remaining[4] = 0x00;
+							AO1_SetWorkSec1 = 0x00;
+							AO1_SetWorkSec2 = 0x00;
+							AO1_SetWorkSec3 = 0x00;
+							AO1_CurrentWorkSec1 = 0x00;
+							AO1_CurrentWorkSec2 = 0x00;
+							AO1_CurrentWorkSec3 = 0x00;
+							AO1_RemainWorkSec1 = 0x00;
+							AO1_RemainWorkSec2 = 0x00;
+							AO1_RemainWorkSec3 = 0x00;
+
 							if (debug_print == 1)
 							{
 								Serial.println("模拟输出1关");
@@ -1099,10 +1383,25 @@ void Receive_A022(unsigned char * Judgement_Data, int Judgement_Length)//A022函
 					//模拟输出2路关
 					else if (Judgement_Data[14] == 0x00 && Judgement_Data[15] == 0x00 && Judgement_Data[16] == 0x00)
 					{
-						//将模拟输出1路关的状态值写入
+						//将模拟输出2路关的状态值写入
 						out_state = Stateless;
 						Out_State[5] = out_state;
 						analogWrite(AO2, 0);
+
+						//将所有的设定时间，已工作时间，剩余时间清零
+						duration[5] = 0x00;
+						CurrentWorkSec[5] = 0x00;
+						remaining[5] = 0x00;
+						AO2_SetWorkSec1 = 0x00;
+						AO2_SetWorkSec2 = 0x00;
+						AO2_SetWorkSec3 = 0x00;
+						AO2_CurrentWorkSec1 = 0x00;
+						AO2_CurrentWorkSec2 = 0x00;
+						AO2_CurrentWorkSec3 = 0x00;
+						AO2_RemainWorkSec1 = 0x00;
+						AO2_RemainWorkSec2 = 0x00;
+						AO2_RemainWorkSec3 = 0x00;
+
 						if (debug_print == 1)
 						{
 							Serial.println("模拟输出2关");
@@ -1233,6 +1532,35 @@ void Receive_A022(unsigned char * Judgement_Data, int Judgement_Length)//A022函
 							Out_State[5] = out_state;
 							analogWrite(AO1, 0);
 							analogWrite(AO2, 0);
+
+							//将所有的设定时间，已工作时间，剩余时间清零
+							duration[4] = 0x00;
+							CurrentWorkSec[4] = 0x00;
+							remaining[4] = 0x00;
+							duration[5] = 0x00;
+							CurrentWorkSec[5] = 0x00;
+							remaining[5] = 0x00;
+
+							AO1_SetWorkSec1 = 0x00;
+							AO1_SetWorkSec2 = 0x00;
+							AO1_SetWorkSec3 = 0x00;
+							AO1_CurrentWorkSec1 = 0x00;
+							AO1_CurrentWorkSec2 = 0x00;
+							AO1_CurrentWorkSec3 = 0x00;
+							AO1_RemainWorkSec1 = 0x00;
+							AO1_RemainWorkSec2 = 0x00;
+							AO1_RemainWorkSec3 = 0x00;
+
+							AO2_SetWorkSec1 = 0x00;
+							AO2_SetWorkSec2 = 0x00;
+							AO2_SetWorkSec3 = 0x00;
+							AO2_CurrentWorkSec1 = 0x00;
+							AO2_CurrentWorkSec2 = 0x00;
+							AO2_CurrentWorkSec3 = 0x00;
+							AO2_RemainWorkSec1 = 0x00;
+							AO2_RemainWorkSec2 = 0x00;
+							AO2_RemainWorkSec3 = 0x00;
+
 							if (debug_print == 1)
 							{
 								Serial.println("模拟输出全部路关");
@@ -1354,6 +1682,15 @@ void Receive_A022(unsigned char * Judgement_Data, int Judgement_Length)//A022函
 						Out_State[0] = out_state;
 						digitalWrite(DO1, LOW);
 
+						//将所有的设定时间，已工作时间，剩余时间清零
+						CurrentWorkSec[0] = 0x00;
+						DO1_CurrentWorkSec1 = 0x00;
+						DO1_CurrentWorkSec2 = 0x00;
+						DO1_CurrentWorkSec3 = 0x00;
+						DO1_RemainWorkSec1 = 0x00;
+						DO1_RemainWorkSec2 = 0x00;
+						DO1_RemainWorkSec3 = 0x00;
+
 						if (debug_print == 1)
 						{
 							Serial.println("数字输出1关");
@@ -1443,6 +1780,15 @@ void Receive_A022(unsigned char * Judgement_Data, int Judgement_Length)//A022函
 						out_state = Stateless;
 						Out_State[1] = out_state;
 						digitalWrite(DO2, LOW);
+
+						//将所有的设定时间，已工作时间，剩余时间清零
+						CurrentWorkSec[1] = 0x00;
+						DO2_CurrentWorkSec1 = 0x00;
+						DO2_CurrentWorkSec2 = 0x00;
+						DO2_CurrentWorkSec3 = 0x00;
+						DO2_RemainWorkSec1 = 0x00;
+						DO2_RemainWorkSec2 = 0x00;
+						DO2_RemainWorkSec3 = 0x00;
 
 						if (debug_print == 1)
 						{
@@ -1534,6 +1880,15 @@ void Receive_A022(unsigned char * Judgement_Data, int Judgement_Length)//A022函
 						Out_State[2] = out_state;
 						digitalWrite(KCZJ1, HIGH);
 
+						//将所有的设定时间，已工作时间，剩余时间清零
+						CurrentWorkSec[2] = 0x00;
+						DO3_CurrentWorkSec1 = 0x00;
+						DO3_CurrentWorkSec2 = 0x00;
+						DO3_CurrentWorkSec3 = 0x00;
+						DO3_RemainWorkSec1 = 0x00;
+						DO3_RemainWorkSec2 = 0x00;
+						DO3_RemainWorkSec3 = 0x00;
+
 						if (debug_print == 1)
 						{
 							Serial.println("数字输出3关");
@@ -1623,6 +1978,15 @@ void Receive_A022(unsigned char * Judgement_Data, int Judgement_Length)//A022函
 						out_state = Stateless;
 						Out_State[3] = out_state;
 						digitalWrite(KCZJ2, HIGH);
+
+						//将所有的设定时间，已工作时间，剩余时间清零
+						CurrentWorkSec[3] = 0x00;
+						DO4_CurrentWorkSec1 = 0x00;
+						DO4_CurrentWorkSec2 = 0x00;
+						DO4_CurrentWorkSec3 = 0x00;
+						DO4_RemainWorkSec1 = 0x00;
+						DO4_RemainWorkSec2 = 0x00;
+						DO4_RemainWorkSec3 = 0x00;
 
 						if (debug_print == 1)
 						{
@@ -1745,6 +2109,16 @@ void Receive_A022(unsigned char * Judgement_Data, int Judgement_Length)//A022函
 						out_state = Stateless;
 						Out_State[4] = out_state;
 						analogWrite(AO1, 0);
+
+						//将所有的设定时间，已工作时间，剩余时间清零
+						CurrentWorkSec[4] = 0x00;
+						AO1_CurrentWorkSec1 = 0x00;
+						AO1_CurrentWorkSec2 = 0x00;
+						AO1_CurrentWorkSec3 = 0x00;
+						AO1_RemainWorkSec1 = 0x00;
+						AO1_RemainWorkSec2 = 0x00;
+						AO1_RemainWorkSec3 = 0x00;
+
 						if (debug_print == 1)
 						{
 							Serial.println("模拟输出2关");
@@ -1866,6 +2240,16 @@ void Receive_A022(unsigned char * Judgement_Data, int Judgement_Length)//A022函
 						out_state = Stateless;
 						Out_State[5] = out_state;
 						analogWrite(AO2, 0);
+
+						//将所有的设定时间，已工作时间，剩余时间清零
+						CurrentWorkSec[5] = 0x00;
+						AO2_CurrentWorkSec1 = 0x00;
+						AO2_CurrentWorkSec2 = 0x00;
+						AO2_CurrentWorkSec3 = 0x00;
+						AO2_RemainWorkSec1 = 0x00;
+						AO2_RemainWorkSec2 = 0x00;
+						AO2_RemainWorkSec3 = 0x00;
+
 						if (debug_print == 1)
 						{
 							Serial.println("模拟输出2关");
@@ -1918,9 +2302,9 @@ void Receive_A022(unsigned char * Judgement_Data, int Judgement_Length)//A022函
 
 
 		//进行状态的回执
-		Send_E021(Receive_IsBroadcast);
+		Send_E021(Receive_IsBroadcast);//各路数状态的回执
 
-		Send_E022(Receive_IsBroadcast);
+		Send_E022(Receive_IsBroadcast);//各路数剩余时间的回执
 	}
 	else
 	{
@@ -2525,6 +2909,108 @@ unsigned char E020_init()
 /////////////////////////////////////////////////////////////////////
 unsigned char Send_E022(int Receive_IsBroadcast)
 {
+	E022_init();//将E022的值重置为初始值
+
+	E022_IsBroadcast = Receive_IsBroadcast;//E022的是否广播指令
+
+	E022[0] = E022_FrameHead;
+	E022[1] = E022_FrameId1;
+	E022[2] = E022_FrameId2;
+	E022[3] = E022_DataLen;
+	E022[4] = E022_DeviceTypeID1;
+	E022[5] = E022_DeviceTypeID2;
+	E022[6] = E022_IsBroadcast;
+	E022[7] = E022_ZoneId;
+
+	E022[8] = E022_DO1_SetTime1;
+	E022[9] = E022_DO1_SetTime2;
+	E022[10] = E022_DO1_SetTime3;
+	E022[11] = E022_DO1_RemainTime1;
+	E022[12] = E022_DO1_RemainTime2;
+	E022[13] = E022_DO1_RemainTime3;
+
+	E022[14] = E022_DO2_SetTime1;
+	E022[15] = E022_DO2_SetTime2;
+	E022[16] = E022_DO2_SetTime3;
+	E022[17] = E022_DO2_RemainTime1;
+	E022[18] = E022_DO2_RemainTime2;
+	E022[19] = E022_DO2_RemainTime3;
+
+	E022[20] = E022_DO3_SetTime1;
+	E022[21] = E022_DO3_SetTime2;
+	E022[22] = E022_DO3_SetTime3;
+	E022[23] = E022_DO3_RemainTime1;
+	E022[24] = E022_DO3_RemainTime2;
+	E022[25] = E022_DO3_RemainTime3;
+
+	E022[26] = E022_DO4_SetTime1;
+	E022[27] = E022_DO4_SetTime2;
+	E022[28] = E022_DO4_SetTime3;
+	E022[29] = E022_DO4_RemainTime1;
+	E022[30] = E022_DO4_RemainTime2;
+	E022[31] = E022_DO4_RemainTime3;
+
+	E022[32] = E022_AO1_SetTime1;
+	E022[33] = E022_AO1_SetTime2;
+	E022[34] = E022_AO1_SetTime3;
+	E022[35] = E022_AO1_RemainTime1;
+	E022[36] = E022_AO1_RemainTime2;
+	E022[37] = E022_AO1_RemainTime3;
+
+	E022[38] = E022_AO2_SetTime1;
+	E022[39] = E022_AO2_SetTime2;
+	E022[40] = E022_AO2_SetTime3;
+	E022[41] = E022_AO2_RemainTime1;
+	E022[42] = E022_AO2_RemainTime2;
+	E022[43] = E022_AO2_RemainTime3;
+
+	for (size_t i = 4; i <= E022_DataLen + 0x03; i++)
+	{
+		Check_Data[Check_Length] = E022[i];
+		// Check_Data[Check_Length] = 0x55;
+		if (debug_print == 1)
+		{
+			Serial.print("Check_Data ");
+			Serial.print(Check_Length);
+			Serial.print(" :");
+			Serial.println(Check_Data[Check_Length], HEX);
+		}
+		Check_Length++;
+		delay(1);
+	}
+	Serial.print("Check_Length = ");
+	Serial.println(Check_Length);
+
+	if (Check_Length > 0)
+	{
+		E022_CRC8 = GetCrc8(Check_Data, Check_Length);//得到CRC数据
+		if (debug_print == 1)
+		{
+			Serial.print("CRC8计算的值E022_CRC8 = 0x");
+			Serial.println(E022_CRC8, HEX);
+		}
+		Check_Length = 0;
+	}
+
+	E022[44] = E020_CRC8;
+	E022[45] = E020_FrameEnd1;
+	E022[46] = E020_FrameEnd2;
+	E022[47] = E020_FrameEnd3;
+	E022[48] = E020_FrameEnd4;
+	E022[49] = E020_FrameEnd5;
+	E022[50] = E020_FrameEnd6;
+
+	//该区域为串口查看E020回执的信息
+	if (debug_print == 1)
+	{
+		for (int i = 0; i < 51; i++)
+		{
+			Serial.print(i);
+			Serial.print("/");
+			Serial.println(E022[i], HEX);
+			delay(1);
+		}
+	}
 
 	Serial3.write(E022, 51);
 	Serial3.flush();
@@ -2557,6 +3043,71 @@ unsigned char E022_init()
 	E022_IsBroadcast = 0x00;		//E022的是否广播指令
 
 	E022_ZoneId = AT24CXX_ReadOneByte(12);			//E022的区域
+
+	E022_DO1_SetTime1 = DO1_SetWorkSec1;
+	E022_DO1_SetTime2 = DO1_SetWorkSec2;
+	E022_DO1_SetTime3 = DO1_SetWorkSec3;
+
+	E022_DO1_RemainTime1 = DO1_RemainWorkSec1;
+	E022_DO1_RemainTime2 = DO1_RemainWorkSec2;
+	E022_DO1_RemainTime3 = DO1_RemainWorkSec3;
+
+	E022_DO2_SetTime1 = DO2_SetWorkSec1;
+	E022_DO2_SetTime2 = DO2_SetWorkSec2;
+	E022_DO2_SetTime3 = DO2_SetWorkSec3;
+
+	E022_DO2_RemainTime1 = DO2_RemainWorkSec1;
+	E022_DO2_RemainTime2 = DO2_RemainWorkSec2;
+	E022_DO2_RemainTime3 = DO2_RemainWorkSec3;
+
+	E022_DO2_SetTime1 = DO2_SetWorkSec1;
+	E022_DO2_SetTime2 = DO2_SetWorkSec2;
+	E022_DO2_SetTime3 = DO2_SetWorkSec3;
+
+	E022_DO2_RemainTime1 = DO2_RemainWorkSec1;
+	E022_DO2_RemainTime2 = DO2_RemainWorkSec2;
+	E022_DO2_RemainTime3 = DO2_RemainWorkSec3;
+
+	E022_DO3_SetTime1 = DO3_SetWorkSec1;
+	E022_DO3_SetTime2 = DO3_SetWorkSec2;
+	E022_DO3_SetTime3 = DO3_SetWorkSec3;
+
+	E022_DO3_RemainTime1 = DO3_RemainWorkSec1;
+	E022_DO3_RemainTime2 = DO3_RemainWorkSec2;
+	E022_DO3_RemainTime3 = DO3_RemainWorkSec3;
+
+	E022_DO4_SetTime1 = DO4_SetWorkSec1;
+	E022_DO4_SetTime2 = DO4_SetWorkSec2;
+	E022_DO4_SetTime3 = DO4_SetWorkSec3;
+
+	E022_DO4_RemainTime1 = DO4_RemainWorkSec1;
+	E022_DO4_RemainTime2 = DO4_RemainWorkSec2;
+	E022_DO4_RemainTime3 = DO4_RemainWorkSec3;
+
+	E022_AO1_SetTime1 = AO1_SetWorkSec1;
+	E022_AO1_SetTime2 = AO1_SetWorkSec2;
+	E022_AO1_SetTime3 = AO1_SetWorkSec3;
+
+	E022_AO1_RemainTime1 = AO1_RemainWorkSec1;
+	E022_AO1_RemainTime2 = AO1_RemainWorkSec2;
+	E022_AO1_RemainTime3 = AO1_RemainWorkSec3;
+
+	E022_AO2_SetTime1 = AO2_SetWorkSec1;
+	E022_AO2_SetTime2 = AO2_SetWorkSec2;
+	E022_AO2_SetTime3 = AO2_SetWorkSec3;
+
+	E022_AO2_RemainTime1 = AO2_RemainWorkSec1;
+	E022_AO2_RemainTime2 = AO2_RemainWorkSec2;
+	E022_AO2_RemainTime3 = AO2_RemainWorkSec3;
+
+	E022_CRC8 = 0x00;
+
+	E022_FrameEnd1 = 0x0D;
+	E022_FrameEnd2 = 0x0A;
+	E022_FrameEnd3 = 0x0D;
+	E022_FrameEnd4 = 0x0A;
+	E022_FrameEnd5 = 0x0D;
+	E022_FrameEnd6 = 0x0A;
 
 	return 0;
 }
@@ -3053,14 +3604,96 @@ void forswitch()
 				digitalWrite(DO1, HIGH);
 
 				CurrentWorkSec[i] = (millis() - ot[i]) / 1000;//得到DO1的已工作时长
-				remaining[i] = duration[i] - CurrentWorkSec[i];//得到DO1的剩余工作时长
+				remaining[i] = (duration[i] > CurrentWorkSec[i]) ? (duration[i] - CurrentWorkSec[i]) : 0;//得到DO1的剩余工作时长
 				if (debug_print == 1)
 				{
+					Serial.println(String("DO1的设定工作时长 = ") + duration[i]);
 					Serial.println(String("DO1的已工作时长 = ") + CurrentWorkSec[i]);
 					Serial.println(String("DO1的剩余工作时长 = ") + remaining[i]);
 				}
-				//-----------------------------------这一段代码将已工作的数值拆位-------------------------------------------------------------------------------
+				//---------------------------这一段代码将已工作的数值和剩余工作数值拆位-------------------------------------------------------------------------------
+				if (duration[i] <= 0xFF)
+				{
+					DO1_SetWorkSec1 = 0x00;
+					DO1_SetWorkSec2 = 0x00;
+					DO1_SetWorkSec3 = duration[i];
+				}
+				else if (duration[i] > 0xFF && duration[i] <= 0xFFFF)
+				{
+					DO1_SetWorkSec1 = 0x00;
+					DO1_SetWorkSec2 = duration[i] / 0x100;
+					DO1_SetWorkSec3 = (duration[i] - DO1_SetWorkSec2 * 0x100);
+				}
+				else if (duration[i] > 0xFFFF)
+				{
+					DO1_SetWorkSec1 = duration[i] / 0x10000;
+					DO1_SetWorkSec2 = duration[i] - (DO1_SetWorkSec1 * 0x10000) / 0x100;
+					DO1_SetWorkSec3 = duration[i] - (DO1_SetWorkSec1 * 0x10000) - (DO1_SetWorkSec2 * 0x100);
+				}
+				else
+				{
+					Serial.println("读取DO1设定工作时间错误");
+					//这里应该需要回执错误？？？
+				}
 				
+				if (CurrentWorkSec[i] <= 0xFF)
+				{
+					DO1_CurrentWorkSec1 = 0x00;
+					DO1_CurrentWorkSec2 = 0x00;
+					DO1_CurrentWorkSec3 = CurrentWorkSec[i];
+				}
+				else if (CurrentWorkSec[i] > 0xFF && CurrentWorkSec[i] <= 0xFFFF)
+				{
+					DO1_CurrentWorkSec1 = 0x00;
+					DO1_CurrentWorkSec2 = CurrentWorkSec[i] / 0x100;
+					DO1_CurrentWorkSec3 = (CurrentWorkSec[i] - DO1_CurrentWorkSec2 * 0x100);
+				}
+				else if (CurrentWorkSec[i] > 0xFFFF)
+				{
+					DO1_CurrentWorkSec1 = CurrentWorkSec[i] / 0x10000;
+					DO1_CurrentWorkSec2 = CurrentWorkSec[i] - (DO1_CurrentWorkSec1 * 0x10000) / 0x100;
+					DO1_CurrentWorkSec3 = CurrentWorkSec[i] - (DO1_CurrentWorkSec1 * 0x10000) - (DO1_CurrentWorkSec2 * 0x100);
+				}
+				else
+				{
+					Serial.println("读取DO1已工作时间错误");
+					//这里应该需要回执错误？？？
+				}
+
+				if (remaining[i] <= 0xFF)
+				{
+					DO1_RemainWorkSec1 = 0x00;
+					DO1_RemainWorkSec2 = 0x00;
+					DO1_RemainWorkSec3 = remaining[i];
+				}
+				else if (remaining[i] > 0xFF && remaining[i] <= 0xFFFF)
+				{
+					DO1_RemainWorkSec1 = 0x00;
+					DO1_RemainWorkSec2 = remaining[i] / 0x100;
+					DO1_RemainWorkSec3 = (remaining[i] - DO1_RemainWorkSec2 * 0x100);
+				}
+				else if (remaining[i] > 0xFFFF)
+				{
+					DO1_RemainWorkSec1 = remaining[i] / 0x10000;
+					DO1_RemainWorkSec2 = remaining[i] - (DO1_RemainWorkSec1 * 0x10000) / 0x100;
+					DO1_RemainWorkSec3 = remaining[i] - (DO1_RemainWorkSec1 * 0x10000) - (DO1_RemainWorkSec2 * 0x100);
+				}
+				else
+				{
+					Serial.println("读取DO1剩余工作时间错误");
+					//这里应该需要回执错误？？？
+				}
+
+				if (debug_print == 1)
+				{
+					Serial.println(String("设定工作时间拆位结果为：") + DO1_SetWorkSec1 + "/" + DO1_SetWorkSec2 + "/" + DO1_SetWorkSec3);
+					Serial.println(String("已工作时间拆位结果为：") + DO1_CurrentWorkSec1 + "/" + DO1_CurrentWorkSec2 + "/" + DO1_CurrentWorkSec3);
+					Serial.println(String("剩余工作时间拆位结果为：") + DO1_RemainWorkSec1 + "/" + DO1_RemainWorkSec2 + "/" + DO1_RemainWorkSec3);
+					if (debug == 1)
+					{
+						delay(500);
+					}
+				}
 				//-------------------------------------------------------------------------------------------------------------------------------------------
 
 
@@ -3073,9 +3706,21 @@ void forswitch()
 					}
 					digitalWrite(DO1, LOW);
 					Out_State[i] = Stateless;
+
+					//将所有的设定时间，已工作时间，剩余时间清零
+					duration[i] = 0x00;
+					CurrentWorkSec[i] = 0x00;
+					remaining[i] = 0x00;
+					DO1_SetWorkSec1 = 0x00;
+					DO1_SetWorkSec2 = 0x00;
+					DO1_SetWorkSec3 = 0x00;
+					DO1_CurrentWorkSec1 = 0x00;
+					DO1_CurrentWorkSec2 = 0x00;
+					DO1_CurrentWorkSec3 = 0x00;
+					DO1_RemainWorkSec1 = 0x00;
+					DO1_RemainWorkSec2 = 0x00;
+					DO1_RemainWorkSec3 = 0x00;
 				}
-				////进行状态的回执
-				//Send_E021(Receive_IsBroadcast);
 				break;
 
 				/*状态：DO2开
@@ -3094,8 +3739,96 @@ void forswitch()
 				}
 				//--------------------------------------
 				digitalWrite(DO2, HIGH);
-				//-----------------------------------这一段代码将已工作的数值拆位-------------------------------------------------------------------------------
 
+				CurrentWorkSec[i] = (millis() - ot[i]) / 1000;//得到DO2的已工作时长
+				remaining[i] = (duration[i] > CurrentWorkSec[i]) ? (duration[i] - CurrentWorkSec[i]) : 0;//得到DO2的剩余工作时长
+				if (debug_print == 1)
+				{
+					Serial.println(String("DO2的已工作时长 = ") + CurrentWorkSec[i]);
+					Serial.println(String("DO2的剩余工作时长 = ") + remaining[i]);
+				}
+				//-----------------------------------这一段代码将已工作的数值拆位-------------------------------------------------------------------------------
+				if (duration[i] <= 0xFF)
+				{
+					DO2_SetWorkSec1 = 0x00;
+					DO2_SetWorkSec2 = 0x00;
+					DO2_SetWorkSec3 = duration[i];
+				}
+				else if (duration[i] > 0xFF && duration[i] <= 0xFFFF)
+				{
+					DO2_SetWorkSec1 = 0x00;
+					DO2_SetWorkSec2 = duration[i] / 0x100;
+					DO2_SetWorkSec3 = (duration[i] - DO2_SetWorkSec2 * 0x100);
+				}
+				else if (duration[i] > 0xFFFF)
+				{
+					DO2_SetWorkSec1 = duration[i] / 0x10000;
+					DO2_SetWorkSec2 = duration[i] - (DO2_SetWorkSec1 * 0x10000) / 0x100;
+					DO2_SetWorkSec3 = duration[i] - (DO2_SetWorkSec1 * 0x10000) - (DO2_SetWorkSec2 * 0x100);
+				}
+				else
+				{
+					Serial.println("读取DO2设定工作时间错误");
+					//这里应该需要回执错误？？？
+				}
+				
+				if (CurrentWorkSec[i] <= 0xFF)
+				{
+					DO2_CurrentWorkSec1 = 0x00;
+					DO2_CurrentWorkSec2 = 0x00;
+					DO2_CurrentWorkSec3 = CurrentWorkSec[i];
+				}
+				else if (CurrentWorkSec[i] > 0xFF && CurrentWorkSec[i] <= 0xFFFF)
+				{
+					DO2_CurrentWorkSec1 = 0x00;
+					DO2_CurrentWorkSec2 = CurrentWorkSec[i] / 0x100;
+					DO2_CurrentWorkSec3 = (CurrentWorkSec[i] - DO2_CurrentWorkSec2 * 0x100);
+				}
+				else if (CurrentWorkSec[i] > 0xFFFF)
+				{
+					DO2_CurrentWorkSec1 = CurrentWorkSec[i] / 0x10000;
+					DO2_CurrentWorkSec2 = CurrentWorkSec[i] - (DO2_CurrentWorkSec1 * 0x10000) / 0x100;
+					DO2_CurrentWorkSec3 = CurrentWorkSec[i] - (DO2_CurrentWorkSec1 * 0x10000) - (DO2_CurrentWorkSec2 * 0x100);
+				}
+				else
+				{
+					Serial.println("读取DO2已工作时间错误");
+					//这里应该需要回执错误？？？
+				}
+
+				if (remaining[i] <= 0xFF)
+				{
+					DO2_RemainWorkSec1 = 0x00;
+					DO2_RemainWorkSec2 = 0x00;
+					DO2_RemainWorkSec3 = remaining[i];
+				}
+				else if (remaining[i] > 0xFF && remaining[i] <= 0xFFFF)
+				{
+					DO2_RemainWorkSec1 = 0x00;
+					DO2_RemainWorkSec2 = remaining[i] / 0x100;
+					DO2_RemainWorkSec3 = (remaining[i] - DO2_RemainWorkSec2 * 0x100);
+				}
+				else if (remaining[i] > 0xFFFF)
+				{
+					DO2_RemainWorkSec1 = remaining[i] / 0x10000;
+					DO2_RemainWorkSec2 = remaining[i] - (DO2_RemainWorkSec1 * 0x10000) / 0x100;
+					DO2_RemainWorkSec3 = remaining[i] - (DO2_RemainWorkSec1 * 0x10000) - (DO2_RemainWorkSec2 * 0x100);
+				}
+				else
+				{
+					Serial.println("读取DO2剩余工作时间错误");
+					//这里应该需要回执错误？？？
+				}
+
+				if (debug_print == 1)
+				{
+					Serial.println(String("已工作时间拆位结果为：") + DO2_CurrentWorkSec1 + "/" + DO2_CurrentWorkSec2 + "/" + DO2_CurrentWorkSec3);
+					Serial.println(String("剩余工作时间拆位结果为：") + DO2_RemainWorkSec1 + "/" + DO2_RemainWorkSec2 + "/" + DO2_RemainWorkSec3);
+					if (debug == 1)
+					{
+						delay(500);
+					}
+				}
 				//-------------------------------------------------------------------------------------------------------------------------------------------
 
 
@@ -3108,6 +3841,20 @@ void forswitch()
 					}
 					digitalWrite(DO2, LOW);
 					Out_State[i] = Stateless;
+
+					//将所有的设定时间，已工作时间，剩余时间清零
+					duration[i] = 0x00;
+					CurrentWorkSec[i] = 0x00;
+					remaining[i] = 0x00;
+					DO2_SetWorkSec1 = 0x00;
+					DO2_SetWorkSec2 = 0x00;
+					DO2_SetWorkSec3 = 0x00;
+					DO2_CurrentWorkSec1 = 0x00;
+					DO2_CurrentWorkSec2 = 0x00;
+					DO2_CurrentWorkSec3 = 0x00;
+					DO2_RemainWorkSec1 = 0x00;
+					DO2_RemainWorkSec2 = 0x00;
+					DO2_RemainWorkSec3 = 0x00;
 				}
 				break;
 
@@ -3127,8 +3874,96 @@ void forswitch()
 				}
 				//--------------------------------------
 				digitalWrite(KCZJ1, LOW);
-				//-----------------------------------这一段代码将已工作的数值拆位-------------------------------------------------------------------------------
 
+				CurrentWorkSec[i] = (millis() - ot[i]) / 1000;//得到DO3的已工作时长
+				remaining[i] = (duration[i] > CurrentWorkSec[i]) ? (duration[i] - CurrentWorkSec[i]) : 0;//得到DO3的剩余工作时长
+				if (debug_print == 1)
+				{
+					Serial.println(String("DO3的已工作时长 = ") + CurrentWorkSec[i]);
+					Serial.println(String("DO3的剩余工作时长 = ") + remaining[i]);
+				}
+				//-----------------------------------这一段代码将已工作的数值拆位-------------------------------------------------------------------------------
+				if (duration[i] <= 0xFF)
+				{
+					DO3_SetWorkSec1 = 0x00;
+					DO3_SetWorkSec2 = 0x00;
+					DO3_SetWorkSec3 = duration[i];
+				}
+				else if (duration[i] > 0xFF && duration[i] <= 0xFFFF)
+				{
+					DO3_SetWorkSec1 = 0x00;
+					DO3_SetWorkSec2 = duration[i] / 0x100;
+					DO3_SetWorkSec3 = (duration[i] - DO3_SetWorkSec2 * 0x100);
+				}
+				else if (duration[i] > 0xFFFF)
+				{
+					DO3_SetWorkSec1 = duration[i] / 0x10000;
+					DO3_SetWorkSec2 = duration[i] - (DO3_SetWorkSec1 * 0x10000) / 0x100;
+					DO3_SetWorkSec3 = duration[i] - (DO3_SetWorkSec1 * 0x10000) - (DO3_SetWorkSec2 * 0x100);
+				}
+				else
+				{
+					Serial.println("读取DO3设定工作时间错误");
+					//这里应该需要回执错误？？？
+				}
+				
+				if (CurrentWorkSec[i] <= 0xFF)
+				{
+					DO3_CurrentWorkSec1 = 0x00;
+					DO3_CurrentWorkSec2 = 0x00;
+					DO3_CurrentWorkSec3 = CurrentWorkSec[i];
+				}
+				else if (CurrentWorkSec[i] > 0xFF && CurrentWorkSec[i] <= 0xFFFF)
+				{
+					DO3_CurrentWorkSec1 = 0x00;
+					DO3_CurrentWorkSec2 = CurrentWorkSec[i] / 0x100;
+					DO3_CurrentWorkSec3 = (CurrentWorkSec[i] - DO3_CurrentWorkSec2 * 0x100);
+				}
+				else if (CurrentWorkSec[i] > 0xFFFF)
+				{
+					DO3_CurrentWorkSec1 = CurrentWorkSec[i] / 0x10000;
+					DO3_CurrentWorkSec2 = CurrentWorkSec[i] - (DO3_CurrentWorkSec1 * 0x10000) / 0x100;
+					DO3_CurrentWorkSec3 = CurrentWorkSec[i] - (DO3_CurrentWorkSec1 * 0x10000) - (DO3_CurrentWorkSec2 * 0x100);
+				}
+				else
+				{
+					Serial.println("读取DO3已工作时间错误");
+					//这里应该需要回执错误？？？
+				}
+
+				if (remaining[i] <= 0xFF)
+				{
+					DO3_RemainWorkSec1 = 0x00;
+					DO3_RemainWorkSec2 = 0x00;
+					DO3_RemainWorkSec3 = remaining[i];
+				}
+				else if (remaining[i] > 0xFF && remaining[i] <= 0xFFFF)
+				{
+					DO3_RemainWorkSec1 = 0x00;
+					DO3_RemainWorkSec2 = remaining[i] / 0x100;
+					DO3_RemainWorkSec3 = (remaining[i] - DO3_RemainWorkSec2 * 0x100);
+				}
+				else if (remaining[i] > 0xFFFF)
+				{
+					DO3_RemainWorkSec1 = remaining[i] / 0x10000;
+					DO3_RemainWorkSec2 = remaining[i] - (DO3_RemainWorkSec1 * 0x10000) / 0x100;
+					DO3_RemainWorkSec3 = remaining[i] - (DO3_RemainWorkSec1 * 0x10000) - (DO3_RemainWorkSec2 * 0x100);
+				}
+				else
+				{
+					Serial.println("读取DO3剩余工作时间错误");
+					//这里应该需要回执错误？？？
+				}
+
+				if (debug_print == 1)
+				{
+					Serial.println(String("已工作时间拆位结果为：") + DO3_CurrentWorkSec1 + "/" + DO3_CurrentWorkSec2 + "/" + DO3_CurrentWorkSec3);
+					Serial.println(String("剩余工作时间拆位结果为：") + DO3_RemainWorkSec1 + "/" + DO3_RemainWorkSec2 + "/" + DO3_RemainWorkSec3);
+					if (debug == 1)
+					{
+						delay(500);
+					}
+				}
 				//-------------------------------------------------------------------------------------------------------------------------------------------
 
 
@@ -3141,6 +3976,20 @@ void forswitch()
 					}
 					digitalWrite(KCZJ1, HIGH);
 					Out_State[i] = Stateless;
+
+					//将所有的设定时间，已工作时间，剩余时间清零
+					duration[i] = 0x00;
+					CurrentWorkSec[i] = 0x00;
+					remaining[i] = 0x00;
+					DO3_SetWorkSec1 = 0x00;
+					DO3_SetWorkSec2 = 0x00;
+					DO3_SetWorkSec3 = 0x00;
+					DO3_CurrentWorkSec1 = 0x00;
+					DO3_CurrentWorkSec2 = 0x00;
+					DO3_CurrentWorkSec3 = 0x00;
+					DO3_RemainWorkSec1 = 0x00;
+					DO3_RemainWorkSec2 = 0x00;
+					DO3_RemainWorkSec3 = 0x00;
 				}
 				break;
 
@@ -3160,8 +4009,96 @@ void forswitch()
 				}
 				//--------------------------------------
 				digitalWrite(KCZJ2, LOW);
-				//-----------------------------------这一段代码将已工作的数值拆位-------------------------------------------------------------------------------
 
+				CurrentWorkSec[i] = (millis() - ot[i]) / 1000;//得到DO4的已工作时长
+				remaining[i] = (duration[i] > CurrentWorkSec[i]) ? (duration[i] - CurrentWorkSec[i]) : 0;//得到DO4的剩余工作时长
+				if (debug_print == 1)
+				{
+					Serial.println(String("DO4的已工作时长 = ") + CurrentWorkSec[i]);
+					Serial.println(String("DO4的剩余工作时长 = ") + remaining[i]);
+				}
+				//-----------------------------------这一段代码将已工作的数值拆位-------------------------------------------------------------------------------
+				if (duration[i] <= 0xFF)
+				{
+					DO4_SetWorkSec1 = 0x00;
+					DO4_SetWorkSec2 = 0x00;
+					DO4_SetWorkSec3 = duration[i];
+				}
+				else if (duration[i] > 0xFF && duration[i] <= 0xFFFF)
+				{
+					DO4_SetWorkSec1 = 0x00;
+					DO4_SetWorkSec2 = duration[i] / 0x100;
+					DO4_SetWorkSec3 = (duration[i] - DO4_SetWorkSec2 * 0x100);
+				}
+				else if (duration[i] > 0xFFFF)
+				{
+					DO4_SetWorkSec1 = duration[i] / 0x10000;
+					DO4_SetWorkSec2 = duration[i] - (DO4_SetWorkSec1 * 0x10000) / 0x100;
+					DO4_SetWorkSec3 = duration[i] - (DO4_SetWorkSec1 * 0x10000) - (DO4_SetWorkSec2 * 0x100);
+				}
+				else
+				{
+					Serial.println("读取DO4设定工作时间错误");
+					//这里应该需要回执错误？？？
+				}
+				
+				if (CurrentWorkSec[i] <= 0xFF)
+				{
+					DO4_CurrentWorkSec1 = 0x00;
+					DO4_CurrentWorkSec2 = 0x00;
+					DO4_CurrentWorkSec3 = CurrentWorkSec[i];
+				}
+				else if (CurrentWorkSec[i] > 0xFF && CurrentWorkSec[i] <= 0xFFFF)
+				{
+					DO4_CurrentWorkSec1 = 0x00;
+					DO4_CurrentWorkSec2 = CurrentWorkSec[i] / 0x100;
+					DO4_CurrentWorkSec3 = (CurrentWorkSec[i] - DO4_CurrentWorkSec2 * 0x100);
+				}
+				else if (CurrentWorkSec[i] > 0xFFFF)
+				{
+					DO4_CurrentWorkSec1 = CurrentWorkSec[i] / 0x10000;
+					DO4_CurrentWorkSec2 = CurrentWorkSec[i] - (DO4_CurrentWorkSec1 * 0x10000) / 0x100;
+					DO4_CurrentWorkSec3 = CurrentWorkSec[i] - (DO4_CurrentWorkSec1 * 0x10000) - (DO4_CurrentWorkSec2 * 0x100);
+				}
+				else
+				{
+					Serial.println("读取DO4已工作时间错误");
+					//这里应该需要回执错误？？？
+				}
+
+				if (remaining[i] <= 0xFF)
+				{
+					DO4_RemainWorkSec1 = 0x00;
+					DO4_RemainWorkSec2 = 0x00;
+					DO4_RemainWorkSec3 = remaining[i];
+				}
+				else if (remaining[i] > 0xFF && remaining[i] <= 0xFFFF)
+				{
+					DO4_RemainWorkSec1 = 0x00;
+					DO4_RemainWorkSec2 = remaining[i] / 0x100;
+					DO4_RemainWorkSec3 = (remaining[i] - DO4_RemainWorkSec2 * 0x100);
+				}
+				else if (remaining[i] > 0xFFFF)
+				{
+					DO4_RemainWorkSec1 = remaining[i] / 0x10000;
+					DO4_RemainWorkSec2 = remaining[i] - (DO4_RemainWorkSec1 * 0x10000) / 0x100;
+					DO4_RemainWorkSec3 = remaining[i] - (DO4_RemainWorkSec1 * 0x10000) - (DO4_RemainWorkSec2 * 0x100);
+				}
+				else
+				{
+					Serial.println("读取DO4剩余工作时间错误");
+					//这里应该需要回执错误？？？
+				}
+
+				if (debug_print == 1)
+				{
+					Serial.println(String("已工作时间拆位结果为：") + DO4_CurrentWorkSec1 + "/" + DO4_CurrentWorkSec2 + "/" + DO4_CurrentWorkSec3);
+					Serial.println(String("剩余工作时间拆位结果为：") + DO4_RemainWorkSec1 + "/" + DO4_RemainWorkSec2 + "/" + DO4_RemainWorkSec3);
+					if (debug == 1)
+					{
+						delay(500);
+					}
+				}
 				//-------------------------------------------------------------------------------------------------------------------------------------------
 
 
@@ -3174,6 +4111,20 @@ void forswitch()
 					}
 					digitalWrite(KCZJ2, HIGH);
 					Out_State[i] = Stateless;
+
+					//将所有的设定时间，已工作时间，剩余时间清零
+					duration[i] = 0x00;
+					CurrentWorkSec[i] = 0x00;
+					remaining[i] = 0x00;
+					DO4_SetWorkSec1 = 0x00;
+					DO4_SetWorkSec2 = 0x00;
+					DO4_SetWorkSec3 = 0x00;
+					DO4_CurrentWorkSec1 = 0x00;
+					DO4_CurrentWorkSec2 = 0x00;
+					DO4_CurrentWorkSec3 = 0x00;
+					DO4_RemainWorkSec1 = 0x00;
+					DO4_RemainWorkSec2 = 0x00;
+					DO4_RemainWorkSec3 = 0x00;
 				}
 				break;
 
@@ -3193,8 +4144,96 @@ void forswitch()
 				}
 				//--------------------------------------
 				analogWrite(AO1, Analog_Value1);
-				//-----------------------------------这一段代码将已工作的数值拆位-------------------------------------------------------------------------------
 
+				CurrentWorkSec[i] = (millis() - ot[i]) / 1000;//得到AO1的已工作时长
+				remaining[i] = (duration[i] > CurrentWorkSec[i]) ? (duration[i] - CurrentWorkSec[i]) : 0;//得到AO的剩余工作时长
+				if (debug_print == 1)
+				{
+					Serial.println(String("AO1的已工作时长 = ") + CurrentWorkSec[i]);
+					Serial.println(String("AO1的剩余工作时长 = ") + remaining[i]);
+				}
+				//-----------------------------------这一段代码将已工作的数值拆位-------------------------------------------------------------------------------
+				if (duration[i] <= 0xFF)
+				{
+					AO1_SetWorkSec1 = 0x00;
+					AO1_SetWorkSec2 = 0x00;
+					AO1_SetWorkSec3 = duration[i];
+				}
+				else if (duration[i] > 0xFF && duration[i] <= 0xFFFF)
+				{
+					AO1_SetWorkSec1 = 0x00;
+					AO1_SetWorkSec2 = duration[i] / 0x100;
+					AO1_SetWorkSec3 = (duration[i] - AO1_SetWorkSec2 * 0x100);
+				}
+				else if (duration[i] > 0xFFFF)
+				{
+					AO1_SetWorkSec1 = duration[i] / 0x10000;
+					AO1_SetWorkSec2 = duration[i] - (AO1_SetWorkSec1 * 0x10000) / 0x100;
+					AO1_SetWorkSec3 = duration[i] - (AO1_SetWorkSec1 * 0x10000) - (AO1_SetWorkSec2 * 0x100);
+				}
+				else
+				{
+					Serial.println("读取AO1设定工作时间错误");
+					//这里应该需要回执错误？？？
+				}
+
+				if (CurrentWorkSec[i] <= 0xFF)
+				{
+					AO1_CurrentWorkSec1 = 0x00;
+					AO1_CurrentWorkSec2 = 0x00;
+					AO1_CurrentWorkSec3 = CurrentWorkSec[i];
+				}
+				else if (CurrentWorkSec[i] > 0xFF && CurrentWorkSec[i] <= 0xFFFF)
+				{
+					AO1_CurrentWorkSec1 = 0x00;
+					AO1_CurrentWorkSec2 = CurrentWorkSec[i] / 0x100;
+					AO1_CurrentWorkSec3 = (CurrentWorkSec[i] - AO1_CurrentWorkSec2 * 0x100);
+				}
+				else if (CurrentWorkSec[i] > 0xFFFF)
+				{
+					AO1_CurrentWorkSec1 = CurrentWorkSec[i] / 0x10000;
+					AO1_CurrentWorkSec2 = CurrentWorkSec[i] - (AO1_CurrentWorkSec1 * 0x10000) / 0x100;
+					AO1_CurrentWorkSec3 = CurrentWorkSec[i] - (AO1_CurrentWorkSec1 * 0x10000) - (AO1_CurrentWorkSec2 * 0x100);
+				}
+				else
+				{
+					Serial.println("读取AO1已工作时间错误");
+					//这里应该需要回执错误？？？
+				}
+
+				if (remaining[i] <= 0xFF)
+				{
+					AO1_RemainWorkSec1 = 0x00;
+					AO1_RemainWorkSec2 = 0x00;
+					AO1_RemainWorkSec3 = remaining[i];
+				}
+				else if (remaining[i] > 0xFF && remaining[i] <= 0xFFFF)
+				{
+					AO1_RemainWorkSec1 = 0x00;
+					AO1_RemainWorkSec2 = remaining[i] / 0x100;
+					AO1_RemainWorkSec3 = (remaining[i] - AO1_RemainWorkSec2 * 0x100);
+				}
+				else if (remaining[i] > 0xFFFF)
+				{
+					AO1_RemainWorkSec1 = remaining[i] / 0x10000;
+					AO1_RemainWorkSec2 = remaining[i] - (AO1_RemainWorkSec1 * 0x10000) / 0x100;
+					AO1_RemainWorkSec3 = remaining[i] - (AO1_RemainWorkSec1 * 0x10000) - (AO1_RemainWorkSec2 * 0x100);
+				}
+				else
+				{
+					Serial.println("读取AO1剩余工作时间错误");
+					//这里应该需要回执错误？？？
+				}
+
+				if (debug_print == 1)
+				{
+					Serial.println(String("已工作时间拆位结果为：") + AO1_CurrentWorkSec1 + "/" + AO1_CurrentWorkSec2 + "/" + AO1_CurrentWorkSec3);
+					Serial.println(String("剩余工作时间拆位结果为：") + AO1_RemainWorkSec1 + "/" + AO1_RemainWorkSec2 + "/" + AO1_RemainWorkSec3);
+					if (debug == 1)
+					{
+						delay(500);
+					}
+				}
 				//-------------------------------------------------------------------------------------------------------------------------------------------
 
 
@@ -3207,6 +4246,20 @@ void forswitch()
 					}
 					analogWrite(AO1, 0);
 					Out_State[i] = Stateless;
+
+					//将所有的设定时间，已工作时间，剩余时间清零
+					duration[i] = 0x00;
+					CurrentWorkSec[i] = 0x00;
+					remaining[i] = 0x00;
+					AO1_SetWorkSec1 = 0x00;
+					AO1_SetWorkSec2 = 0x00;
+					AO1_SetWorkSec3 = 0x00;
+					AO1_CurrentWorkSec1 = 0x00;
+					AO1_CurrentWorkSec2 = 0x00;
+					AO1_CurrentWorkSec3 = 0x00;
+					AO1_RemainWorkSec1 = 0x00;
+					AO1_RemainWorkSec2 = 0x00;
+					AO1_RemainWorkSec3 = 0x00;
 				}
 				break;
 
@@ -3226,8 +4279,96 @@ void forswitch()
 				}
 				//--------------------------------------
 				analogWrite(AO2, Analog_Value2);
-				//-----------------------------------这一段代码将已工作的数值拆位-------------------------------------------------------------------------------
 
+				CurrentWorkSec[i] = (millis() - ot[i]) / 1000;//得到AO2的已工作时长
+				remaining[i] = (duration[i] > CurrentWorkSec[i]) ? (duration[i] - CurrentWorkSec[i]) : 0;//得到AO2的剩余工作时长
+				if (debug_print == 1)
+				{
+					Serial.println(String("AO2的已工作时长 = ") + CurrentWorkSec[i]);
+					Serial.println(String("AO2的剩余工作时长 = ") + remaining[i]);
+				}
+				//-----------------------------------这一段代码将已工作的数值拆位-------------------------------------------------------------------------------
+				if (duration[i] <= 0xFF)
+				{
+					AO2_SetWorkSec1 = 0x00;
+					AO2_SetWorkSec2 = 0x00;
+					AO2_SetWorkSec3 = duration[i];
+				}
+				else if (duration[i] > 0xFF && duration[i] <= 0xFFFF)
+				{
+					AO2_SetWorkSec1 = 0x00;
+					AO2_SetWorkSec2 = duration[i] / 0x100;
+					AO2_SetWorkSec3 = (duration[i] - AO2_SetWorkSec2 * 0x100);
+				}
+				else if (duration[i] > 0xFFFF)
+				{
+					AO2_SetWorkSec1 = duration[i] / 0x10000;
+					AO2_SetWorkSec2 = duration[i] - (AO2_SetWorkSec1 * 0x10000) / 0x100;
+					AO2_SetWorkSec3 = duration[i] - (AO2_SetWorkSec1 * 0x10000) - (AO2_SetWorkSec2 * 0x100);
+				}
+				else
+				{
+					Serial.println("读取AO2设定工作时间错误");
+					//这里应该需要回执错误？？？
+				}
+				
+				if (CurrentWorkSec[i] <= 0xFF)
+				{
+					AO2_CurrentWorkSec1 = 0x00;
+					AO2_CurrentWorkSec2 = 0x00;
+					AO2_CurrentWorkSec3 = CurrentWorkSec[i];
+				}
+				else if (CurrentWorkSec[i] > 0xFF && CurrentWorkSec[i] <= 0xFFFF)
+				{
+					AO2_CurrentWorkSec1 = 0x00;
+					AO2_CurrentWorkSec2 = CurrentWorkSec[i] / 0x100;
+					AO2_CurrentWorkSec3 = (CurrentWorkSec[i] - AO2_CurrentWorkSec2 * 0x100);
+				}
+				else if (CurrentWorkSec[i] > 0xFFFF)
+				{
+					AO2_CurrentWorkSec1 = CurrentWorkSec[i] / 0x10000;
+					AO2_CurrentWorkSec2 = CurrentWorkSec[i] - (AO2_CurrentWorkSec1 * 0x10000) / 0x100;
+					AO2_CurrentWorkSec3 = CurrentWorkSec[i] - (AO2_CurrentWorkSec1 * 0x10000) - (AO2_CurrentWorkSec2 * 0x100);
+				}
+				else
+				{
+					Serial.println("读取AO2已工作时间错误");
+					//这里应该需要回执错误？？？
+				}
+
+				if (remaining[i] <= 0xFF)
+				{
+					AO2_RemainWorkSec1 = 0x00;
+					AO2_RemainWorkSec2 = 0x00;
+					AO2_RemainWorkSec3 = remaining[i];
+				}
+				else if (remaining[i] > 0xFF && remaining[i] <= 0xFFFF)
+				{
+					AO2_RemainWorkSec1 = 0x00;
+					AO2_RemainWorkSec2 = remaining[i] / 0x100;
+					AO2_RemainWorkSec3 = (remaining[i] - AO2_RemainWorkSec2 * 0x100);
+				}
+				else if (remaining[i] > 0xFFFF)
+				{
+					AO2_RemainWorkSec1 = remaining[i] / 0x10000;
+					AO2_RemainWorkSec2 = remaining[i] - (AO2_RemainWorkSec1 * 0x10000) / 0x100;
+					AO2_RemainWorkSec3 = remaining[i] - (AO2_RemainWorkSec1 * 0x10000) - (AO2_RemainWorkSec2 * 0x100);
+				}
+				else
+				{
+					Serial.println("读取AO2剩余工作时间错误");
+					//这里应该需要回执错误？？？
+				}
+
+				if (debug_print == 1)
+				{
+					Serial.println(String("已工作时间拆位结果为：") + AO2_CurrentWorkSec1 + "/" + AO2_CurrentWorkSec2 + "/" + AO2_CurrentWorkSec3);
+					Serial.println(String("剩余工作时间拆位结果为：") + AO2_RemainWorkSec1 + "/" + AO2_RemainWorkSec2 + "/" + AO2_RemainWorkSec3);
+					if (debug == 1)
+					{
+						delay(500);
+					}
+				}
 				//-------------------------------------------------------------------------------------------------------------------------------------------
 
 
@@ -3240,6 +4381,20 @@ void forswitch()
 					}
 					analogWrite(AO2, 0);
 					Out_State[i] = Stateless;
+
+					//将所有的设定时间，已工作时间，剩余时间清零
+					duration[i] = 0x00;
+					CurrentWorkSec[i] = 0x00;
+					remaining[i] = 0x00;
+					AO2_SetWorkSec1 = 0x00;
+					AO2_SetWorkSec2 = 0x00;
+					AO2_SetWorkSec3 = 0x00;
+					AO2_CurrentWorkSec1 = 0x00;
+					AO2_CurrentWorkSec2 = 0x00;
+					AO2_CurrentWorkSec3 = 0x00;
+					AO2_RemainWorkSec1 = 0x00;
+					AO2_RemainWorkSec2 = 0x00;
+					AO2_RemainWorkSec3 = 0x00;
 				}
 				break;
 

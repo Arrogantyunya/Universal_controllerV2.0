@@ -6931,7 +6931,26 @@ void Automatic_execution_test()
 		{
 			if (debug_print == 0x01)
 			{
-				//Serial.println("DO3_AutoFlag == 1");
+				Serial.println("DO3_AutoFlag == 1");
+			}
+
+			if (RTC_Hour >= DO3_AutoBegin[0][3] && RTC_Hour <= DO3_AutoEnd[0][3] &&
+				RTC_Minute >= DO3_AutoBegin[0][4] && RTC_Minute <= DO3_AutoEnd[0][4] &&
+				RTC_Second >= DO3_AutoBegin[0][5] && RTC_Second <= DO3_AutoEnd[0][5])
+			{
+				digitalWrite(KCZJ1, LOW);
+			}
+			else if (RTC_Hour >= DO3_AutoBegin[1][3] && RTC_Hour <= DO3_AutoEnd[1][3] &&
+				RTC_Minute >= DO3_AutoBegin[1][4] && RTC_Minute <= DO3_AutoEnd[1][4] &&
+				RTC_Second >= DO3_AutoBegin[1][5] && RTC_Second <= DO3_AutoEnd[1][5])
+			{
+				digitalWrite(KCZJ1, LOW);
+			}
+			else
+			{
+				digitalWrite(KCZJ1, HIGH);
+				Serial.println("DO3时间不匹配");
+				delay(1000);
 			}
 		}
 		else if (DO4_AutoFlag == 1)
@@ -6968,7 +6987,7 @@ void RTC_Clock()
 	float Senod_count_F;
 
 	Senod_count_F = float((millis() - RTC_oldtime)) / 1000;
-	Serial.println(String("Senod_count_F = ") + Senod_count_F);
+	//Serial.println(String("Senod_count_F = ") + Senod_count_F);
 	Senod_count = (millis() - RTC_oldtime) / 1000;
 	Senod_count = (Senod_count_F - Senod_count > 0.5) ? Senod_count + 1 : Senod_count;
 
@@ -6977,10 +6996,10 @@ void RTC_Clock()
 	RTC_oldtime = millis();
 	if (debug_print == 0x01)
 	{
-		Serial.println(String("millis = ") + millis());
+		/*Serial.println(String("millis = ") + millis());
 		Serial.println(String("RTC_oldtime = ") + RTC_oldtime);
 		Serial.println(String("Senod_count = ") + Senod_count);
-		Serial.println(String("RTC_Second = ") + RTC_Second);
+		Serial.println(String("RTC_Second = ") + RTC_Second);*/
 	}
 
 	RTC_Second = RTC_Second + Senod_count;
@@ -6993,10 +7012,10 @@ void RTC_Clock()
 		RTC_Minute = RTC_Minute + 1;
 		RTC_Second = 0;
 	}
-	if (RTC_Second > 60)
+	if (RTC_Second > 60 && RTC_Second <= 119)
 	{
-		RTC_Minute = RTC_Minute + (RTC_Second % 60);
-		RTC_Second = RTC_Second - ((RTC_Second % 60) * 60);
+		RTC_Minute = RTC_Minute + 1;
+		RTC_Second = RTC_Second - 60;
 	}
 
 	if (RTC_Minute == 60)
@@ -7021,23 +7040,41 @@ void RTC_Clock()
 		RTC_Hour = RTC_Hour - ((RTC_Hour % 24) * 24);
 	}
 
-	if (RTC_Day == 30)
-	{
-		RTC_Month = RTC_Month + 1;
-		RTC_Day = 0;
-	}
-	if (RTC_Day >= 30)
-	{
-		RTC_Month = RTC_Month + (RTC_Day % 30);
-		RTC_Day = RTC_Day - ((RTC_Day % 30) * 30);
-	}
 
-	if (RTC_Month == 12)
+	if (RTC_Month == 1 || RTC_Month == 3 || RTC_Month == 5 || RTC_Month == 7 || RTC_Month == 8 || RTC_Month == 10 || RTC_Month == 12)
+	{
+		if (RTC_Day == 32)
+		{
+			RTC_Month = RTC_Month + 1;
+			RTC_Day = 1;
+		}
+		if (RTC_Day > 32)
+		{
+			RTC_Month = RTC_Month + (RTC_Day % 30);
+			RTC_Day = RTC_Day - ((RTC_Day % 30) * 30);
+		}
+	}
+	else if (RTC_Month == 2 || RTC_Month == 4 || RTC_Month == 6 || RTC_Month == 9 || RTC_Month == 11)
+	{
+		if (RTC_Day == 31)
+		{
+			RTC_Month = RTC_Month + 1;
+			RTC_Day = 1;
+		}
+		if (RTC_Day > 31)
+		{
+			RTC_Month = RTC_Month + (RTC_Day % 30);
+			RTC_Day = RTC_Day - ((RTC_Day % 30) * 30);
+		}
+	}
+	
+
+	if (RTC_Month == 13)
 	{
 		RTC_Year = RTC_Year + 1;
-		RTC_Month = 0;
+		RTC_Month = 1;
 	}
-	if (RTC_Month > 12)
+	if (RTC_Month > 13)
 	{
 		RTC_Year = RTC_Year + (RTC_Month % 12);
 		RTC_Month = RTC_Month - ((RTC_Month % 12) * 12);
@@ -7050,11 +7087,14 @@ void RTC_Clock()
 
 	if (debug_print == 0x01)
 	{
-		Serial.println(String("RTC时间为："));
-		Serial.println(String(RTC_Year) + "年" + RTC_Month + "月" + RTC_Day + "日" + RTC_Hour + "时" + RTC_Minute + "分" + RTC_Second + "秒");
-		if (debug == 1)
+		if (Get_RTC_Flag() == 0x01)
 		{
-			delay(1500);
+			Serial.println(String("RTC时间为："));
+			Serial.println(String(RTC_Year) + "年" + RTC_Month + "月" + RTC_Day + "日" + RTC_Hour + "时" + RTC_Minute + "分" + RTC_Second + "秒");
+			if (debug == 1)
+			{
+				delay(3500);
+			}
 		}
 	}
 }

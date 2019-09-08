@@ -68,8 +68,8 @@ static unsigned long RTC_oldtime;//RTC时间的旧值
 static int Mode_implementation = 0x00;//执行方式
 static bool RTC_Flag = 0;	//RTC时钟的标志位，如果为0则请求RTC时钟，为1不请求
 static int RTC_Year = 19;	//RTC时钟的年份
-static int RTC_Month = 11;	//RTC时钟的月份
-static int RTC_Day = 29;		//RTC时钟的日期
+static int RTC_Month = 9;	//RTC时钟的月份
+static int RTC_Day = 30;		//RTC时钟的日期
 static int RTC_Hour = 23;	//RTC时钟的小时
 static int RTC_Minute = 59;	//RTC时钟的分钟
 static int RTC_Second = 40;	//RTC时钟的秒钟

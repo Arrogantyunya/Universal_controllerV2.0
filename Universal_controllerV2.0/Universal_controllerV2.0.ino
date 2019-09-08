@@ -235,13 +235,13 @@ void RTC_request(void)//RTC时间请求函数
 		{
 			LORA_Receive_information();	//LORA的接收函数
 
-			Automated_strategy();//自动策略函数
+			//Automated_strategy();//自动策略函数
 
-			forswitch();//执行函数
+			//forswitch();//执行函数
 
-			Timely_reporting();//定时上报状态函数
+			//Timely_reporting();//定时上报状态函数
 
-			Heartbeat();//心跳函数
+			//Heartbeat();//心跳函数
 
 			Forced_Start_Relay();//强制启动继电器
 

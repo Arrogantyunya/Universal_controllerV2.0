@@ -27,6 +27,7 @@
 #include "AT24CXX.h"
 #include "i2c.h"
 #include "user_HEXtoDEC.h"
+#include "user_filter.h"
 //#include "RTClock.h"
 //----------------------------------------------------------------------------------------------
 
@@ -97,9 +98,9 @@ void loop()
 
 	forswitch();//执行函数
 
-	//Timely_reporting();//定时上报状态函数
+	Timely_reporting();//定时上报状态函数
 
-	//Heartbeat();//心跳函数
+	Heartbeat();//心跳函数
 
 	Forced_Start_Relay();//强制启动继电器
 

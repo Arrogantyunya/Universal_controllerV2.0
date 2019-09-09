@@ -3106,13 +3106,13 @@ unsigned char Send_E022(int Receive_IsBroadcast)
 		Check_Length = 0;
 	}
 
-	E022[44] = E020_CRC8;
-	E022[45] = E020_FrameEnd1;
-	E022[46] = E020_FrameEnd2;
-	E022[47] = E020_FrameEnd3;
-	E022[48] = E020_FrameEnd4;
-	E022[49] = E020_FrameEnd5;
-	E022[50] = E020_FrameEnd6;
+	E022[44] = E022_CRC8;
+	E022[45] = E022_FrameEnd1;
+	E022[46] = E022_FrameEnd2;
+	E022[47] = E022_FrameEnd3;
+	E022[48] = E022_FrameEnd4;
+	E022[49] = E022_FrameEnd5;
+	E022[50] = E022_FrameEnd6;
 
 	//该区域为串口查看E020回执的信息
 	if (debug_print == 1)
@@ -3149,7 +3149,7 @@ unsigned char E022_init()
 	E022_FrameId1 = 0xE0;		//E022的帧ID1
 	E022_FrameId2 = 0x22;		//E022的帧ID2
 
-	E022_DataLen = 0x14;		//E022的数据长度
+	E022_DataLen = 0x28;		//E022的数据长度
 
 	E022_DeviceTypeID1 = 0xC0;	//E022的设备类型1
 	E022_DeviceTypeID2 = 0x02;	//E022的设备类型2
@@ -3721,9 +3721,9 @@ void forswitch()
 				remaining[i] = (duration[i] > CurrentWorkSec[i]) ? (duration[i] - CurrentWorkSec[i]) : 0;//得到DO1的剩余工作时长
 				if (debug_print == 1)
 				{
-					Serial.println(String("DO1的设定工作时长 = ") + duration[i]);
-					Serial.println(String("DO1的已工作时长 = ") + CurrentWorkSec[i]);
-					Serial.println(String("DO1的剩余工作时长 = ") + remaining[i]);
+					//Serial.println(String("DO1的设定工作时长 = ") + duration[i]);
+					//Serial.println(String("DO1的已工作时长 = ") + CurrentWorkSec[i]);
+					//Serial.println(String("DO1的剩余工作时长 = ") + remaining[i]);
 				}
 				//---------------------------这一段代码将已工作的数值和剩余工作数值拆位-------------------------------------------------------------------------------
 				if (duration[i] <= 0xFF)
@@ -3800,9 +3800,9 @@ void forswitch()
 
 				if (debug_print == 1)
 				{
-					Serial.println(String("设定工作时间拆位结果为：") + DO1_SetWorkSec1 + "/" + DO1_SetWorkSec2 + "/" + DO1_SetWorkSec3);
-					Serial.println(String("已工作时间拆位结果为：") + DO1_CurrentWorkSec1 + "/" + DO1_CurrentWorkSec2 + "/" + DO1_CurrentWorkSec3);
-					Serial.println(String("剩余工作时间拆位结果为：") + DO1_RemainWorkSec1 + "/" + DO1_RemainWorkSec2 + "/" + DO1_RemainWorkSec3);
+					//Serial.println(String("设定工作时间拆位结果为：") + DO1_SetWorkSec1 + "/" + DO1_SetWorkSec2 + "/" + DO1_SetWorkSec3);
+					//Serial.println(String("已工作时间拆位结果为：") + DO1_CurrentWorkSec1 + "/" + DO1_CurrentWorkSec2 + "/" + DO1_CurrentWorkSec3);
+					//Serial.println(String("剩余工作时间拆位结果为：") + DO1_RemainWorkSec1 + "/" + DO1_RemainWorkSec2 + "/" + DO1_RemainWorkSec3);
 					if (debug == 1)
 					{
 						delay(500);
@@ -3834,6 +3834,10 @@ void forswitch()
 					DO1_RemainWorkSec1 = 0x00;
 					DO1_RemainWorkSec2 = 0x00;
 					DO1_RemainWorkSec3 = 0x00;
+
+					//进行已经关闭状态的回执
+					Send_E021(Receive_IsBroadcast);//各路数状态的回执
+					Send_E022(Receive_IsBroadcast);//各路数时间的回执
 				}
 				break;
 
@@ -3858,8 +3862,9 @@ void forswitch()
 				remaining[i] = (duration[i] > CurrentWorkSec[i]) ? (duration[i] - CurrentWorkSec[i]) : 0;//得到DO2的剩余工作时长
 				if (debug_print == 1)
 				{
-					Serial.println(String("DO2的已工作时长 = ") + CurrentWorkSec[i]);
-					Serial.println(String("DO2的剩余工作时长 = ") + remaining[i]);
+					//Serial.println(String("DO2的设定工作时长 = ") + duration[i]);
+					//Serial.println(String("DO2的已工作时长 = ") + CurrentWorkSec[i]);
+					//Serial.println(String("DO2的剩余工作时长 = ") + remaining[i]);
 				}
 				//-----------------------------------这一段代码将已工作的数值拆位-------------------------------------------------------------------------------
 				if (duration[i] <= 0xFF)
@@ -3936,8 +3941,8 @@ void forswitch()
 
 				if (debug_print == 1)
 				{
-					Serial.println(String("已工作时间拆位结果为：") + DO2_CurrentWorkSec1 + "/" + DO2_CurrentWorkSec2 + "/" + DO2_CurrentWorkSec3);
-					Serial.println(String("剩余工作时间拆位结果为：") + DO2_RemainWorkSec1 + "/" + DO2_RemainWorkSec2 + "/" + DO2_RemainWorkSec3);
+					//Serial.println(String("已工作时间拆位结果为：") + DO2_CurrentWorkSec1 + "/" + DO2_CurrentWorkSec2 + "/" + DO2_CurrentWorkSec3);
+					//Serial.println(String("剩余工作时间拆位结果为：") + DO2_RemainWorkSec1 + "/" + DO2_RemainWorkSec2 + "/" + DO2_RemainWorkSec3);
 					if (debug == 1)
 					{
 						delay(500);
@@ -3969,6 +3974,10 @@ void forswitch()
 					DO2_RemainWorkSec1 = 0x00;
 					DO2_RemainWorkSec2 = 0x00;
 					DO2_RemainWorkSec3 = 0x00;
+
+					//进行已经关闭状态的回执
+					Send_E021(Receive_IsBroadcast);//各路数状态的回执
+					Send_E022(Receive_IsBroadcast);//各路数时间的回执
 				}
 				break;
 
@@ -3993,8 +4002,9 @@ void forswitch()
 				remaining[i] = (duration[i] > CurrentWorkSec[i]) ? (duration[i] - CurrentWorkSec[i]) : 0;//得到DO3的剩余工作时长
 				if (debug_print == 1)
 				{
-					Serial.println(String("DO3的已工作时长 = ") + CurrentWorkSec[i]);
-					Serial.println(String("DO3的剩余工作时长 = ") + remaining[i]);
+					//Serial.println(String("DO3的设定工作时长 = ") + duration[i]);
+					//Serial.println(String("DO3的已工作时长 = ") + CurrentWorkSec[i]);
+					//Serial.println(String("DO3的剩余工作时长 = ") + remaining[i]);
 				}
 				//-----------------------------------这一段代码将已工作的数值拆位-------------------------------------------------------------------------------
 				if (duration[i] <= 0xFF)
@@ -4071,8 +4081,8 @@ void forswitch()
 
 				if (debug_print == 1)
 				{
-					Serial.println(String("已工作时间拆位结果为：") + DO3_CurrentWorkSec1 + "/" + DO3_CurrentWorkSec2 + "/" + DO3_CurrentWorkSec3);
-					Serial.println(String("剩余工作时间拆位结果为：") + DO3_RemainWorkSec1 + "/" + DO3_RemainWorkSec2 + "/" + DO3_RemainWorkSec3);
+					//Serial.println(String("已工作时间拆位结果为：") + DO3_CurrentWorkSec1 + "/" + DO3_CurrentWorkSec2 + "/" + DO3_CurrentWorkSec3);
+					//Serial.println(String("剩余工作时间拆位结果为：") + DO3_RemainWorkSec1 + "/" + DO3_RemainWorkSec2 + "/" + DO3_RemainWorkSec3);
 					if (debug == 1)
 					{
 						delay(500);
@@ -4104,6 +4114,10 @@ void forswitch()
 					DO3_RemainWorkSec1 = 0x00;
 					DO3_RemainWorkSec2 = 0x00;
 					DO3_RemainWorkSec3 = 0x00;
+
+					//进行已经关闭状态的回执
+					Send_E021(Receive_IsBroadcast);//各路数状态的回执
+					Send_E022(Receive_IsBroadcast);//各路数时间的回执
 				}
 				break;
 
@@ -4128,8 +4142,9 @@ void forswitch()
 				remaining[i] = (duration[i] > CurrentWorkSec[i]) ? (duration[i] - CurrentWorkSec[i]) : 0;//得到DO4的剩余工作时长
 				if (debug_print == 1)
 				{
-					Serial.println(String("DO4的已工作时长 = ") + CurrentWorkSec[i]);
-					Serial.println(String("DO4的剩余工作时长 = ") + remaining[i]);
+					//Serial.println(String("DO4的设定工作时长 = ") + duration[i]);
+					//Serial.println(String("DO4的已工作时长 = ") + CurrentWorkSec[i]);
+					//Serial.println(String("DO4的剩余工作时长 = ") + remaining[i]);
 				}
 				//-----------------------------------这一段代码将已工作的数值拆位-------------------------------------------------------------------------------
 				if (duration[i] <= 0xFF)
@@ -4206,8 +4221,8 @@ void forswitch()
 
 				if (debug_print == 1)
 				{
-					Serial.println(String("已工作时间拆位结果为：") + DO4_CurrentWorkSec1 + "/" + DO4_CurrentWorkSec2 + "/" + DO4_CurrentWorkSec3);
-					Serial.println(String("剩余工作时间拆位结果为：") + DO4_RemainWorkSec1 + "/" + DO4_RemainWorkSec2 + "/" + DO4_RemainWorkSec3);
+					//Serial.println(String("已工作时间拆位结果为：") + DO4_CurrentWorkSec1 + "/" + DO4_CurrentWorkSec2 + "/" + DO4_CurrentWorkSec3);
+					//Serial.println(String("剩余工作时间拆位结果为：") + DO4_RemainWorkSec1 + "/" + DO4_RemainWorkSec2 + "/" + DO4_RemainWorkSec3);
 					if (debug == 1)
 					{
 						delay(500);
@@ -4239,6 +4254,10 @@ void forswitch()
 					DO4_RemainWorkSec1 = 0x00;
 					DO4_RemainWorkSec2 = 0x00;
 					DO4_RemainWorkSec3 = 0x00;
+
+					//进行已经关闭状态的回执
+					Send_E021(Receive_IsBroadcast);//各路数状态的回执
+					Send_E022(Receive_IsBroadcast);//各路数时间的回执
 				}
 				break;
 
@@ -4263,8 +4282,9 @@ void forswitch()
 				remaining[i] = (duration[i] > CurrentWorkSec[i]) ? (duration[i] - CurrentWorkSec[i]) : 0;//得到AO的剩余工作时长
 				if (debug_print == 1)
 				{
-					Serial.println(String("AO1的已工作时长 = ") + CurrentWorkSec[i]);
-					Serial.println(String("AO1的剩余工作时长 = ") + remaining[i]);
+					//Serial.println(String("AO1的设定工作时长 = ") + duration[i]);
+					//Serial.println(String("AO1的已工作时长 = ") + CurrentWorkSec[i]);
+					//Serial.println(String("AO1的剩余工作时长 = ") + remaining[i]);
 				}
 				//-----------------------------------这一段代码将已工作的数值拆位-------------------------------------------------------------------------------
 				if (duration[i] <= 0xFF)
@@ -4341,8 +4361,8 @@ void forswitch()
 
 				if (debug_print == 1)
 				{
-					Serial.println(String("已工作时间拆位结果为：") + AO1_CurrentWorkSec1 + "/" + AO1_CurrentWorkSec2 + "/" + AO1_CurrentWorkSec3);
-					Serial.println(String("剩余工作时间拆位结果为：") + AO1_RemainWorkSec1 + "/" + AO1_RemainWorkSec2 + "/" + AO1_RemainWorkSec3);
+					//Serial.println(String("已工作时间拆位结果为：") + AO1_CurrentWorkSec1 + "/" + AO1_CurrentWorkSec2 + "/" + AO1_CurrentWorkSec3);
+					//Serial.println(String("剩余工作时间拆位结果为：") + AO1_RemainWorkSec1 + "/" + AO1_RemainWorkSec2 + "/" + AO1_RemainWorkSec3);
 					if (debug == 1)
 					{
 						delay(500);
@@ -4374,6 +4394,10 @@ void forswitch()
 					AO1_RemainWorkSec1 = 0x00;
 					AO1_RemainWorkSec2 = 0x00;
 					AO1_RemainWorkSec3 = 0x00;
+
+					//进行已经关闭状态的回执
+					Send_E021(Receive_IsBroadcast);//各路数状态的回执
+					Send_E022(Receive_IsBroadcast);//各路数时间的回执
 				}
 				break;
 
@@ -4398,8 +4422,9 @@ void forswitch()
 				remaining[i] = (duration[i] > CurrentWorkSec[i]) ? (duration[i] - CurrentWorkSec[i]) : 0;//得到AO2的剩余工作时长
 				if (debug_print == 1)
 				{
-					Serial.println(String("AO2的已工作时长 = ") + CurrentWorkSec[i]);
-					Serial.println(String("AO2的剩余工作时长 = ") + remaining[i]);
+					//Serial.println(String("AO2的设定工作时长 = ") + duration[i]);
+					//Serial.println(String("AO2的已工作时长 = ") + CurrentWorkSec[i]);
+					//Serial.println(String("AO2的剩余工作时长 = ") + remaining[i]);
 				}
 				//-----------------------------------这一段代码将已工作的数值拆位-------------------------------------------------------------------------------
 				if (duration[i] <= 0xFF)
@@ -4476,8 +4501,8 @@ void forswitch()
 
 				if (debug_print == 1)
 				{
-					Serial.println(String("已工作时间拆位结果为：") + AO2_CurrentWorkSec1 + "/" + AO2_CurrentWorkSec2 + "/" + AO2_CurrentWorkSec3);
-					Serial.println(String("剩余工作时间拆位结果为：") + AO2_RemainWorkSec1 + "/" + AO2_RemainWorkSec2 + "/" + AO2_RemainWorkSec3);
+					//Serial.println(String("已工作时间拆位结果为：") + AO2_CurrentWorkSec1 + "/" + AO2_CurrentWorkSec2 + "/" + AO2_CurrentWorkSec3);
+					//Serial.println(String("剩余工作时间拆位结果为：") + AO2_RemainWorkSec1 + "/" + AO2_RemainWorkSec2 + "/" + AO2_RemainWorkSec3);
 					if (debug == 1)
 					{
 						delay(500);
@@ -4509,6 +4534,10 @@ void forswitch()
 					AO2_RemainWorkSec1 = 0x00;
 					AO2_RemainWorkSec2 = 0x00;
 					AO2_RemainWorkSec3 = 0x00;
+
+					//进行已经关闭状态的回执
+					Send_E021(Receive_IsBroadcast);//各路数状态的回执
+					Send_E022(Receive_IsBroadcast);//各路数时间的回执
 				}
 				break;
 
@@ -7007,26 +7036,53 @@ void RTC_Clock()
 	{
 		//Serial.println(String("RTC_Second = ") + RTC_Second);
 	}
+
+
 	if (RTC_Second == 60)
 	{
 		RTC_Minute = RTC_Minute + 1;
 		RTC_Second = 0;
 	}
-	if (RTC_Second > 60 && RTC_Second <= 119)
+	else if (RTC_Second > 60 && RTC_Second <= 119)
 	{
 		RTC_Minute = RTC_Minute + 1;
 		RTC_Second = RTC_Second - 60;
 	}
+	else if (RTC_Second > 119 && RTC_Second <= 179)
+	{
+		RTC_Minute = RTC_Minute + 2;
+		RTC_Second = RTC_Second - 120;
+	}
+
 
 	if (RTC_Minute == 60)
 	{
 		RTC_Hour = RTC_Hour + 1;
 		RTC_Minute = 0;
 	}
-	if (RTC_Minute > 60)
+	else if (RTC_Minute > 60 && RTC_Minute <= 119)
 	{
-		RTC_Hour = RTC_Hour + (RTC_Minute % 60);
-		RTC_Minute = RTC_Minute - ((RTC_Minute % 60) * 60);
+		RTC_Hour = RTC_Hour + 1;
+		RTC_Minute = RTC_Minute - 60;
+	}
+	else if (RTC_Minute > 119 && RTC_Minute <= 179)
+	{
+		RTC_Hour = RTC_Hour + 2;
+		RTC_Minute = RTC_Minute - 120;
+	}
+	else if (RTC_Minute > 179 && RTC_Minute <= 239)
+	{
+		RTC_Hour = RTC_Hour + 3;
+		RTC_Minute = RTC_Minute - 180;
+	}
+	else if (RTC_Minute > 239 && RTC_Minute <= 299)
+	{
+		RTC_Hour = RTC_Hour + 4;
+		RTC_Minute = RTC_Minute - 240;
+	}
+	else
+	{
+		//这里应该有报错处理？
 	}
 
 	if (RTC_Hour == 24)
@@ -7034,7 +7090,12 @@ void RTC_Clock()
 		RTC_Day = RTC_Day + 1;
 		RTC_Hour = 0;
 	}
-	if (RTC_Hour > 24)
+	else if (RTC_Hour > 24 && RTC_Hour <= 47)
+	{
+		RTC_Day = RTC_Day + 1;
+		RTC_Hour = RTC_Hour -24;
+	}
+	else if (RTC_Hour > 48 && RTC_Hour <= 71)
 	{
 		RTC_Day = RTC_Day + (RTC_Hour % 24);
 		RTC_Hour = RTC_Hour - ((RTC_Hour % 24) * 24);
@@ -7048,10 +7109,10 @@ void RTC_Clock()
 			RTC_Month = RTC_Month + 1;
 			RTC_Day = 1;
 		}
-		if (RTC_Day > 32)
+		else if (RTC_Day > 32 && RTC_Day <= 60)
 		{
-			RTC_Month = RTC_Month + (RTC_Day % 30);
-			RTC_Day = RTC_Day - ((RTC_Day % 30) * 30);
+			RTC_Month = RTC_Month + 1;
+			RTC_Day = RTC_Day - 31;
 		}
 	}
 	else if (RTC_Month == 2 || RTC_Month == 4 || RTC_Month == 6 || RTC_Month == 9 || RTC_Month == 11)
@@ -7061,10 +7122,10 @@ void RTC_Clock()
 			RTC_Month = RTC_Month + 1;
 			RTC_Day = 1;
 		}
-		if (RTC_Day > 31)
+		else if (RTC_Day > 31 && RTC_Day <= 59)
 		{
-			RTC_Month = RTC_Month + (RTC_Day % 30);
-			RTC_Day = RTC_Day - ((RTC_Day % 30) * 30);
+			RTC_Month = RTC_Month + 1;
+			RTC_Day = RTC_Day -30;
 		}
 	}
 	
@@ -7074,10 +7135,15 @@ void RTC_Clock()
 		RTC_Year = RTC_Year + 1;
 		RTC_Month = 1;
 	}
-	if (RTC_Month > 13)
+	else if (RTC_Month > 13 && RTC_Month <= 24)
 	{
-		RTC_Year = RTC_Year + (RTC_Month % 12);
-		RTC_Month = RTC_Month - ((RTC_Month % 12) * 12);
+		RTC_Year = RTC_Year + 1;
+		RTC_Month = RTC_Month -12;
+	}
+	else if (RTC_Month > 24 && RTC_Month <= 35)
+	{
+		RTC_Year = RTC_Year + 2;
+		RTC_Month = RTC_Month - 24;
 	}
 
 	if (RTC_Year == 99)

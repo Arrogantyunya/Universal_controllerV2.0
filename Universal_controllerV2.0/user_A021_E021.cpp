@@ -4,6 +4,7 @@
 
 #include "user_A021_E021.h"
 #include "user_initialization.h"
+#include "user_filter.h"
 
 //函 数 名：Receive_A021() 
 //功能描述：A021的执行函数
@@ -314,30 +315,38 @@ int E021_GetDigitalStatus()
 //E021得到模拟状态
 int E021_GetAnalogStatus()
 {
-	int analogRead1 = analogRead(VIN1);
-	int analogRead2 = analogRead(VIN1);
-	int analogRead3 = analogRead(AO1);
-	int analogRead4 = analogRead(AO2);
-	float ar1 = (analogRead1 * 0.8056) * 11;//4537.65
-	float ar2 = (analogRead2 * 0.8056) * 11;
-	float ar3 = (analogRead3 * 0.8056) * 11;//4537.65
-	float ar4 = (analogRead4 * 0.8056) * 11;
-	if (debug == 1)
-	{
-		ar1 = 5.69; ar2 = 17.36;
-		ar3 = 0.79; ar4 = 99.36;
-		if (debug_print == 1)
-		{
-			Serial.println(String("ar1 = ") + ar1 + String("mV"));
-			Serial.println(String("ar2 = ") + ar2 + String("mV"));
-			Serial.println(String("ar3 = ") + ar3 + String("mV"));
-			Serial.println(String("ar4 = ") + ar4 + String("mV"));
-		}
-	}
+	int analogReadx[10];
+	float ar1, ar2, ao1, ao2;
 
 	//模拟输入1
 	if (floor(ar1) >= 0 && floor(ar1) <= 99)//[0],(0,99]
 	{
+		//连续对该值采集10次
+		for (size_t i = 0; i < 10; i++)
+		{
+			if (analogRead(VIN1) <= 2)
+			{
+				analogReadx[i] = 0;
+			}
+			else
+			{
+				analogReadx[i] = analogRead(VIN1);
+			}
+			delay(10);
+			Serial.println(String("analogRead1[") + i + "]" + analogReadx[i]);
+		}
+		if (debug == 1)
+		{
+			//delay(1500);
+		}
+
+		ar1 = (((Filter(analogReadx, 10)) * 0.8056) * 11) / 1000;//进行滤波
+		if (debug_print == 1)
+		{
+			Serial.println(String("ar1 = ") + ar1 + "V");
+			//delay(1500);
+		}
+
 		E021_anaIn1_1 = floor(ar1);
 		E021_anaIn1_2 = (ar1 - E021_anaIn1_1) * 100;
 		E021_anaIn1_3 = 0xE2;
@@ -365,6 +374,32 @@ int E021_GetAnalogStatus()
 	//模拟输入2
 	if (floor(ar2) >= 0 && floor(ar2) <= 99)//[0],(0,99]
 	{
+		//连续对该值采集10次
+		for (size_t i = 0; i < 10; i++)
+		{
+			if (analogRead(VIN2) <= 2)
+			{
+				analogReadx[i] = 0;
+			}
+			else
+			{
+				analogReadx[i] = analogRead(VIN2);
+			}
+			delay(10);
+			Serial.println(String("analogRead2[") + i + "]" + analogReadx[i]);
+		}
+		if (debug == 1)
+		{
+			//delay(1500);
+		}
+
+		ar2 = (((Filter(analogReadx, 10)) * 0.8056) * 11) / 1000;//进行滤波
+		if (debug_print == 1)
+		{
+			Serial.println(String("ar2 = ") + ar2 + "V");
+			//delay(1500);
+		}
+
 		E021_anaIn2_1 = floor(ar2);
 		E021_anaIn2_2 = (ar2 - E021_anaIn2_1) * 100;
 		E021_anaIn2_3 = 0xE2;
@@ -390,10 +425,36 @@ int E021_GetAnalogStatus()
 	}
 
 	//模拟输出1
-	if (floor(ar3) >= 0 && floor(ar3) <= 99)//[0],(0,99]
+	if (floor(ao1) >= 0 && floor(ao1) <= 99)//[0],(0,99]
 	{
-		E021_anaOut1_1 = floor(ar3);
-		E021_anaOut1_2 = (ar3 - E021_anaOut1_1) * 100;
+		//连续对该值采集10次
+		for (size_t i = 0; i < 10; i++)
+		{
+			if (analogRead(AO1) <= 2)
+			{
+				analogReadx[i] = 0;
+			}
+			else
+			{
+				analogReadx[i] = analogRead(AO1);
+			}
+			delay(10);
+			Serial.println(String("analogRead3[") + i + "]" + analogReadx[i]);
+		}
+		if (debug == 1)
+		{
+			//delay(1500);
+		}
+
+		ao1 = (((Filter(analogReadx, 10)) * 0.8056) * 11) / 1000;//进行滤波
+		if (debug_print == 1)
+		{
+			Serial.println(String("ao1 = ") + ao1 + "V");
+			//delay(1500);
+		}
+
+		E021_anaOut1_1 = floor(ao1);
+		E021_anaOut1_2 = (ao1 - E021_anaOut1_1) * 100;
 		E021_anaOut1_3 = 0xE2;
 		if (debug_print == 1)
 		{
@@ -405,8 +466,8 @@ int E021_GetAnalogStatus()
 	else//超出量程
 	{
 		Serial.println("模拟输入2超出量程");
-		/*E021_anaOut1_1 = floor(ar3);
-		E021_anaOut1_2 = (ar3 - E021_anaOut1_1) * 100;
+		/*E021_anaOut1_1 = floor(ao1);
+		E021_anaOut1_2 = (ao1 - E021_anaOut1_1) * 100;
 		E021_anaOut1_3 = 0xE2;*/
 		if (debug_print == 1)
 		{
@@ -417,10 +478,36 @@ int E021_GetAnalogStatus()
 	}
 
 	//模拟输出2
-	if (floor(ar4) >= 0 && floor(ar4) <= 99)//[0],(0,99]
+	if (floor(ao2) >= 0 && floor(ao2) <= 99)//[0],(0,99]
 	{
-		E021_anaOut2_1 = floor(ar4);
-		E021_anaOut2_2 = (ar4 - E021_anaOut2_1) * 100;
+		//连续对该值采集10次
+		for (size_t i = 0; i < 10; i++)
+		{
+			if (analogRead(AO2) <= 2)
+			{
+				analogReadx[i] = 0;
+			}
+			else
+			{
+				analogReadx[i] = analogRead(AO2);
+			}
+			delay(10);
+			Serial.println(String("analogRead4[") + i + "]" + analogReadx[i]);
+		}
+		if (debug == 1)
+		{
+			//delay(1500);
+		}
+
+		ao2 = (((Filter(analogReadx, 10)) * 0.8056) * 11) / 1000;//进行滤波
+		if (debug_print == 1)
+		{
+			Serial.println(String("ao2 = ") + ao2 + "V");
+			//delay(1500);
+		}
+
+		E021_anaOut2_1 = floor(ao2);
+		E021_anaOut2_2 = (ao2 - E021_anaOut2_1) * 100;
 		E021_anaOut2_3 = 0xE2;
 		if (debug_print == 1)
 		{
@@ -432,8 +519,8 @@ int E021_GetAnalogStatus()
 	else//超出量程
 	{
 		Serial.println("模拟输入2超出量程");
-		/*E021_anaOut2_1 = floor(ar4);
-		E021_anaOut2_2 = (ar4 - E021_anaOut2_1) * 100;
+		/*E021_anaOut2_1 = floor(ao2);
+		E021_anaOut2_2 = (ao2 - E021_anaOut2_1) * 100;
 		E021_anaOut2_3 = 0xE2;*/
 		if (debug_print == 1)
 		{

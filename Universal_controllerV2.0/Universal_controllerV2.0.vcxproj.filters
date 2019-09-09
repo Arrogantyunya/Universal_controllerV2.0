@@ -54,6 +54,9 @@
     <ClInclude Include="user_Set_Correlation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="user_filter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="user_lorainit.cpp">
@@ -87,6 +90,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="user_Set_Correlation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="user_filter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -702,7 +702,7 @@ void Receive_A022(unsigned char * Judgement_Data, int Judgement_Length)//A022函
 							Out_State[0] = out_state;
 
 							//决定在这里赋时间值，先赋持续时间的值到数组
-							Duration_time = Judgement_Data[15] * 0x1000 + Judgement_Data[16] * 0x100 + Judgement_Data[17];
+							Duration_time = Judgement_Data[15] * 0x10000 + Judgement_Data[16] * 0x100 + Judgement_Data[17];
 							duration[0] = Duration_time;
 							if (debug == 1)
 							{
@@ -806,7 +806,7 @@ void Receive_A022(unsigned char * Judgement_Data, int Judgement_Length)//A022函
 							Out_State[1] = out_state;
 
 							//决定在这里赋时间值，先赋持续时间的值到数组
-							Duration_time = Judgement_Data[15] * 0x1000 + Judgement_Data[16] * 0x100 + Judgement_Data[17];
+							Duration_time = Judgement_Data[15] * 0x10000 + Judgement_Data[16] * 0x100 + Judgement_Data[17];
 							duration[1] = Duration_time;
 							if (debug == 1)
 							{
@@ -909,7 +909,7 @@ void Receive_A022(unsigned char * Judgement_Data, int Judgement_Length)//A022函
 							Out_State[2] = out_state;
 
 							//决定在这里赋时间值，先赋持续时间的值到数组
-							Duration_time = Judgement_Data[15] * 0x1000 + Judgement_Data[16] * 0x100 + Judgement_Data[17];
+							Duration_time = Judgement_Data[15] * 0x10000 + Judgement_Data[16] * 0x100 + Judgement_Data[17];  
 							duration[2] = Duration_time;
 							if (debug_print == 1)
 							{
@@ -1012,7 +1012,7 @@ void Receive_A022(unsigned char * Judgement_Data, int Judgement_Length)//A022函
 							Out_State[3] = out_state;
 
 							//决定在这里赋时间值，先赋持续时间的值到数组
-							Duration_time = Judgement_Data[15] * 0x1000 + Judgement_Data[16] * 0x100 + Judgement_Data[17];
+							Duration_time = Judgement_Data[15] * 0x10000 + Judgement_Data[16] * 0x100 + Judgement_Data[17];
 							duration[3] = Duration_time;
 							if (debug_print == 1)
 							{
@@ -1120,7 +1120,7 @@ void Receive_A022(unsigned char * Judgement_Data, int Judgement_Length)//A022函
 							Out_State[3] = out_state;
 
 							//决定在这里赋时间值，先赋持续时间的值到数组
-							Duration_time = Judgement_Data[15] * 0x1000 + Judgement_Data[16] * 0x100 + Judgement_Data[17];
+							Duration_time = Judgement_Data[15] * 0x10000 + Judgement_Data[16] * 0x100 + Judgement_Data[17];
 							duration[0] = Duration_time;
 							duration[1] = Duration_time;
 							duration[2] = Duration_time;
@@ -1321,7 +1321,7 @@ void Receive_A022(unsigned char * Judgement_Data, int Judgement_Length)//A022函
 							}
 
 							//决定在这里赋时间值，先赋持续时间的值到数组
-							Duration_time = Judgement_Data[17] * 0x1000 + Judgement_Data[18] * 0x100 + Judgement_Data[19];
+							Duration_time = Judgement_Data[17] * 0x10000 + Judgement_Data[18] * 0x100 + Judgement_Data[19];
 							duration[4] = Duration_time;
 							if (debug_print == 1)
 							{
@@ -1456,7 +1456,7 @@ void Receive_A022(unsigned char * Judgement_Data, int Judgement_Length)//A022函
 						}
 
 						//决定在这里赋时间值，先赋持续时间的值到数组
-						Duration_time = Judgement_Data[17] * 0x1000 + Judgement_Data[18] * 0x100 + Judgement_Data[19];
+						Duration_time = Judgement_Data[17] * 0x10000 + Judgement_Data[18] * 0x100 + Judgement_Data[19];
 						duration[5] = Duration_time;
 						if (debug_print == 1)
 						{
@@ -1597,7 +1597,7 @@ void Receive_A022(unsigned char * Judgement_Data, int Judgement_Length)//A022函
 							}
 
 							//决定在这里赋时间值，先赋持续时间的值到数组
-							Duration_time = Judgement_Data[17] * 0x1000 + Judgement_Data[18] * 0x100 + Judgement_Data[19];
+							Duration_time = Judgement_Data[17] * 0x10000 + Judgement_Data[18] * 0x100 + Judgement_Data[19];
 							duration[4] = Duration_time;
 							duration[5] = Duration_time;
 							if (debug_print == 1)

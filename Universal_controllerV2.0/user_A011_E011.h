@@ -39,21 +39,27 @@
  //全局变量
 //static unsigned char Receive_IsBroadcast = 0x00; //是否广播指令
 
-static unsigned char E011[24];//用来存放E011发送出去的数组
+static unsigned char E011[47];//用来存放E011发送出去的数组
 
 static int E011_FrameHead = 0xFE;		//E011的帧头
 
 static int E011_FrameId1 = 0xE0;		//E011的帧ID1
 static int E011_FrameId2 = 0x11;		//E011的帧ID2
 
-static int E011_DataLen = 0x0D;			//E011的数据长度
+static int E011_DataLen = 0x24;			//E011的数据长度
 
 static int E011_DeviceTypeID1 = 0xC0;	//E011的设备类型1
 static int E011_DeviceTypeID2 = 0x02;	//E011的设备类型2
 
 static int E011_IsBroadcast = 0x00;		//E011的是否广播指令
 
-static int E011_ZoneId = 0x00;			//E011的区域
+static int E011_ZoneId = 0x01;			//E011的区域
+
+static int E011_GroupIDArray1 = 0x01;	//E011的组ID数组1
+static int E011_GroupIDArray2 = 0x00;	//E011的组ID数组2
+static int E011_GroupIDArray3 = 0x00;	//E011的组ID数组3
+static int E011_GroupIDArray4 = 0x00;	//E011的组ID数组4
+static int E011_GroupIDArray5 = 0x00;	//E011的组ID数组5
 
 static int E011_DeviceSN1 = 0x00;		//E011的SN1
 static int E011_DeviceSN2 = 0x00;		//E011的SN2
@@ -64,6 +70,28 @@ static int E011_DeviceSN6 = 0x00;		//E011的SN6
 static int E011_DeviceSN7 = 0x00;		//E011的SN7
 static int E011_DeviceSN8 = 0x00;		//E011的SN8
 static int E011_DeviceSN9 = 0x00;		//E011的SN9
+
+static int E011_channel = 0x01;			//E011的路数
+
+static int E011_interval1 = 0x00;			//E011的采集时间间隔1
+static int E011_interval2 = 0x00;			//E011的采集时间间隔2
+
+static int E011_NewTime1 = 0x00;		//E011的时间1
+static int E011_NewTime2 = 0x00;		//E011的时间2
+static int E011_NewTime3 = 0x00;		//E011的时间3
+static int E011_NewTime4 = 0x00;		//E011的时间4
+static int E011_NewTime5 = 0x00;		//E011的时间5
+static int E011_NewTime6 = 0x00;		//E011的时间6
+static int E011_NewTime7 = 0x00;		//E011的时间7
+
+static int E001_Allocate1 = 0x00;		//E011的预留字段1
+static int E001_Allocate2 = 0x00;		//E011的预留字段2
+static int E001_Allocate3 = 0x00;		//E011的预留字段3
+static int E001_Allocate4 = 0x00;		//E011的预留字段4
+static int E001_Allocate5 = 0x00;		//E011的预留字段5
+static int E001_Allocate6 = 0x00;		//E011的预留字段6
+static int E001_Allocate7 = 0x00;		//E011的预留字段7
+static int E001_Allocate8 = 0x00;		//E011的预留字段8
 
 static int E011_CRC8 = 0x00;			//E011的CRC8校验码
 

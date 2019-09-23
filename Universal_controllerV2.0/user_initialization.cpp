@@ -152,11 +152,11 @@ void Initialization()//初始化函数
 		{
 			AT24CXX_WriteOneByte(i, 0x00);
 		}
-		AT24CXX_WriteOneByte(12, 0x00);//LORA主设备区域ID的存储
+		AT24CXX_WriteOneByte(12, 0x01);//LORA主设备区域ID的存储
 		AT24CXX_WriteOneByte(13, 0x00);//LORA自动策略关联的标志位
 		for (size_t i = 14; i <= 55; i++)//工作组数组的初始化
 		{
-			AT24CXX_WriteOneByte(i, 0x00);
+			AT24CXX_WriteOneByte(i, 0x01);
 		}
 		for (size_t i = 56; i <= 88; i++)//预留字段的初始化
 		{

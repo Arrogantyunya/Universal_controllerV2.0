@@ -6,14 +6,14 @@
 			All non-arduino files created by visual micro and all visual studio project or solution files can be freely deleted and are not required to compile a sketch (do not delete your own code!).
 			Note: debugger breakpoints are stored in '.sln' or '.asln' files, knowledge of last uploaded breakpoints is stored in the upload.vmps.xml file. Both files are required to continue a previous debug session without needing to compile and upload again
 	
-	Hardware: Generic STM32F103R series, Platform=STM32F1, Package=Arduino_STM32-master
+	Hardware: Generic STM32F103R series, Platform=STM32F1, Package=stm32
 */
 
 #if defined(_VMICRO_INTELLISENSE)
 
 #ifndef _VSARDUINO_H_
 #define _VSARDUINO_H_
-#define DEBUG_LEVEL DEBUG_NONE
+#define DEBUG_LEVEL DEBUG_FAULT
 #define BOARD_generic_stm32f103r
 #define VECT_TAB_ADDR 0x8000000
 #define ERROR_LED_PORT GPIOB
@@ -27,7 +27,6 @@
 #define GENERIC_BOOTLOADER
 #define MCU_STM32F103RC
 #define __STM32F1__
-#define ARDUINO_ARCH_STM32
 #define __cplusplus 201103L
 
 #define __inline__

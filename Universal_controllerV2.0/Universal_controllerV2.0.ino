@@ -67,12 +67,12 @@ void setup()
 			digitalWrite(LED2, LOW);
 		}
 
-		//Button_Waiting_report();//按键等待上报函数
+		Button_Waiting_report();//按键等待上报函数
 	}
-	//else
-	//{
-	//	Initialization_exception();//初始化异常函数
-	//}
+	else
+	{
+		Initialization_exception();//初始化异常函数
+	}
 }
 
 //函 数 名：loop() 
@@ -98,7 +98,7 @@ void loop()
 
 	forswitch();//执行函数
 
-	Timely_reporting();//定时上报状态函数
+	//Timely_reporting();//定时上报状态函数
 
 	Heartbeat();//心跳函数
 
@@ -165,18 +165,22 @@ void Restore_factory_settings(void)//恢复出厂设置函数
 		delay(2000);
 		if (digitalRead(K1) == LOW)
 		{
-			//-------------------------------------------
-			//======测试时所用代码块，实际使用请注释=====
-			//将所有的标志位都清为0
-			AT24CXX_WriteOneByte(0, 0x00);//lora初始化的标志位
-			AT24CXX_WriteOneByte(1, 0x00);//EEPROM设置的标志位
-			AT24CXX_WriteOneByte(2, 0x00);//申号的标志位
-			AT24CXX_WriteOneByte(13, 0x00);//自动策略的标志位
-			//-------------------------------------------
-			Serial.println("开始进行恢复出厂设置");
+			////-------------------------------------------
+			////======测试时所用代码块，实际使用请注释=====
+			////将所有的标志位都清为0
+			//AT24CXX_WriteOneByte(0, 0x00);//lora初始化的标志位
+			//AT24CXX_WriteOneByte(1, 0x00);//EEPROM设置的标志位
+			//AT24CXX_WriteOneByte(2, 0x00);//申号的标志位
+			//AT24CXX_WriteOneByte(13, 0x00);//自动策略的标志位
+			////-------------------------------------------
+			//Serial.println("开始进行恢复出厂设置");
 
-			Initialization();//重新进行初始化的设置
-			setup();//重新进入setup()进行申号
+			//Initialization();//重新进行初始化的设置
+			//setup();//重新进入setup()进行申号
+
+
+			//进入E011函数上报请求当前参数
+			Send_E011(Receive_IsBroadcast);//这里的Receive_IsBroadcast是否有值？
 		}
 	}
 }

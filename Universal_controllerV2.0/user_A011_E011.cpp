@@ -118,15 +118,43 @@ unsigned char Send_E011(int Receive_IsBroadcast)//E011函数
 	E011[5] = E011_DeviceTypeID2;
 	E011[6] = E011_IsBroadcast;
 	E011[7] = E011_ZoneId;
-	E011[8] = E011_DeviceSN1;
-	E011[9] = E011_DeviceSN2;
-	E011[10] = E011_DeviceSN3;
-	E011[11] = E011_DeviceSN4;
-	E011[12] = E011_DeviceSN5;
-	E011[13] = E011_DeviceSN6;
-	E011[14] = E011_DeviceSN7;
-	E011[15] = E011_DeviceSN8;
-	E011[16] = E011_DeviceSN9;
+	E011[8] = E011_GroupIDArray1;
+	E011[9] = E011_GroupIDArray2;
+	E011[10] = E011_GroupIDArray3;
+	E011[11] = E011_GroupIDArray4;
+	E011[12] = E011_GroupIDArray5;
+
+	E011[13] = E011_DeviceSN1;
+	E011[14] = E011_DeviceSN2;
+	E011[15] = E011_DeviceSN3;
+	E011[16] = E011_DeviceSN4;
+	E011[17] = E011_DeviceSN5;
+	E011[18] = E011_DeviceSN6;
+	E011[19] = E011_DeviceSN7;
+	E011[20] = E011_DeviceSN8;
+	E011[21] = E011_DeviceSN9;
+
+	E011[22] = E011_channel;
+	E011[23] = E011_interval1;
+	E011[24] = E011_interval2;
+
+	E011[25] = E011_NewTime1;
+	E011[26] = E011_NewTime2;
+	E011[27] = E011_NewTime3;
+	E011[28] = E011_NewTime4;
+	E011[29] = E011_NewTime5;
+	E011[30] = E011_NewTime6;
+	E011[31] = E011_NewTime7;
+
+	E011[32] = E001_Allocate1;
+	E011[33] = E001_Allocate2;
+	E011[34] = E001_Allocate3;
+	E011[35] = E001_Allocate4;
+	E011[36] = E001_Allocate5;
+	E011[37] = E001_Allocate6;
+	E011[38] = E001_Allocate7;
+	E011[39] = E001_Allocate8;
+
 	for (size_t i = 4; i <= E011_DataLen + 0x03; i++)
 	{
 		Check_Data[Check_Length] = E011[i];
@@ -154,18 +182,18 @@ unsigned char Send_E011(int Receive_IsBroadcast)//E011函数
 		}
 		Check_Length = 0;
 	}
-	E011[17] = E011_CRC8;
-	E011[18] = E011_FrameEnd1;
-	E011[19] = E011_FrameEnd2;
-	E011[20] = E011_FrameEnd3;
-	E011[21] = E011_FrameEnd4;
-	E011[22] = E011_FrameEnd5;
-	E011[23] = E011_FrameEnd6;
+	E011[40] = E011_CRC8;
+	E011[41] = E011_FrameEnd1;
+	E011[42] = E011_FrameEnd2;
+	E011[43] = E011_FrameEnd3;
+	E011[44] = E011_FrameEnd4;
+	E011[45] = E011_FrameEnd5;
+	E011[46] = E011_FrameEnd6;
 
 	//该区域为串口查看E011回执的信息
 	if (debug_print == 1)
 	{
-		for (int i = 0; i < 24; i++)
+		for (int i = 0; i < 47; i++)
 		{
 			Serial.print(i);
 			Serial.print("/");
@@ -174,7 +202,7 @@ unsigned char Send_E011(int Receive_IsBroadcast)//E011函数
 		}
 	}
 
-	Serial3.write(E011, 24);
+	Serial3.write(E011, 47);
 	Serial3.flush();
 	Send_Data_Lamp();//发送数据灯
 	return 0;
@@ -195,7 +223,7 @@ unsigned char E011_init()
 	E011_FrameId1 = 0xE0;                   //E011的帧ID1
 	E011_FrameId2 = 0x11;                   //E011的帧ID2
 
-	E011_DataLen = 0x0D;                    //E011的数据长度
+	E011_DataLen = 0x24;                    //E011的数据长度
 
 	E011_DeviceTypeID1 = 0xC0;				//E011的设备类型1
 	E011_DeviceTypeID2 = 0x02;				//E011的设备类型2
@@ -203,6 +231,12 @@ unsigned char E011_init()
 	E011_IsBroadcast = Receive_IsBroadcast;//E011的是否广播指令
 
 	E011_ZoneId = AT24CXX_ReadOneByte(12);         //E011的区域
+
+	E011_GroupIDArray1 = 0x01;		//E011的组ID数组1
+	E011_GroupIDArray2 = 0x01;		//E011的组ID数组2	
+	E011_GroupIDArray3 = 0x01;		//E011的组ID数组3	
+	E011_GroupIDArray4 = 0x01;		//E011的组ID数组4	
+	E011_GroupIDArray5 = 0x01;		//E011的组ID数组5	
 
 	E011_DeviceSN1 = AT24CXX_ReadOneByte(3);       //E011的SN1
 	E011_DeviceSN2 = AT24CXX_ReadOneByte(4);       //E011的SN2
@@ -214,12 +248,34 @@ unsigned char E011_init()
 	E011_DeviceSN8 = AT24CXX_ReadOneByte(10);      //E011的SN8
 	E011_DeviceSN9 = AT24CXX_ReadOneByte(11);      //E011的SN9
 
-	E011_CRC8 = 0x00;                       //E011的CRC8校验码
+	E011_channel = 0x01;			//E011的路数
 
-	E011_FrameEnd1 = 0x0D;                  //E011的帧尾1
-	E011_FrameEnd2 = 0x0A;                  //E011的帧尾2
-	E011_FrameEnd3 = 0x0D;                  //E011的帧尾3
-	E011_FrameEnd4 = 0x0A;                  //E011的帧尾4
-	E011_FrameEnd5 = 0x0D;                  //E011的帧尾5
-	E011_FrameEnd6 = 0x0A;                  //E011的帧尾6
+	E011_interval1 = 0x00;			//E011的采集时间间隔1
+	E011_interval2 = 0x00;			//E011的采集时间间隔2
+
+	E011_NewTime1 = 0x00;		//E011的时间1
+	E011_NewTime2 = 0x00;		//E011的时间2
+	E011_NewTime3 = 0x00;		//E011的时间3
+	E011_NewTime4 = 0x00;		//E011的时间4
+	E011_NewTime5 = 0x00;		//E011的时间5
+	E011_NewTime6 = 0x00;		//E011的时间6
+	E011_NewTime7 = 0x00;		//E011的时间7
+
+	E001_Allocate1 = 0x00;		//E011的预留字段1
+	E001_Allocate2 = 0x00;		//E011的预留字段2
+	E001_Allocate3 = 0x00;		//E011的预留字段3
+	E001_Allocate4 = 0x00;		//E011的预留字段4
+	E001_Allocate5 = 0x00;		//E011的预留字段5
+	E001_Allocate6 = 0x00;		//E011的预留字段6
+	E001_Allocate7 = 0x00;		//E011的预留字段7
+	E001_Allocate8 = 0x00;		//E011的预留字段8
+
+	E011_CRC8 = 0x00;           //E011的CRC8校验码
+
+	E011_FrameEnd1 = 0x0D;      //E011的帧尾1
+	E011_FrameEnd2 = 0x0A;      //E011的帧尾2
+	E011_FrameEnd3 = 0x0D;      //E011的帧尾3
+	E011_FrameEnd4 = 0x0A;      //E011的帧尾4
+	E011_FrameEnd5 = 0x0D;      //E011的帧尾5
+	E011_FrameEnd6 = 0x0A;      //E011的帧尾6
 }
